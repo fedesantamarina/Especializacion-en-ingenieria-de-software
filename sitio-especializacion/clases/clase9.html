@@ -1,0 +1,25 @@
+<div class="clase-content">
+    <h1>Clase 9: Desarrollo de Aplicaciones Empresariales</h1>
+    <div class="clase-meta">
+        <div class="meta-item"><strong>Módulo:</strong> Desarrollo de Aplicaciones</div>
+        <div class="meta-item"><strong>Duración:</strong> 4 horas</div>
+    </div>
+    <h2>1. Arquitecturas Empresariales</h2>
+    <p>Las aplicaciones empresariales gestionan procesos de negocio complejos, datos críticos, y múltiples usuarios concurrentes. Características distintivas incluyen lógica de negocio compleja, persistencia de datos extensiva, integración con múltiples sistemas, requisitos de transaccionalidad y consistencia, seguridad rigurosa, y escalabilidad. Las arquitecturas típicas incluyen arquitectura en capas (presentación, lógica de negocio, acceso a datos), arquitectura hexagonal que aísla core de negocio de infraestructura, y microservicios que descomponen sistema en servicios independientes. La selección arquitectónica impacta profundamente mantenibilidad, testabilidad, escalabilidad y evolucionabilidad del sistema.</p>
+    <h2>2. Patrones Empresariales</h2>
+    <p>Martin Fowler catalogó patrones específicos para aplicaciones empresariales. Para acceso a datos: Active Record (objeto encapsula fila de BD y lógica de acceso), Data Mapper (capa que transfiere datos entre objetos y BD), Repository (media entre dominio y data mapping). Para lógica: Transaction Script (procedimientos por casos de uso), Domain Model (modelo rico de objetos), Table Module (lógica para filas de tabla). Para presentación: MVC, MVP, MVVM. Para distribución: Remote Facade, Data Transfer Object. Estos patrones abordan problemas recurrentes en desarrollo empresarial, proporcionando soluciones probadas que mejoran mantenibilidad y extensibilidad.</p>
+    <h2>3. Frameworks Empresariales</h2>
+    <p>Los frameworks empresariales proporcionan infraestructura reutilizable. Spring Framework domina el ecosistema Java mediante inyección de dependencias, AOP, integración con múltiples tecnologías, y modelo consistente. Spring Boot simplifica configuración. Java EE/Jakarta EE proporciona especificaciones estándar (JPA, JAX-RS, JMS). Los frameworks .NET (ASP.NET Core, Entity Framework) proporcionan capacidades equivalentes. La selección de framework impacta productividad, curva de aprendizaje, y ecosistema disponible. Los frameworks modernos enfatizan convención sobre configuración, reduciendo boilerplate.</p>
+    <h2>4. Transacciones y Persistencia</h2>
+    <p>Las transacciones garantizan ACID en operaciones de negocio que involucran múltiples operaciones de base de datos. Las transacciones distribuidas coordinan múltiples recursos usando protocolos como two-phase commit. Los ORM (Object-Relational Mapping) como Hibernate, Entity Framework mapean objetos a tablas relacionales, abstrayen SQL, y gestionan ciclo de vida de objetos persistentes. Los patterns como Unit of Work rastrean cambios y los persisten atómicamente. El diseño apropiado de boundaries transaccionales resulta crítico: transacciones grandes incrementan contención; transacciones pequeñas pueden violar consistencia de negocio.</p>
+    <h2>5. Seguridad Empresarial</h2>
+    <p>La seguridad constituye requisito crítico. La autenticación verifica identidad mediante credenciales, tokens, certificados, o biometría. La autorización controla qué usuarios acceden a qué recursos mediante roles, permisos, o políticas. OAuth 2.0 y OpenID Connect estandarizan autenticación delegada. La protección requiere encriptación en tránsito (TLS) y en reposo. La prevención de vulnerabilidades requiere input validation, output encoding, parametrized queries, CSRF tokens, CSP. El principio de defensa en profundidad aplica múltiples capas. Spring Security y similares proporcionan infraestructura comprehensiva.</p>
+    <div class="highlight-box">
+        <h3>Resumen</h3>
+        <p>Esta clase ha cubierto arquitecturas, patrones, frameworks, transacciones y seguridad en aplicaciones empresariales, proporcionando fundamentos esenciales para construir sistemas empresariales robustos y escalables.</p>
+    </div>
+    <div class="nav-buttons">
+        <a href="#" class="btn btn-prev" data-clase="clase8">← Anterior</a>
+        <a href="#" class="btn btn-next" data-clase="clase10">Siguiente →</a>
+    </div>
+</div>

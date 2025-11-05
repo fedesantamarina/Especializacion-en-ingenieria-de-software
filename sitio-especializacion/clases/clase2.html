@@ -1,0 +1,317 @@
+<div class="clase-content">
+    <h1>Clase 2: Métodos Formales en la Ingeniería de Software</h1>
+
+    <div class="clase-meta">
+        <div class="meta-item">
+            <strong>Módulo:</strong> Fundamentos
+        </div>
+        <div class="meta-item">
+            <strong>Duración:</strong> 4 horas
+        </div>
+        <div class="meta-item">
+            <strong>Nivel:</strong> Avanzado
+        </div>
+    </div>
+
+    <h2>1. Introducción a los Métodos Formales</h2>
+
+    <p>
+        Los métodos formales constituyen un conjunto de técnicas matemáticamente rigurosas para la especificación, desarrollo y verificación de sistemas de software y hardware. Estos métodos se fundamentan en notaciones matemáticas precisas y en teorías formales que permiten razonar sobre las propiedades de los sistemas de manera rigurosa y sistemática. A diferencia de los enfoques informales o semi-formales, los métodos formales proporcionan un marco teórico sólido que posibilita demostrar propiedades cruciales como corrección, completitud, consistencia y ausencia de ciertos tipos de errores.
+    </p>
+
+    <p>
+        La aplicación de métodos formales en la ingeniería de software responde a la necesidad de construir sistemas críticos donde los fallos pueden tener consecuencias catastróficas. Sistemas de control aeroespacial, dispositivos médicos, sistemas financieros de alta criticidad, infraestructuras de telecomunicaciones, y sistemas de seguridad requieren niveles de confiabilidad que superan lo que pueden garantizar los enfoques convencionales de testing. Los métodos formales permiten detectar errores sutiles durante las fases tempranas del desarrollo, cuando su corrección resulta significativamente menos costosa que durante fases posteriores o después del despliegue del sistema.
+    </p>
+
+    <div class="info-box">
+        <p><strong>Definición clave:</strong> Un método formal es una técnica matemáticamente fundamentada para la especificación, desarrollo y verificación de sistemas software y hardware, que utiliza notaciones precisas y permite razonamientos rigurosos sobre las propiedades del sistema.</p>
+    </div>
+
+    <h3>1.1 Historia y Evolución de los Métodos Formales</h3>
+
+    <p>
+        Los fundamentos teóricos de los métodos formales se remontan a los trabajos pioneros de Alan Turing, Alonzo Church y otros lógicos matemáticos de principios del siglo XX. Sin embargo, su aplicación sistemática a la ingeniería de software comenzó en las décadas de 1960 y 1970, con contribuciones seminales de Edsger W. Dijkstra, C.A.R. Hoare, y otros investigadores que formularon bases teóricas para el razonamiento sobre programas. El método de aserciones de Floyd-Hoare, la lógica temporal, y las semánticas denotacionales constituyeron avances fundamentales que establecieron el campo de los métodos formales.
+    </p>
+
+    <p>
+        Durante las décadas de 1980 y 1990, se desarrollaron diversos lenguajes y herramientas de especificación formal, incluyendo Z, VDM (Vienna Development Method), LOTOS, y posteriormente B, TLA+, Alloy, y otros. Estos lenguajes incorporan construcciones matemáticas como teoría de conjuntos, lógica de predicados, álgebras, y otras estructuras formales. Paralelamente, se desarrollaron técnicas automatizadas de verificación como model checking, theorem proving, y abstract interpretation. La evolución contemporánea de los métodos formales tiende hacia enfoques más pragmáticos y ligeros que buscan equilibrar rigor formal con practicidad en contextos industriales.
+    </p>
+
+    <div class="mermaid">
+    timeline
+        title Evolución de los Métodos Formales
+        1960s : Fundamentos teóricos
+               : Floyd-Hoare Logic
+               : Semántica formal
+        1970s : Desarrollo de lenguajes
+               : Z Notation
+               : VDM
+        1980s : Herramientas de verificación
+               : Model checking
+               : Theorem proving
+        1990s : Aplicaciones industriales
+               : Sistemas críticos
+               : Estándares formales
+        2000s : Métodos ligeros
+               : Integración con ágiles
+               : Verificación automatizada
+        2020s : IA y métodos formales
+               : Síntesis automática
+               : Verificación escalable
+    </div>
+
+    <h3>1.2 Beneficios y Limitaciones de los Métodos Formales</h3>
+
+    <p>
+        Los métodos formales ofrecen beneficios sustanciales que justifican su aplicación en contextos apropiados. El beneficio más significativo radica en la capacidad de detectar errores lógicos y de diseño durante las fases tempranas del ciclo de vida del software, cuando su corrección resulta menos costosa. Las especificaciones formales proporcionan descripciones no ambiguas de los requisitos del sistema, facilitando la comunicación entre stakeholders y reduciendo malentendidos que frecuentemente originan defectos costosos. La verificación formal permite demostrar propiedades críticas del sistema con un nivel de confianza que el testing convencional no puede alcanzar.
+    </p>
+
+    <p>
+        No obstante, los métodos formales presentan limitaciones que han condicionado su adopción generalizada. Requieren expertise especializado en matemáticas y lógica formal, lo cual implica inversión significativa en capacitación. La especificación y verificación formal de sistemas complejos puede resultar laboriosa y consumir recursos considerables. Existen también limitaciones fundamentales de computabilidad: ciertos problemas son indecidibles, y para problemas decidibles, la complejidad computacional puede hacerlos intratables en la práctica. Estas limitaciones han motivado el desarrollo de enfoques pragmáticos que aplican métodos formales de manera selectiva a componentes críticos del sistema.
+    </p>
+
+    <h2>2. Especificación Formal de Sistemas</h2>
+
+    <p>
+        La especificación formal constituye el fundamento sobre el cual se construyen aplicaciones rigurosas de métodos formales. Una especificación formal describe de manera matemáticamente precisa qué debe hacer el sistema, abstrayendo detalles de cómo se implementará. Esta separación entre especificación (qué) e implementación (cómo) resulta fundamental para el razonamiento sobre corrección: un sistema es correcto si su implementación satisface su especificación.
+    </p>
+
+    <h3>2.1 Especificaciones Basadas en Propiedades vs. Basadas en Modelos</h3>
+
+    <p>
+        Existen dos paradigmas fundamentales para la especificación formal. Las especificaciones basadas en propiedades describen el sistema mediante un conjunto de propiedades o axiomas que debe satisfacer, sin construir un modelo explícito del sistema. Este enfoque es característico de lenguajes como lógica temporal (LTL, CTL) y lógicas algebraicas. Por ejemplo, una propiedad como "si el sistema recibe una solicitud, eventualmente responderá" expresa un requisito de liveness sin especificar cómo se logrará la respuesta.
+    </p>
+
+    <p>
+        Las especificaciones basadas en modelos, por otro lado, construyen un modelo matemático abstracto del sistema, típicamente utilizando teoría de conjuntos, relaciones, funciones y estructuras algebraicas. Lenguajes como Z, VDM y B siguen este paradigma. Un modelo abstracto define el espacio de estados del sistema y las operaciones que transforman esos estados. Por ejemplo, especificar un sistema bancario podría involucrar definir un conjunto de cuentas, cada una con un balance, y operaciones como depósito y retiro que modifican los balances respetando invariantes como "el balance nunca puede ser negativo para cuentas regulares".
+    </p>
+
+    <div class="mermaid">
+    graph TB
+        subgraph "Paradigmas de Especificación Formal"
+            A[Especificación Formal]
+            A --> B[Basada en Propiedades]
+            A --> C[Basada en Modelos]
+
+            B --> B1[Lógica Temporal]
+            B --> B2[Axiomas Algebraicos]
+            B --> B3[Propiedades de Safety/Liveness]
+
+            C --> C1[Teoría de Conjuntos]
+            C --> C2[Máquinas de Estado]
+            C --> C3[Funciones y Relaciones]
+        end
+
+        style A fill:#9b59b6
+        style B fill:#3498db
+        style C fill:#e74c3c
+    </div>
+
+    <h3>2.2 Niveles de Abstracción en Especificación</h3>
+
+    <p>
+        Las especificaciones formales pueden desarrollarse a diferentes niveles de abstracción. Las especificaciones de alto nivel se enfocan en qué funcionalidad debe proporcionar el sistema, abstrayendo completamente detalles de implementación. Estas especificaciones resultan apropiadas para capturar requisitos y facilitar comunicación con stakeholders no técnicos. A medida que se progresa en el desarrollo, las especificaciones se refinan hacia niveles más concretos que incorporan decisiones de diseño e implementación.
+    </p>
+
+    <p>
+        El refinamiento es un proceso formal mediante el cual una especificación abstracta se transforma en una especificación más concreta o en código ejecutable, preservando propiedades esenciales. El refinamiento puede probarse formalmente, garantizando que la especificación concreta es una implementación correcta de la especificación abstracta. Esta capacidad de refinamiento verificado representa una ventaja significativa de los métodos formales, permitiendo desarrollo correctness-by-construction donde la corrección se construye sistemáticamente en lugar de verificarse a posteriori.
+    </p>
+
+    <h2>3. Lenguajes de Especificación Formal</h2>
+
+    <p>
+        Diversos lenguajes de especificación formal han sido desarrollados, cada uno con fortalezas particulares y apropiados para diferentes tipos de sistemas y propiedades. La selección del lenguaje apropiado depende de factores como el tipo de sistema a especificar, las propiedades de interés, el nivel de automatización deseado para verificación, y el expertise disponible en el equipo de desarrollo.
+    </p>
+
+    <h3>3.1 Z Notation</h3>
+
+    <p>
+        Z (pronunciado "zed") es un lenguaje de especificación formal basado en teoría de conjuntos y lógica de predicados. Desarrollado en la Universidad de Oxford en los años 1980, Z utiliza una notación que combina texto matemático con estructuras esquemáticas. Un esquema Z define un espacio de estados mediante declaraciones de variables y un predicado que expresa invariantes del sistema. Las operaciones se especifican mediante esquemas que relacionan estados antes y después de la operación, expresando precondiciones y postcondiciones.
+    </p>
+
+    <p>
+        La fortaleza de Z radica en su expresividad y en la capacidad de especificar sistemas complejos de manera modular. Los esquemas pueden componerse utilizando operadores como conjunción, disyunción, y composición secuencial. Z ha sido aplicado exitosamente en la especificación de sistemas críticos, incluyendo sistemas ferroviarios, dispositivos médicos, y sistemas criptográficos. La notación matemática formal de Z proporciona precisión, aunque puede resultar desafiante para stakeholders sin formación matemática avanzada.
+    </p>
+
+    <div class="highlight-box">
+        <h3>Ejemplo conceptual de especificación en Z</h3>
+        <p>
+            Una especificación Z de un sistema bancario simple podría definir un esquema BankSystem con:
+        </p>
+        <ul>
+            <li>Espacio de estados: conjunto de cuentas, cada una mapeando a un balance</li>
+            <li>Invariante: todos los balances son no negativos para cuentas regulares</li>
+            <li>Operación Deposit: precondición (cuenta existe), postcondición (balance incrementado por monto depositado)</li>
+            <li>Operación Withdraw: precondición (cuenta existe y tiene fondos suficientes), postcondición (balance decrementado)</li>
+        </ul>
+    </div>
+
+    <h3>3.2 VDM (Vienna Development Method)</h3>
+
+    <p>
+        VDM es una familia de técnicas de especificación y desarrollo formal que incluye VDM-SL (Specification Language) y VDM++, una extensión orientada a objetos. VDM se basa en especificaciones de modelos utilizando teoría de conjuntos, lógica y construcciones de tipos de datos abstractos. Una característica distintiva de VDM es el énfasis en el refinamiento sistemático desde especificaciones abstractas hacia implementaciones concretas, con reglas formales para probar corrección del refinamiento.
+    </p>
+
+    <p>
+        VDM ha sido aplicado extensivamente en la industria europea, particularmente en sectores como aviónica, telecomunicaciones, y sistemas embedded críticos. El lenguaje proporciona construcciones para especificar operaciones mediante precondiciones y postcondiciones explícitas, facilitando razonamiento sobre condiciones bajo las cuales las operaciones están definidas. VDM++ extiende VDM-SL con conceptos de orientación a objetos como clases, herencia, y concurrencia, haciéndolo más apropiado para sistemas modernos complejos.
+    </p>
+
+    <h3>3.3 TLA+ (Temporal Logic of Actions)</h3>
+
+    <p>
+        TLA+ es un lenguaje de especificación formal desarrollado por Leslie Lamport que combina lógica temporal con teoría de conjuntos ordinaria. TLA+ es particularmente apropiado para especificar sistemas concurrentes y distribuidos, donde comportamientos temporales como orden de eventos, concurrencia, y propiedades de liveness resultan críticos. El lenguaje permite especificar tanto propiedades de safety (algo malo nunca ocurre) como propiedades de liveness (algo bueno eventualmente ocurre).
+    </p>
+
+    <p>
+        TLA+ ha ganado prominencia en años recientes gracias a su adopción por organizaciones como Amazon Web Services, Microsoft, y otros gigantes tecnológicos para especificar y verificar algoritmos distribuidos complejos. El model checker TLC permite verificar automáticamente especificaciones TLA+ para sistemas de tamaño finito, explorando exhaustivamente el espacio de estados accesibles y verificando si se satisfacen las propiedades especificadas. Para sistemas infinitos, el proof system TLAPS permite construcción de pruebas formales asistidas por computadora.
+    </p>
+
+    <div class="mermaid">
+    graph LR
+        A[Lenguajes de Especificación] --> B[Basados en Conjuntos]
+        A --> C[Basados en Lógica]
+        A --> D[Híbridos]
+
+        B --> B1[Z]
+        B --> B2[VDM]
+        B --> B3[B]
+
+        C --> C1[LTL]
+        C --> C2[CTL]
+        C --> C3[μ-calculus]
+
+        D --> D1[TLA+]
+        D --> D2[Alloy]
+        D --> D3[Event-B]
+
+        style A fill:#9b59b6
+        style B fill:#3498db
+        style C fill:#e74c3c
+        style D fill:#2ecc71
+    </div>
+
+    <h3>3.4 Alloy</h3>
+
+    <p>
+        Alloy es un lenguaje de especificación desarrollado por Daniel Jackson en MIT que combina lógica de primer orden relacional con análisis automatizado de modelos. Alloy es más ligero que lenguajes tradicionales como Z o VDM, enfocándose en permitir análisis rápido de modelos conceptuales mediante búsqueda exhaustiva en espacios de búsqueda acotados. El Alloy Analyzer puede generar automáticamente instancias de modelos que satisfacen las restricciones especificadas, o contraejemplos que violan propiedades deseadas.
+    </p>
+
+    <p>
+        La filosofía de Alloy enfatiza el análisis ligero: en lugar de probar propiedades para todos los casos posibles (lo cual puede ser intratable), se buscan contraejemplos dentro de alcances finitos especificados por el analista. Este enfoque pragmático resulta efectivo para detectar errores conceptuales en las fases tempranas de diseño. Alloy ha sido aplicado en dominios diversos incluyendo protocolos de seguridad, modelos de datos, configuraciones de sistemas, y análisis de arquitecturas de software. Su sintaxis relativamente accesible y capacidad de análisis interactivo rápido lo hacen atractivo para practicantes.
+    </p>
+
+    <h3>3.5 Método B y Event-B</h3>
+
+    <p>
+        El método B, desarrollado por Jean-Raymond Abrial, es un método formal que cubre tanto especificación como desarrollo de software mediante refinamiento. B combina teoría de conjuntos y lógica de predicados con un método sistemático de refinamiento y generación automática de obligaciones de prueba que deben demostrarse para garantizar corrección. El método B ha sido aplicado extensivamente en la industria ferroviaria europea, particularmente en sistemas de control de trenes metropolitanos donde los requisitos de seguridad son extremadamente rigurosos.
+    </p>
+
+    <p>
+        Event-B es una evolución del método B enfocada en sistemas reactivos y distribuidos. Event-B estructura especificaciones como máquinas que contienen variables, invariantes, y eventos. Cada evento tiene guardas (condiciones bajo las cuales puede ocurrir) y acciones que modifican el estado. Event-B soporta refinamiento incremental donde eventos abstractos se refinan hacia eventos más concretos, y nuevos eventos pueden introducirse en refinamientos. La plataforma Rodin proporciona herramientas integradas para desarrollo y verificación de modelos Event-B, incluyendo generadores automáticos de obligaciones de prueba y probadores de teoremas.
+    </p>
+
+    <h2>4. Técnicas de Verificación Formal</h2>
+
+    <p>
+        La verificación formal busca establecer rigurosamente que un sistema satisface su especificación o posee ciertas propiedades deseables. Diversas técnicas han sido desarrolladas, cada una con trade-offs entre expresividad, automatización, y escalabilidad. Las técnicas principales incluyen model checking, theorem proving, y abstract interpretation.
+    </p>
+
+    <h3>4.1 Model Checking</h3>
+
+    <p>
+        Model checking es una técnica automatizada de verificación que explora exhaustivamente el espacio de estados de un sistema finito, verificando si se satisfacen propiedades especificadas en lógica temporal u otras lógicas formales. El proceso involucra construir un modelo del sistema (típicamente como un sistema de transición de estados o una estructura Kripke), especificar propiedades a verificar, y ejecutar un algoritmo de búsqueda que sistemáticamente explora todos los estados accesibles y todas las posibles secuencias de transiciones.
+    </p>
+
+    <p>
+        Cuando una propiedad se viola, los model checkers modernos generan contraejemplos que muestran una traza de ejecución específica que lleva a la violación. Estos contraejemplos resultan invaluables para debugging, ya que proporcionan ejemplos concretos de comportamiento incorrecto. Model checking ha sido aplicado exitosamente en verificación de hardware (circuits, protocolos de coherencia de caché), protocolos de comunicación, algoritmos distribuidos, y sistemas embedded. Sin embargo, model checking enfrenta el problema de explosión de estados: el número de estados crece exponencialmente con la complejidad del sistema, limitando su aplicabilidad a sistemas de tamaño moderado sin técnicas de reducción.
+    </p>
+
+    <div class="mermaid">
+    flowchart TD
+        A[Sistema a Verificar] --> B[Construcción del Modelo]
+        B --> C[Modelo de Estados Finitos]
+        D[Propiedades LTL/CTL] --> E[Algoritmo de Model Checking]
+        C --> E
+        E --> F{¿Propiedad Satisfecha?}
+        F -->|Sí| G[Sistema Verificado]
+        F -->|No| H[Contraejemplo Generado]
+        H --> I[Análisis y Corrección]
+        I --> A
+
+        style G fill:#2ecc71
+        style H fill:#e74c3c
+        style E fill:#3498db
+    </div>
+
+    <h3>4.2 Theorem Proving</h3>
+
+    <p>
+        Theorem proving (demostración de teoremas) involucra construir pruebas formales de propiedades utilizando sistemas lógicos y reglas de inferencia. A diferencia de model checking que es completamente automático pero limitado a sistemas finitos, theorem proving puede manejar sistemas infinitos y propiedades arbitrariamente complejas, pero requiere interacción humana significativa. Los asistentes de prueba como Coq, Isabelle/HOL, PVS, y Lean proporcionan entornos donde los usuarios pueden construir pruebas formales asistidos por tácticas automáticas y semi-automáticas.
+    </p>
+
+    <p>
+        El desarrollo de pruebas formales requiere expertise considerable y puede ser laborious para sistemas complejos. Sin embargo, las pruebas proporcionan garantías de corrección que cubren todos los casos posibles, no solo casos de prueba finitos. Theorem proving ha sido utilizado para verificar propiedades fundamentales de algoritmos, verificar corrección de compiladores (como el compilador CompCert verificado con Coq), verificar kernels de sistemas operativos (como seL4), y desarrollar bibliotecas matemáticas formalmente verificadas. La tendencia actual es hacia mayor automatización mediante tácticas más potentes y métodos híbridos que combinan theorem proving con otras técnicas.
+    </p>
+
+    <h3>4.3 Abstract Interpretation</h3>
+
+    <p>
+        Abstract interpretation es un framework teórico para análisis estático de programas desarrollado por Patrick y Radhia Cousot. La idea fundamental consiste en ejecutar el programa sobre dominios abstractos que sobreaproximan el comportamiento concreto del programa. Por ejemplo, en lugar de rastrear valores numéricos exactos de variables, un análisis por abstract interpretation podría rastrear intervalos o relaciones entre variables. Esta abstracción permite que el análisis termine y sea computable, a costa de perder precisión.
+    </p>
+
+    <p>
+        Abstract interpretation es completamente automática y puede escalar a programas grandes. Se utiliza ampliamente en analizadores estáticos comerciales para detectar errores como desbordamientos de buffer, dereferenciación de punteros nulos, y condiciones de carrera. Herramientas como Astrée han verificado exitosamente ausencia de errores runtime en software crítico de aviones Airbus. El desafío principal es diseñar dominios abstractos que sean suficientemente precisos para evitar falsos positivos excesivos, pero suficientemente abstractos para permitir análisis eficientes.
+    </p>
+
+    <h2>5. Aplicaciones Prácticas de Métodos Formales</h2>
+
+    <p>
+        Los métodos formales han sido aplicados exitosamente en diversos dominios industriales, particularmente donde los requisitos de confiabilidad y seguridad justifican la inversión adicional. Los sistemas críticos para la seguridad, donde fallos pueden causar pérdida de vidas humanas o daños materiales catastróficos, representan el caso de uso más natural para métodos formales.
+    </p>
+
+    <h3>5.1 Sistemas de Transporte</h3>
+
+    <p>
+        La industria ferroviaria ha sido pionera en la adopción de métodos formales. El sistema de control automático de trenes del metro de París Línea 14 (METEOR) fue desarrollado utilizando el método B, logrando niveles de confiabilidad excepcionales. Sistemas similares en diversas ciudades europeas han empleado especificación y verificación formal. Los sistemas de señalización ferroviaria, donde la corrección es crítica para prevenir colisiones, también utilizan extensivamente métodos formales. Los estándares de seguridad ferroviaria como CENELEC EN 50128 reconocen explícitamente métodos formales como técnicas de alta integridad.
+    </p>
+
+    <h3>5.2 Aviónica y Sistemas Aeroespaciales</h3>
+
+    <p>
+        Los sistemas de control de vuelo, navegación, y gestión de motores en aeronaves modernas emplean software crítico que debe satisfacer estándares rigurosos como DO-178C. Organizaciones como Airbus han aplicado abstract interpretation para verificar ausencia de errores runtime en software de control de vuelo. Los sistemas de control de cohetes y satélites, donde el debugging post-despliegue es imposible o extremadamente costoso, justifican plenamente la aplicación de métodos formales. La NASA ha utilizado model checking y otros métodos formales en misiones críticas, detectando errores sutiles que el testing convencional no había revelado.
+    </p>
+
+    <h3>5.3 Seguridad y Criptografía</h3>
+
+    <p>
+        Los protocolos criptográficos y de seguridad son notoriamente difíciles de diseñar correctamente, con errores sutiles que pueden comprometer completamente la seguridad. Métodos formales han sido aplicados para analizar protocolos como TLS, SSH, y protocolos de autenticación, revelando vulnerabilidades que habían pasado inadvertidas durante años. Herramientas como Tamarin, ProVerif, y Cryptol permiten modelar y verificar propiedades de seguridad de protocolos criptográficos. Las implementaciones criptográficas también se benefician de verificación formal: bibliotecas como HACL* y Fiat-Crypto proporcionan implementaciones verificadas de primitivas criptográficas.
+    </p>
+
+    <h3>5.4 Sistemas Médicos</h3>
+
+    <p>
+        Los dispositivos médicos como marcapasos, bombas de infusión, y sistemas de radioterapia requieren niveles extremos de confiabilidad. Errores de software en estos dispositivos han causado muertes y lesiones, motivando regulaciones más estrictas. Los métodos formales ofrecen capacidades para verificar propiedades críticas de seguridad en estos dispositivos. Por ejemplo, se han desarrollado modelos formales de marcapasos que permiten verificar que el dispositivo nunca excederá tasas de estimulación peligrosas bajo ninguna circunstancia.
+    </p>
+
+    <h2>6. Integración de Métodos Formales en el Desarrollo Ágil</h2>
+
+    <p>
+        Históricamente, los métodos formales se asociaban con procesos de desarrollo pesados y burocráticos, aparentemente incompatibles con enfoques ágiles que valoran adaptabilidad y entrega rápida. Sin embargo, investigaciones recientes exploran cómo integrar beneficios de ambos paradigmas. Los métodos formales ligeros aplican técnicas formales de manera selectiva y pragmática, enfocándose en componentes críticos sin intentar verificar formalmente todo el sistema.
+    </p>
+
+    <p>
+        Técnicas como design by contract, popularizadas por el lenguaje Eiffel y adoptadas en lenguajes modernos, incorporan elementos de especificación formal (precondiciones, postcondiciones, invariantes) en código ejecutable. Los analyzadores estáticos basados en métodos formales pueden integrarse en pipelines de CI/CD, proporcionando feedback rápido sobre posibles errores. La especificación formal de APIs críticas y algoritmos complejos puede coexistir con desarrollo ágil para el resto del sistema. El desafío radica en encontrar el balance apropiado entre rigor formal y pragmatismo ágil según el contexto específico del proyecto.
+    </p>
+
+    <div class="highlight-box">
+        <h3>Resumen de la Clase</h3>
+        <p>
+            Esta clase ha proporcionado una introducción integral a los métodos formales en ingeniería de software, cubriendo sus fundamentos teóricos, principales lenguajes de especificación, técnicas de verificación, y aplicaciones prácticas. Los métodos formales ofrecen capacidades únicas para construir software de alta confiabilidad mediante razonamiento riguroso. Si bien presentan desafíos de adopción, su aplicación estratégica en componentes críticos representa una práctica valiosa que complementa enfoques convencionales de testing y aseguramiento de calidad.
+        </p>
+    </div>
+
+    <div class="nav-buttons">
+        <a href="#" class="btn btn-prev" data-clase="clase1">← Anterior: Introducción</a>
+        <a href="#" class="btn btn-next" data-clase="clase3">Siguiente: Ingeniería de Requerimientos →</a>
+    </div>
+</div>

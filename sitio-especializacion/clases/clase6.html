@@ -1,0 +1,87 @@
+<div class="clase-content">
+    <h1>Clase 6: Verificación Formal de Software</h1>
+
+    <div class="clase-meta">
+        <div class="meta-item"><strong>Módulo:</strong> Tecnologías Avanzadas</div>
+        <div class="meta-item"><strong>Duración:</strong> 4 horas</div>
+        <div class="meta-item"><strong>Nivel:</strong> Avanzado</div>
+    </div>
+
+    <h2>1. Fundamentos de la Verificación de Software</h2>
+    <p>
+        La verificación de software constituye el proceso sistemático de evaluar si un sistema cumple con sus especificaciones y está libre de defectos. A diferencia de la validación que responde "¿estamos construyendo el producto correcto?", la verificación pregunta "¿estamos construyendo el producto correctamente?". La verificación formal emplea técnicas matemáticamente rigurosas incluyendo análisis estático, testing sistemático, model checking y theorem proving. Estas técnicas complementan testing convencional, proporcionando mayores garantías de corrección para sistemas críticos donde errores pueden tener consecuencias catastróficas en términos de seguridad, económicos o reputacionales.
+    </p>
+
+    <h3>1.1 Testing vs. Verificación Formal</h3>
+    <p>
+        El testing tradicional ejecuta el programa con entradas específicas, verificando que las salidas sean correctas. Aunque esencial, el testing solo puede demostrar presencia de errores, no su ausencia (como observó Dijkstra). La cobertura exhaustiva resulta intratable: incluso programas simples tienen espacios de entrada astronómicamente grandes. La verificación formal, por contraste, puede proporcionar garantías sobre todas las ejecuciones posibles mediante razonamiento matemático abstracto. Sin embargo, la verificación formal requiere esfuerzo significativo, expertise especializado, y puede no ser práctica para sistemas muy grandes o complejos. La práctica efectiva combina ambos enfoques estratégicamente.
+    </p>
+
+    <h2>2. Análisis Estático de Código</h2>
+    <p>
+        El análisis estático examina código sin ejecutarlo, detectando automáticamente errores potenciales, vulnerabilidades de seguridad, violaciones de estándares de codificación, y code smells. Herramientas como SonarQube, FindBugs, ESLint, o Pylint analizan código buscando patrones problemáticos. Los analizadores estáticos modernos emplean técnicas sofisticadas como abstract interpretation, dataflow analysis, y taint analysis para detectar bugs sutiles como null pointer dereferences, resource leaks, o injection vulnerabilities. Integrados en pipelines CI/CD, los analizadores estáticos proporcionan feedback rápido durante desarrollo.
+    </p>
+
+    <h3>2.1 Tipos de Análisis Estático</h3>
+    <p>
+        El análisis sintáctico verifica que el código cumple con reglas sintácticas y estándares de codificación (linters). El análisis semántico evalúa significado del código, detectando problemas lógicos como variables no inicializadas o código unreachable. El dataflow analysis rastrea flujo de datos a través del programa, detectando anomalías como uso de datos no inicializados o asignaciones sin uso subsecuente. El control flow analysis examina flujo de control, identificando código unreachable o violaciones de invariantes. El taint analysis rastrea propagación de datos no confiables, crucial para detectar vulnerabilidades de seguridad como SQL injection o XSS. Cada tipo de análisis tiene trade-offs entre precisión, escalabilidad y falsos positivos.
+    </p>
+
+    <div class="mermaid">
+    graph TB
+        A[Código Fuente] --> B[Análisis Sintáctico]
+        B --> C[Análisis Semántico]
+        C --> D[Dataflow Analysis]
+        C --> E[Control Flow Analysis]
+        C --> F[Taint Analysis]
+        D --> G[Reportes de Errores]
+        E --> G
+        F --> G
+        G --> H[Corrección de Código]
+        H --> A
+
+        style A fill:#3498db
+        style G fill:#e74c3c
+        style H fill:#2ecc71
+    </div>
+
+    <h2>3. Testing Sistemático y Automatizado</h2>
+    <p>
+        El testing efectivo requiere estrategia sistemática que cubra múltiples niveles: testing unitario verifica componentes individuales aisladamente, testing de integración verifica interacciones entre componentes, testing de sistema verifica el sistema completo, y testing de aceptación valida que el sistema satisface requisitos de usuario. El testing automatizado ejecuta pruebas repetidamente sin intervención manual, esencial en desarrollo ágil y CI/CD. Los frameworks como JUnit, pytest, o Jest facilitan escritura y ejecución de pruebas. La cobertura de código mide qué porcentaje de código es ejercitado por pruebas, aunque alta cobertura no garantiza ausencia de errores.
+    </p>
+
+    <h3>3.1 Test-Driven Development y Behavior-Driven Development</h3>
+    <p>
+        Test-Driven Development (TDD) invierte el flujo tradicional: primero se escribe una prueba que falla, luego se implementa código mínimo para pasar la prueba, y finalmente se refactoriza. Este ciclo red-green-refactor fuerza diseño testeable y proporciona regresión automática. Behavior-Driven Development (BDD) extiende TDD con énfasis en comportamiento desde perspectiva de usuario, usando lenguajes como Gherkin (Given-When-Then) para especificar escenarios. Herramientas como Cucumber traducen especificaciones BDD en pruebas ejecutables. Estos enfoques mejoran calidad y proporcionan documentación ejecutable que permanece sincronizada con código.
+    </p>
+
+    <h2>4. Property-Based Testing</h2>
+    <p>
+        El property-based testing, popularizado por QuickCheck (Haskell) y adoptado en herramientas como Hypothesis (Python) o fast-check (JavaScript), genera automáticamente casos de prueba basados en propiedades especificadas por el desarrollador. En lugar de escribir casos de prueba específicos, se especifican propiedades invariantes que deben cumplirse para todas las entradas válidas. La herramienta genera entradas aleatorias o semi-aleatorias, ejecuta el código, y verifica que las propiedades se mantengan. Cuando se detecta violación, la herramienta "shrinks" la entrada para encontrar caso mínimo que reproduce el error. Este enfoque descubre edge cases que los desarrolladores típicamente no consideran.
+    </p>
+
+    <h2>5. Model Checking y Verificación de Modelos</h2>
+    <p>
+        El model checking verifica automáticamente que un modelo del sistema (típicamente máquina de estados finitos o sistema de transiciones) satisface propiedades especificadas en lógica temporal. Model checkers como SPIN, NuSMV, o TLA+ TLC exploran exhaustivamente el espacio de estados, verificando propiedades como ausencia de deadlocks, mutual exclusion, o eventualmente-always properties. Cuando una propiedad se viola, el model checker genera contraejemplo mostrando traza de estados que conduce a la violación. El model checking ha sido aplicado exitosamente en verificación de protocolos, hardware, y sistemas embebidos. Sin embargo, enfrenta el problema de explosión de estados que limita escalabilidad.
+    </p>
+
+    <h3>5.1 Técnicas de Reducción del Espacio de Estados</h3>
+    <p>
+        Para mitigar explosión de estados, diversas técnicas reducen el espacio de búsqueda. La abstracción construye modelo abstracto más pequeño que preserva propiedades de interés. El partial order reduction explota independencia de acciones concurrentes para evitar explorar interleavings redundantes. El symbolic model checking representa conjuntos de estados mediante BDDs (Binary Decision Diagrams) en lugar de enumerarlos explícitamente. El bounded model checking busca violaciones dentro de profundidad acotada usando SAT solvers. El compositional verification divide sistema en componentes verificados independientemente. La combinación de estas técnicas permite model checking escalar a sistemas de tamaño práctico.
+    </p>
+
+    <h2>6. Integración de Verificación en CI/CD</h2>
+    <p>
+        La verificación efectiva debe integrarse en el flujo de desarrollo mediante pipelines CI/CD que ejecutan automáticamente suites de pruebas, análisis estático, y verificaciones de seguridad en cada commit o pull request. Los pipelines pueden incluir múltiples etapas: lint y análisis estático rápidos, pruebas unitarias, pruebas de integración, análisis de cobertura, security scanning, y pruebas de rendimiento. Los resultados se reportan automáticamente, bloqueando merges que no pasen criterios de calidad. Esta automatización proporciona feedback rápido, mantiene calidad consistente, y libera a desarrolladores de tareas repetitivas de verificación manual.
+    </p>
+
+    <div class="highlight-box">
+        <h3>Resumen de la Clase</h3>
+        <p>Esta clase ha explorado técnicas de verificación formal de software, desde análisis estático y testing sistemático hasta model checking y property-based testing. La verificación rigurosa resulta esencial para construir software confiable, especialmente en sistemas críticos. La integración de verificación en pipelines CI/CD automatiza detección temprana de defectos, mejorando significativamente calidad del software.</p>
+    </div>
+
+    <div class="nav-buttons">
+        <a href="#" class="btn btn-prev" data-clase="clase5">← Anterior: Bases de Datos</a>
+        <a href="#" class="btn btn-next" data-clase="clase7">Siguiente: Diseño OO Avanzado →</a>
+    </div>
+</div>
