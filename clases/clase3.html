@@ -1,0 +1,279 @@
+<div class="clase-content">
+    <h1>Clase 3: Ingeniería de Requerimientos</h1>
+
+    <div class="clase-meta">
+        <div class="meta-item">
+            <strong>Módulo:</strong> Fundamentos
+        </div>
+        <div class="meta-item">
+            <strong>Duración:</strong> 4 horas
+        </div>
+        <div class="meta-item">
+            <strong>Nivel:</strong> Avanzado
+        </div>
+    </div>
+
+    <h2>1. Fundamentos de la Ingeniería de Requerimientos</h2>
+
+    <p>
+        La Ingeniería de Requerimientos constituye una disciplina fundamental dentro de la Ingeniería de Software, enfocándose en la identificación, documentación, análisis, validación y gestión de los requerimientos de un sistema de software. Los requerimientos representan descripciones de las funcionalidades que el sistema debe proporcionar, las restricciones bajo las cuales debe operar, y las propiedades que debe exhibir. La calidad de los requerimientos impacta directamente en el éxito o fracaso del proyecto: requerimientos inadecuados, incompletos, inconsistentes o mal comunicados constituyen causas principales de sobrecostos, retrasos y fracasos de proyectos de software.
+    </p>
+
+    <p>
+        Diversos estudios empíricos han demostrado consistentemente que los defectos de requerimientos detectados en fases tardías del desarrollo resultan exponencialmente más costosos de corregir que aquellos detectados tempranamente. El costo de corregir un error de requerimiento durante la fase de mantenimiento puede ser entre 100 y 1000 veces mayor que corregirlo durante la fase de análisis de requerimientos. Esta observación justifica la inversión significativa en actividades rigurosas de ingeniería de requerimientos. Además, los errores de requerimientos no solo impactan costos, sino también la satisfacción del usuario y la utilidad real del sistema desarrollado: un sistema perfectamente implementado según especificaciones incorrectas resulta igualmente inútil.
+    </p>
+
+    <div class="info-box">
+        <p><strong>Definición clave:</strong> La Ingeniería de Requerimientos es el proceso sistemático de descubrir, documentar, analizar, validar y gestionar las necesidades y restricciones de los stakeholders sobre un sistema de software a construir.</p>
+    </div>
+
+    <h3>1.1 Tipos de Requerimientos</h3>
+
+    <p>
+        Los requerimientos se clasifican tradicionalmente en requerimientos funcionales y no funcionales. Los requerimientos funcionales describen las funcionalidades o servicios específicos que el sistema debe proporcionar: qué debe hacer el sistema en respuesta a entradas particulares, cómo debe comportarse en situaciones específicas, y qué salidas debe producir. Por ejemplo, "el sistema debe permitir a usuarios autenticados crear órdenes de compra especificando productos, cantidades y dirección de envío" constituye un requerimiento funcional.
+    </p>
+
+    <p>
+        Los requerimientos no funcionales especifican propiedades cualitativas del sistema o restricciones sobre su operación o desarrollo. Incluyen requerimientos de rendimiento (tiempos de respuesta, throughput), confiabilidad (disponibilidad, tolerancia a fallas), usabilidad (facilidad de aprendizaje, eficiencia de uso), seguridad (confidencialidad, integridad, autenticación), mantenibilidad (facilidad de modificación), portabilidad (capacidad de ejecutar en diferentes plataformas), y restricciones legales, regulatorias o de estándares. Los requerimientos no funcionales frecuentemente resultan más críticos que los funcionales: un sistema con funcionalidad correcta pero rendimiento inaceptable resultará inutilizable en la práctica.
+    </p>
+
+    <div class="mermaid">
+    graph TB
+        A[Requerimientos de Software] --> B[Funcionales]
+        A --> C[No Funcionales]
+        A --> D[De Dominio]
+
+        B --> B1[Funcionalidades del Sistema]
+        B --> B2[Servicios Provistos]
+        B --> B3[Comportamiento Esperado]
+
+        C --> C1[Rendimiento]
+        C --> C2[Seguridad]
+        C --> C3[Usabilidad]
+        C --> C4[Confiabilidad]
+        C --> C5[Mantenibilidad]
+
+        D --> D1[Reglas del Negocio]
+        D --> D2[Restricciones del Dominio]
+        D --> D3[Políticas Organizacionales]
+
+        style A fill:#9b59b6
+        style B fill:#3498db
+        style C fill:#e74c3c
+        style D fill:#2ecc71
+    </div>
+
+    <h3>1.2 Niveles de Abstracción de Requerimientos</h3>
+
+    <p>
+        Los requerimientos pueden expresarse a diferentes niveles de abstracción, desde declaraciones de alto nivel sobre objetivos del negocio hasta especificaciones detalladas de comportamiento del sistema. Los requerimientos de usuario son declaraciones en lenguaje natural, posiblemente complementadas con diagramas, sobre las funcionalidades que el sistema debe proporcionar y las restricciones bajo las cuales debe operar. Estos requerimientos se escriben para clientes y usuarios finales que típicamente no poseen conocimientos técnicos profundos.
+    </p>
+
+    <p>
+        Los requerimientos del sistema proporcionan descripciones más detalladas y precisas de las funcionalidades y restricciones del sistema. Se escriben para desarrolladores, arquitectos y testers, y frecuentemente sirven como base contractual entre clientes y proveedores. Los requerimientos del sistema deben ser suficientemente precisos para permitir diseño e implementación, pero suficientemente abstractos para no dictar prematuramente decisiones de diseño. Un desafío fundamental en ingeniería de requerimientos consiste en gestionar apropiadamente estos diferentes niveles de abstracción y asegurar trazabilidad entre ellos.
+    </p>
+
+    <h2>2. Proceso de Ingeniería de Requerimientos</h2>
+
+    <p>
+        La Ingeniería de Requerimientos comprende un conjunto de actividades interrelacionadas que se ejecutan iterativamente a lo largo del ciclo de vida del proyecto. Estas actividades incluyen elicitación, análisis, especificación, validación y gestión de requerimientos. Aunque frecuentemente se presentan secuencialmente, en la práctica estas actividades se superponen y se ejecutan de manera incremental e iterativa.
+    </p>
+
+    <h3>2.1 Elicitación de Requerimientos</h3>
+
+    <p>
+        La elicitación de requerimientos involucra descubrir y comprender las necesidades de los stakeholders mediante diversas técnicas de recopilación de información. Esta actividad resulta desafiante porque los stakeholders frecuentemente no conocen con precisión qué necesitan, expresan necesidades en términos de su dominio que pueden resultar ambiguos, diferentes stakeholders tienen perspectivas y prioridades conflictivas, y el contexto organizacional y técnico puede restringir qué soluciones resultan viables.
+    </p>
+
+    <p>
+        Las técnicas de elicitación incluyen entrevistas estructuradas o no estructuradas con stakeholders, cuestionarios para recopilar información de grandes grupos, observación de usuarios realizando sus tareas actuales, análisis de documentos existentes (manuales, regulaciones, sistemas legacy), workshops facilitados donde stakeholders colaboran para definir requerimientos, y prototipado para explorar necesidades mediante artefactos tangibles. La selección de técnicas apropiadas depende de factores como disponibilidad y expertise de stakeholders, complejidad del dominio, y restricciones de tiempo y recursos.
+    </p>
+
+    <div class="warning-box">
+        <p><strong>Desafío común:</strong> Los stakeholders frecuentemente asumen que los analistas comprenden el dominio de negocio, mientras que los analistas asumen que los stakeholders articularán claramente sus necesidades. Esta brecha de comunicación causa malentendidos significativos.</p>
+    </div>
+
+    <h3>2.2 Análisis y Negociación de Requerimientos</h3>
+
+    <p>
+        El análisis de requerimientos busca detectar y resolver problemas en los requerimientos elicitados, incluyendo conflictos, inconsistencias, ambigüedades, redundancias, y requerimientos incompletos o irrealizables. Los conflictos emergen cuando diferentes stakeholders tienen necesidades contradictorias o cuando requerimientos entran en tensión con restricciones técnicas, temporales o presupuestarias. La resolución de conflictos requiere negociación entre stakeholders, facilitada por el analista, para alcanzar compromisos aceptables.
+    </p>
+
+    <p>
+        El análisis también involucra clasificar y priorizar requerimientos. No todos los requerimientos tienen igual importancia: algunos son críticos para el éxito del sistema mientras otros son deseables pero no esenciales. Técnicas de priorización como MoSCoW (Must have, Should have, Could have, Won't have), análisis de valor versus costo, o métodos analíticos como AHP (Analytic Hierarchy Process) ayudan a establecer prioridades. La priorización informa decisiones sobre qué requerimientos implementar en iteraciones tempranas y cuáles pueden diferirse o descartarse si surgen restricciones.
+    </p>
+
+    <div class="mermaid">
+    flowchart TD
+        A[Elicitación] --> B[Requerimientos Crudos]
+        B --> C[Análisis]
+        C --> D{¿Conflictos?}
+        D -->|Sí| E[Negociación]
+        D -->|No| F[Especificación]
+        E --> C
+        F --> G[Documento de Requerimientos]
+        G --> H[Validación]
+        H --> I{¿Correcto?}
+        I -->|No| A
+        I -->|Sí| J[Requerimientos Aprobados]
+        J --> K[Gestión de Requerimientos]
+        K --> L[Cambios] --> A
+
+        style J fill:#2ecc71
+        style E fill:#f39c12
+        style H fill:#3498db
+    </div>
+
+    <h3>2.3 Especificación de Requerimientos</h3>
+
+    <p>
+        La especificación de requerimientos produce documentación formal que describe los requerimientos del sistema de manera precisa y completa. El artefacto principal es típicamente un documento de especificación de requerimientos de software (SRS - Software Requirements Specification) que sirve como contrato entre cliente y desarrolladores, base para diseño e implementación, y criterio para verificación y validación. Los estándares como IEEE 830 proporcionan lineamientos sobre estructura y contenido de documentos SRS.
+    </p>
+
+    <p>
+        Un SRS de calidad debe exhibir características como corrección (todos los requerimientos representan fielmente necesidades de stakeholders), completitud (todos los requerimientos relevantes están incluidos), consistencia (no hay contradicciones entre requerimientos), no ambigüedad (cada requerimiento tiene una única interpretación), verificabilidad (es posible verificar objetivamente si el sistema satisface cada requerimiento), modificabilidad (la estructura facilita incorporar cambios), y trazabilidad (origen y relaciones de cada requerimiento están documentados).
+    </p>
+
+    <h3>2.4 Validación de Requerimientos</h3>
+
+    <p>
+        La validación de requerimientos busca asegurar que los requerimientos especificados representan fielmente las necesidades de los stakeholders y que constituyen una base apropiada para desarrollar el sistema. La validación difiere de la verificación: validación pregunta "¿estamos construyendo el producto correcto?" mientras verificación pregunta "¿estamos construyendo el producto correctamente?". La validación de requerimientos debe ocurrir antes de comprometer recursos significativos al desarrollo, ya que errores de requerimientos resultan costosísimos de corregir posteriormente.
+    </p>
+
+    <p>
+        Las técnicas de validación incluyen revisiones de requerimientos donde stakeholders y desarrolladores revisan sistemáticamente el documento de requerimientos buscando problemas, prototipado para permitir que stakeholders interactúen con representaciones concretas del sistema propuesto, generación de casos de prueba que verifican si los requerimientos son testables y completos, y análisis de consistencia utilizando herramientas automatizadas. La validación debe involucrar activamente a los stakeholders, ya que son ellos quienes pueden juzgar si los requerimientos reflejan adecuadamente sus necesidades.
+    </p>
+
+    <h3>2.5 Gestión de Requerimientos</h3>
+
+    <p>
+        La gestión de requerimientos aborda el hecho inevitable de que los requerimientos cambian a lo largo del ciclo de vida del proyecto. Los cambios emergen por múltiples razones: mejor comprensión del dominio a medida que avanza el proyecto, cambios en el contexto de negocio u organizacional, errores o ambigüedades descubiertas en requerimientos iniciales, cambios en regulaciones o estándares aplicables, o nuevas oportunidades tecnológicas. Gestionar cambios de manera descontrolada conduce al scope creep y proyectos descontrolados; ignorar cambios legítimos produce sistemas que no satisfacen necesidades reales.
+    </p>
+
+    <p>
+        La gestión efectiva de requerimientos requiere procesos formales para proponer, evaluar, aprobar e implementar cambios. Se debe mantener trazabilidad entre requerimientos y artefactos de diseño, código, y pruebas, permitiendo evaluar el impacto de cambios propuestos. Las herramientas de gestión de requerimientos como DOORS, Jama, o sistemas más ligeros basados en issue trackers facilitan versionado de requerimientos, gestión de trazabilidad, y control de cambios. La gestión de configuración de requerimientos asegura que diferentes versiones se mantengan consistentes y que todos los stakeholders trabajen sobre la misma baseline.
+    </p>
+
+    <h2>3. Técnicas Avanzadas de Modelado de Requerimientos</h2>
+
+    <p>
+        El lenguaje natural, aunque accesible, presenta limitaciones inherentes de ambigüedad, imprecisión, y dificultad para capturar estructuras complejas. Por ello, la ingeniería de requerimientos utiliza diversas notaciones de modelado que complementan o reemplazan descripciones textuales, proporcionando representaciones más precisas y formales de los requerimientos.
+    </p>
+
+    <h3>3.1 Modelado Orientado a Objetivos</h3>
+
+    <p>
+        Los enfoques orientados a objetivos (goal-oriented) modelan requerimientos como objetivos que el sistema debe lograr. Un objetivo representa un estado deseado del sistema o su entorno. Los objetivos se organizan jerárquicamente: objetivos de alto nivel (como "aumentar satisfacción de clientes") se refinan en subobjetivos más específicos y eventualmente en requerimientos operacionalizables. Frameworks como KAOS (Knowledge Acquisition in autOmated Specification) proporcionan lenguajes formales y herramientas para modelado orientado a objetivos.
+    </p>
+
+    <p>
+        El modelado orientado a objetivos facilita razonamiento sobre por qué ciertos requerimientos existen, ayudando a justificar decisiones y evaluar alternativas. Los modelos de objetivos pueden analizarse para detectar conflictos entre objetivos de diferentes stakeholders y para identificar objetivos incompletos u obstáculos que impiden alcanzar objetivos. Esta capacidad analítica representa una ventaja significativa sobre especificaciones puramente textuales. Los objetivos también proporcionan criterios para evaluar decisiones de diseño y priorizar requerimientos según su contribución a objetivos estratégicos.
+    </p>
+
+    <h3>3.2 Casos de Uso</h3>
+
+    <p>
+        Los casos de uso, popularizados por Ivar Jacobson y adoptados en UML, describen interacciones entre actores externos y el sistema para lograr objetivos específicos. Un caso de uso describe una secuencia de acciones que el sistema realiza para proporcionar valor observable a un actor. Los casos de uso capturan requerimientos funcionales desde la perspectiva del usuario, enfocándose en qué hace el sistema sin especificar cómo lo implementa internamente.
+    </p>
+
+    <p>
+        Los diagramas de casos de uso proporcionan vistas de alto nivel mostrando actores y sus interacciones con casos de uso del sistema. Las especificaciones textuales de casos de uso detallan el flujo básico de eventos, flujos alternativos que manejan variaciones, y flujos de excepción que manejan condiciones de error. Los casos de uso resultan particularmente efectivos para comunicar requerimientos a stakeholders técnicos y no técnicos. Sin embargo, no capturan adecuadamente requerimientos no funcionales ni reglas de negocio complejas, por lo que deben complementarse con otras técnicas.
+    </p>
+
+    <div class="mermaid">
+    graph LR
+        A[Actor: Cliente] -->|Realizar Pedido| B[Sistema E-Commerce]
+        A -->|Consultar Estado| B
+        A -->|Cancelar Pedido| B
+        C[Actor: Administrador] -->|Gestionar Inventario| B
+        C -->|Generar Reportes| B
+        D[Sistema de Pago] <-->|Procesar Transacción| B
+        E[Sistema de Envío] <-->|Calcular Costos| B
+
+        style B fill:#3498db
+        style A fill:#2ecc71
+        style C fill:#e74c3c
+    </div>
+
+    <h3>3.3 Historias de Usuario</h3>
+
+    <p>
+        Las historias de usuario, originadas en metodologías ágiles como Extreme Programming, representan descripciones breves e informales de funcionalidades desde la perspectiva del usuario. Una historia de usuario típicamente sigue la plantilla: "Como [tipo de usuario], quiero [objetivo] para [beneficio]". Por ejemplo: "Como cliente registrado, quiero guardar productos en una lista de deseos para comprarlos posteriormente". Las historias de usuario enfatizan conversación: la tarjeta escrita sirve como placeholder para discusiones más detalladas.
+    </p>
+
+    <p>
+        Las historias de usuario se complementan con criterios de aceptación que especifican condiciones que deben satisfacerse para considerar la historia completa. Los criterios de aceptación típicamente se expresan en formato Given-When-Then: "Dado que soy un usuario autenticado, cuando agrego un producto a mi lista de deseos, entonces el producto aparece en mi lista de deseos y puedo verlo en mi perfil". Las historias de usuario resultan más livianas que casos de uso formales, apropiadas para contextos ágiles donde la documentación exhaustiva se considera overhead.
+    </p>
+
+    <h3>3.4 Modelado de Datos</h3>
+
+    <p>
+        Los modelos de datos capturan la estructura de la información que el sistema debe almacenar y manipular. Los modelos entidad-relación (ER) representan entidades (objetos o conceptos del dominio), atributos de entidades, y relaciones entre entidades. Los diagramas de clases UML proporcionan capacidades similares con sintaxis orientada a objetos. Los modelos de datos ayudan a identificar requerimientos funcionales implícitos: por ejemplo, si el modelo incluye una relación muchos-a-muchos entre Estudiantes y Cursos, implícitamente requiere funcionalidad para inscribir estudiantes en cursos.
+    </p>
+
+    <h3>3.5 Modelado de Comportamiento</h3>
+
+    <p>
+        Los modelos de comportamiento describen aspectos dinámicos del sistema. Los diagramas de secuencia UML muestran interacciones entre objetos a lo largo del tiempo, útiles para especificar escenarios complejos de interacción. Los diagramas de estados modelan comportamiento dependiente del estado, apropiados para sistemas reactivos donde el comportamiento del sistema depende de su historia. Los diagramas de actividades modelan flujos de trabajo o procesos de negocio, útiles para capturar lógica de procesos complejos.
+    </p>
+
+    <h3>3.6 Especificaciones Formales</h3>
+
+    <p>
+        Para sistemas críticos donde ambigüedad resulta inaceptable, las especificaciones formales utilizando lenguajes matemáticos como Z, VDM, o lógicas temporales proporcionan precisión absoluta. Aunque requieren expertise especializado, las especificaciones formales eliminan ambigüedades inherentes al lenguaje natural y permiten verificación automática de consistencia y completitud. La decisión de usar especificaciones formales debe balancear sus beneficios contra sus costos y la disponibilidad de personal calificado.
+    </p>
+
+    <h2>4. Requerimientos No Funcionales: Desafíos Especiales</h2>
+
+    <p>
+        Los requerimientos no funcionales presentan desafíos particulares en su elicitación, especificación y validación. Mientras los requerimientos funcionales frecuentemente pueden especificarse de manera relativamente directa, los requerimientos no funcionales tienden a ser vagos, difíciles de cuantificar, y están interrelacionados de maneras complejas. Además, los requerimientos no funcionales frecuentemente impactan globalmente la arquitectura del sistema, mientras los funcionales pueden implementarse de manera localizada.
+    </p>
+
+    <h3>4.1 Especificación Medible de Requerimientos No Funcionales</h3>
+
+    <p>
+        Un desafío fundamental consiste en convertir requerimientos no funcionales vagos como "el sistema debe ser rápido" o "el sistema debe ser fácil de usar" en especificaciones verificables. Esto requiere identificar métricas apropiadas y establecer valores objetivo cuantificables. Por ejemplo, un requerimiento de rendimiento podría especificarse como "el sistema debe responder a consultas simples en menos de 2 segundos para el 95% de las solicitudes bajo carga normal de 1000 usuarios concurrentes".
+    </p>
+
+    <p>
+        El framework de calidad de software ISO/IEC 25010 proporciona un modelo de calidad que organiza características de calidad (funcionalidad, confiabilidad, usabilidad, eficiencia, mantenibilidad, portabilidad) y subcaracterísticas, ayudando a estructurar requerimientos no funcionales. Para cada subcaracterística relevante, se deben identificar métricas apropiadas y establecer valores objetivo o rangos aceptables. La especificación debe también definir condiciones bajo las cuales se medirán las métricas, ya que el rendimiento bajo carga ligera difiere radicalmente del rendimiento bajo carga extrema.
+    </p>
+
+    <h3>4.2 Trade-offs entre Requerimientos No Funcionales</h3>
+
+    <p>
+        Los requerimientos no funcionales frecuentemente entran en tensión: optimizar para una característica puede degradar otras. Por ejemplo, mejorar rendimiento mediante caching agresivo puede comprometer seguridad si datos sensibles se cachean inapropiadamente; maximizar flexibilidad y extensibilidad puede incrementar complejidad y reducir rendimiento; incrementar disponibilidad mediante redundancia aumenta costos. Estos trade-offs deben hacerse explícitos y resolverse mediante negociación con stakeholders, considerando prioridades relativas de diferentes características de calidad.
+    </p>
+
+    <h2>5. Herramientas y Tecnologías para Ingeniería de Requerimientos</h2>
+
+    <p>
+        Diversas herramientas soportan actividades de ingeniería de requerimientos, desde herramientas especializadas de gestión de requerimientos hasta herramientas de modelado y análisis. Las herramientas profesionales de gestión de requerimientos como IBM DOORS, Jama Connect, o Polarion proporcionan capacidades como versionado de requerimientos, gestión de trazabilidad, análisis de impacto de cambios, generación de reportes, y colaboración multi-usuario. Estas herramientas resultan apropiadas para proyectos grandes con requerimientos complejos y múltiples stakeholders distribuidos.
+    </p>
+
+    <p>
+        Para proyectos más pequeños o equipos ágiles, herramientas más ligeras como Jira, Azure DevOps, o incluso hojas de cálculo bien estructuradas pueden resultar suficientes. Las herramientas de modelado como Enterprise Architect, Visual Paradigm, o herramientas open-source como PlantUML soportan creación de diversos diagramas UML y otros modelos. La integración de herramientas de requerimientos con sistemas de gestión de proyectos, control de versiones, y gestión de pruebas facilita workflows integrados donde la trazabilidad se mantiene automáticamente.
+    </p>
+
+    <h2>6. Tendencias Emergentes en Ingeniería de Requerimientos</h2>
+
+    <p>
+        La disciplina continúa evolucionando, adaptándose a contextos contemporáneos como desarrollo ágil a escala, sistemas de sistemas, DevOps, y sistemas intensivos en datos y aprendizaje automático. La ingeniería de requerimientos ágil busca equilibrar disciplina rigurosa con flexibilidad y adaptabilidad, enfatizando conversación continua sobre documentación exhaustiva, pero reconociendo que ciertos contextos (sistemas críticos, proyectos distribuidos, desarrollos contractuales) requieren documentación más formal.
+    </p>
+
+    <p>
+        Las técnicas de minería de requerimientos aplican análisis automatizado a fuentes como documentos existentes, logs de sistemas, feedback de usuarios en redes sociales, y repositorios de código para extraer o inferir requerimientos. Los enfoques basados en aprendizaje automático pueden identificar patrones, detectar inconsistencias, o incluso predecir requerimientos faltantes. La crowd requirements engineering explora cómo involucrar grandes comunidades de stakeholders en elicitación y priorización de requerimientos, particularmente relevante para software de consumo masivo. Estas tendencias prometen transformar significativamente prácticas de ingeniería de requerimientos en la próxima década.
+    </p>
+
+    <div class="highlight-box">
+        <h3>Resumen de la Clase</h3>
+        <p>
+            Esta clase ha proporcionado una visión integral de la Ingeniería de Requerimientos, cubriendo sus fundamentos, procesos, técnicas de modelado, desafíos especiales de requerimientos no funcionales, herramientas de soporte, y tendencias emergentes. La ingeniería de requerimientos rigurosa constituye un factor crítico de éxito para proyectos de software, particularmente aquellos de gran escala y complejidad. El dominio de técnicas avanzadas de elicitación, análisis, especificación, validación y gestión de requerimientos representa una competencia esencial para especialistas en Ingeniería de Software.
+        </p>
+    </div>
+
+    <div class="nav-buttons">
+        <a href="#" class="btn btn-prev" data-clase="clase2">← Anterior: Métodos Formales</a>
+        <a href="#" class="btn btn-next" data-clase="clase4">Siguiente: Diseño y Arquitectura →</a>
+    </div>
+</div>

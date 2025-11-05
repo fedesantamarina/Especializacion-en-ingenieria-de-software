@@ -1,0 +1,25 @@
+<div class="clase-content">
+    <h1>Clase 8: Reingeniería y Refactoring de Software</h1>
+    <div class="clase-meta">
+        <div class="meta-item"><strong>Módulo:</strong> Tecnologías Avanzadas</div>
+        <div class="meta-item"><strong>Duración:</strong> 4 horas</div>
+    </div>
+    <h2>1. Fundamentos de Reingeniería de Software</h2>
+    <p>La reingeniería de software aborda el desafío de mantener y modernizar sistemas legacy que, aunque funcionales, presentan limitaciones significativas en términos de mantenibilidad, rendimiento, o alineación con requisitos contemporáneos. Los sistemas legacy frecuentemente constituyen activos críticos de negocio que no pueden reemplazarse abruptamente, requiriendo estrategias de evolución gradual. La reingeniería comprende actividades de análisis del sistema existente (reverse engineering), rediseño mejorado, y reimplementación (forward engineering). El objetivo consiste en preservar funcionalidad mientras se mejoran atributos de calidad, reduce deuda técnica, y moderniza tecnologías subyacentes.</p>
+    <h2>2. Refactoring: Mejora Continua del Diseño</h2>
+    <p>El refactoring, popularizado por Martin Fowler, consiste en modificar estructura interna del código sin alterar su comportamiento externo observable. El refactoring sistemático mantiene código limpio, reduciendo deuda técnica incremental que se acumula durante desarrollo rápido. Los refactorings catalogados por Fowler incluyen Extract Method, Inline Method, Rename Variable, Move Method, Extract Class, Inline Class, Replace Conditional with Polymorphism, entre muchos otros. Los IDEs modernos como IntelliJ IDEA, Eclipse, o Visual Studio proporcionan refactorings automatizados que preservan semántica mientras transforman estructura. La práctica efectiva requiere suite comprehensiva de pruebas que verifiquen que refactorings no introducen regresiones.</p>
+    <h2>3. Code Smells y Detección de Problemas</h2>
+    <p>Los code smells son síntomas de problemas de diseño subyacentes. Duplicated Code viola DRY, incrementando mantenimiento. Long Method dificulta comprensión. Large Class viola Single Responsibility. Long Parameter List complica uso. Divergent Change indica clase con múltiples razones de cambio. Shotgun Surgery requiere múltiples cambios pequeños dispersos para modificar funcionalidad. Feature Envy indica método más interesado en otra clase. Data Clumps sugieren objetos conceptuales no modelados. Primitive Obsession usa tipos primitivos en lugar de objetos de dominio. Switch Statements sugieren polimorfismo. Las herramientas de análisis estático detectan automáticamente muchos smells, priorizando refactorings.</p>
+    <h2>4. Gestión de Deuda Técnica</h2>
+    <p>La deuda técnica representa costo futuro de mantenimiento causado por decisiones subóptimas de diseño o implementación. Ward Cunningham acuñó la metáfora: como deuda financiera, genera 'intereses' (esfuerzo adicional) que consumen recursos. La deuda técnica puede ser deliberada (decisiones conscientes por time-to-market) o inadvertida (ignorancia o descuido). La gestión efectiva requiere hacerla visible mediante métricas (complejidad ciclomática, acoplamiento, cobertura de tests), priorizar pago basado en dolor actual y futuro, y asignar tiempo explícito para refactoring en sprints. El Technical Debt Quadrant de Fowler clasifica deuda como prudente/imprudente y deliberada/inadvertida, guiando estrategias de gestión.</p>
+    <h2>5. Modernización de Sistemas Legacy</h2>
+    <p>Los sistemas legacy presentan desafíos únicos: documentación inadecuada, tecnologías obsoletas, arquitectura monolítica rígida, y expertise escaso. Las estrategias de modernización incluyen encapsulation (wrapper con interfaces modernas), rehosting (migrar a infraestructura moderna sin cambiar código), replatforming (migrar a plataforma diferente con cambios mínimos), refactoring (reestructurar mejorando diseño), rearchitecting (alterar arquitectura sustancialmente), rebuilding (reescribir desde cero), y replacing (adquirir producto comercial). La estrategia apropiada depende de valor de negocio, estado técnico, riesgo, y recursos. El patrón Strangler Fig permite reemplazo gradual migrando funcionalidad incrementalmente hacia nuevo sistema mientras el legacy continúa operando.</p>
+    <div class="highlight-box">
+        <h3>Resumen de la Clase</h3>
+        <p>Esta clase ha cubierto técnicas de reingeniería y refactoring de software, desde identificación de code smells hasta gestión de deuda técnica y modernización de sistemas legacy. Estas competencias resultan esenciales para mantener calidad de sistemas a largo plazo.</p>
+    </div>
+    <div class="nav-buttons">
+        <a href="#" class="btn btn-prev" data-clase="clase7">← Anterior</a>
+        <a href="#" class="btn btn-next" data-clase="clase9">Siguiente →</a>
+    </div>
+</div>

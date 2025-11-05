@@ -1,0 +1,27 @@
+<div class="clase-content">
+    <h1>Clase 12: Desarrollo de Aplicaciones Móviles</h1>
+    <div class="clase-meta">
+        <div class="meta-item"><strong>Módulo:</strong> Desarrollo de Aplicaciones</div>
+        <div class="meta-item"><strong>Duración:</strong> 4 horas</div>
+    </div>
+    <h2>1. Ecosistemas Móviles: iOS y Android</h2>
+    <p>Los ecosistemas móviles dominantes, iOS y Android, presentan características distintivas. iOS, desarrollado por Apple, ejecuta en iPhones e iPads, enfatiza consistencia de experiencia, seguridad rigurosa, y revisión estricta de apps en App Store. El desarrollo iOS tradicionalmente usa Objective-C o Swift con Xcode en macOS. Android, desarrollado por Google, ejecuta en dispositivos de múltiples fabricantes, enfatiza apertura y customización. El desarrollo Android usa Java o Kotlin con Android Studio. Cada plataforma tiene guidelines de diseño (Human Interface Guidelines para iOS, Material Design para Android), APIs específicas, y consideraciones de fragmentación (especialmente Android con múltiples versiones de OS y tamaños de pantalla).</p>
+    <h2>2. Desarrollo Nativo vs. Cross-Platform</h2>
+    <p>El desarrollo nativo usa lenguajes y herramientas específicos de plataforma (Swift/Objective-C para iOS, Kotlin/Java para Android), proporcionando máximo rendimiento, acceso completo a APIs de plataforma, y UX nativa. Sin embargo, requiere equipos y codebases separados. El desarrollo cross-platform usa frameworks como React Native, Flutter, o Xamarin para escribir código una vez y desplegar en múltiples plataformas. React Native usa JavaScript/React, compilando a componentes nativos. Flutter usa Dart, renderizando UI propia con alto rendimiento. Xamarin usa C# compartiendo lógica mientras permite UI específica de plataforma. Los frameworks cross-platform reducen costo pero presentan trade-offs en rendimiento, acceso a APIs, y experiencia nativa.</p>
+    <h2>3. Arquitecturas Móviles</h2>
+    <p>Las arquitecturas móviles deben considerar constrains de dispositivos: memoria limitada, batería, conectividad intermitente, pantallas pequeñas. MVC, MVP, y MVVM separan concerns: Model (datos/lógica), View (UI), Controller/Presenter/ViewModel (median entre Model y View). MVVM, especialmente popular en Android (con Architecture Components) e iOS (con SwiftUI/Combine), usa data binding para sincronizar View y ViewModel. Clean Architecture aplica principios SOLID organizando código en capas con dependencias hacia adentro. El patrón Repository abstrae fuentes de datos (red, BD local, cache). Los patrones de networking gestionan llamadas API asíncronas, manejo de errores, y retry logic.</p>
+    <h2>4. Persistencia y Gestión de Estado</h2>
+    <p>Las apps móviles requieren persistencia local para offline functionality y cache. Las opciones incluyen SharedPreferences/UserDefaults (key-value simple), SQLite (BD relacional), Room/CoreData (ORMs), Realm (BD móvil orientada a objetos), y almacenamiento de archivos. La gestión de estado resulta crítica para UI reactiva: Redux/MobX en React Native, Provider/BLoC en Flutter, ObservableObject/Combine en iOS. El offline-first design asume conectividad intermitente, almacenando datos localmente y sincronizando cuando hay conexión. Los conflict resolution strategies manejan sincronización bidireccional entre dispositivo y backend.</p>
+    <h2>5. Performance y Optimización</h2>
+    <p>El rendimiento impacta críticamenteexperiencia móvil. Las técnicas incluyen lazy loading (cargar datos bajo demanda), pagination (cargar datos en páginas), image optimization (comprimir, cache), lista virtualization (renderizar solo ítems visibles), background threading (operaciones pesadas fuera del UI thread), y memory management (prevenir leaks). Los profiling tools (Xcode Instruments, Android Profiler) identifican cuellos de botella. El startup time debe minimizarse: lazy initialization, splash screens, pre-caching. El battery consumption debe optimizarse: minimizar network calls, usar efficient algorithms, defer non-critical work.</p>
+    <h2>6. Seguridad y Distribución</h2>
+    <p>La seguridad móvil aborda amenazas como man-in-the-middle, almacenamiento inseguro, reverse engineering. Las prácticas incluyen certificate pinning, encriptación de datos sensibles, obfuscación de código, jailbreak/root detection, y autenticación biométrica. La distribución involucra publicar en App Store (iOS) y Google Play (Android), cada uno con procesos de revisión, políticas, y consideraciones técnicas (signing, provisioning profiles en iOS; signing con keystore en Android). Los servicios como TestFlight (iOS) y Google Play Beta facilitan testing beta. Los analytics y crash reporting (Firebase, Crashlytics) proporcionan insights sobre comportamiento y estabilidad.</p>
+    <div class="highlight-box">
+        <h3>Resumen</h3>
+        <p>Esta clase ha cubierto desarrollo móvil incluyendo ecosistemas iOS/Android, desarrollo nativo vs. cross-platform, arquitecturas, persistencia, performance, y seguridad. El desarrollo móvil requiere considerar constrains únicos de dispositivos y proporcionar experiencias optimizadas.</p>
+    </div>
+    <div class="nav-buttons">
+        <a href="#" class="btn btn-prev" data-clase="clase11">← Anterior</a>
+        <a href="#" class="btn btn-next" data-clase="clase13">Siguiente →</a>
+    </div>
+</div>

@@ -1,0 +1,73 @@
+<div class="clase-content">
+    <h1>Clase 7: Diseño Avanzado Orientado a Objetos</h1>
+
+    <div class="clase-meta">
+        <div class="meta-item"><strong>Módulo:</strong> Tecnologías Avanzadas</div>
+        <div class="meta-item"><strong>Duración:</strong> 4 horas</div>
+        <div class="meta-item"><strong>Nivel:</strong> Avanzado</div>
+    </div>
+
+    <h2>1. Principios SOLID en Profundidad</h2>
+    <p>
+        Los principios SOLID, formulados por Robert C. Martin (Uncle Bob), representan cinco principios fundamentales que guían el diseño orientado a objetos hacia sistemas mantenibles, extensibles y testables. Estos principios han sido ampliamente adoptados en la industria y constituyen fundamento esencial para arquitecturas de software de calidad. Single Responsibility Principle dicta que cada clase debe tener una única razón para cambiar. Open/Closed Principle establece que entidades deben estar abiertas para extensión pero cerradas para modificación. Liskov Substitution Principle requiere que subtipos sean sustituibles por sus tipos base. Interface Segregation Principle aconseja múltiples interfaces específicas sobre una interfaz general. Dependency Inversion Principle invierte dependencias tradicionales hacia abstracciones.
+    </p>
+
+    <h3>1.1 Aplicación Práctica de SOLID</h3>
+    <p>
+        La aplicación efectiva de SOLID requiere comprensión profunda más allá de definiciones memorísticas. Single Responsibility no significa que cada clase debe tener un solo método, sino que debe tener cohesión conceptual con única razón de cambio. Open/Closed se logra típicamente mediante abstracciones (interfaces, clases abstractas) y composición. Liskov Substitution implica que precondiciones no pueden fortalecerse en subtipos y postcondiciones no pueden debilitarse. Interface Segregation evita que clientes dependan de métodos que no usan, facilitando evolución independiente. Dependency Inversion, implementado mediante inyección de dependencias, facilita testing con mocks y permite intercambiar implementaciones sin modificar clientes. Los frameworks modernos como Spring incorporan estos principios profundamente en su diseño.
+    </p>
+
+    <div class="mermaid">
+    graph TB
+        subgraph "Principios SOLID"
+            S[Single Responsibility<br/>Una razón para cambiar]
+            O[Open/Closed<br/>Abierto extensión, cerrado modificación]
+            L[Liskov Substitution<br/>Subtipos sustituibles]
+            I[Interface Segregation<br/>Interfaces específicas]
+            D[Dependency Inversion<br/>Depender de abstracciones]
+        end
+
+        S --> QUALITY[Código de Alta Calidad]
+        O --> QUALITY
+        L --> QUALITY
+        I --> QUALITY
+        D --> QUALITY
+
+        style QUALITY fill:#2ecc71,stroke:#27ae60,stroke-width:3px
+    </div>
+
+    <h2>2. Patrones de Diseño Gang of Four Avanzados</h2>
+    <p>
+        Los 23 patrones de diseño catalogados por Gamma, Helm, Johnson y Vlissides (Gang of Four) permanecen relevantes décadas después de su publicación. Sin embargo, su aplicación efectiva requiere comprensión de cuándo aplicarlos, no solo cómo. Los patrones no son recetas que deben aplicarse indiscriminadamente; son soluciones a problemas específicos recurrentes. La sobre-aplicación de patrones (pattern fever) puede resultar en complejidad innecesaria. La comprensión avanzada incluye reconocer variaciones de patrones, combinarlos apropiadamente, y adaptarlos a contextos específicos.
+    </p>
+
+    <h3>2.1 Patrones Creacionales Avanzados</h3>
+    <p>
+        Factory Method y Abstract Factory se usan frecuentemente para desacoplar creación de objetos de su uso. Builder resulta invaluable para construir objetos complejos con muchos parámetros opcionales, evitando constructores telescópicos. Prototype permite clonar objetos existentes cuando creación desde cero resulta costosa. Singleton, aunque útil, debe usarse cautelosamente: introduce estado global que complica testing y puede ocultar dependencias. Alternativas como inyección de dependencias frecuentemente resultan preferibles. Los frameworks modernos de IoC (Inversion of Control) como Spring gestionan ciclo de vida de objetos aplicando patrones creacionales transparentemente.
+    </p>
+
+    <h3>2.2 Patrones Estructurales y de Comportamiento</h3>
+    <p>
+        Adapter transforma interfaces incompatibles, facilitando integración de componentes legacy o librerías terceras. Facade simplifica interfaces complejas de subsistemas, reduciendo acoplamiento entre clientes y subsistemas. Decorator añade responsabilidades dinámicamente sin modificar código existente, respetando Open/Closed. Strategy encapsula familias de algoritmos intercambiables, facilitando variación de comportamiento en runtime. Observer implementa mecanismo de publicación-suscripción, fundamental para arquitecturas reactivas y event-driven. Command encapsula solicitudes como objetos, permitiendo parametrización de clientes, queueing de operaciones, y soporte para undo.
+    </p>
+
+    <h2>3. Principios GRASP y Domain-Driven Design</h2>
+    <p>
+        Los principios GRASP (General Responsibility Assignment Software Patterns), formulados por Craig Larman, proporcionan guías para asignar responsabilidades a clases y objetos. Information Expert asigna responsabilidad a la clase que tiene información necesaria para cumplirla. Creator determina quién debe crear instancias de una clase. Controller designa objetos que reciben y coordinan eventos del sistema. Low Coupling minimiza dependencias entre clases. High Cohesion maximiza relación entre responsabilidades de una clase. Domain-Driven Design complementa estos principios con patterns específicos: Entities con identidad persistente, Value Objects inmutables, Aggregates como unidades de consistencia, Repositories para persistencia, y Domain Services para lógica de dominio compleja.
+    </p>
+
+    <h2>4. Anti-Patrones y Diseño para Testabilidad</h2>
+    <p>
+        Los anti-patrones son soluciones recurrentes que parecen beneficiosas pero resultan contraproducentes. God Class concentra excesiva funcionalidad violando Single Responsibility. Spaghetti Code carece de estructura clara. Los code smells catalogados por Fowler son síntomas de problemas de diseño: Long Method, Large Class, Long Parameter List, Feature Envy, Data Clumps. El diseño para testabilidad facilita escritura de pruebas efectivas mediante inyección de dependencias, clases pequeñas con responsabilidades focalizadas, y separación de lógica de negocio de infraestructura. El diseño testeable típicamente resulta en mejor diseño general: bajo acoplamiento, alta cohesión, y separación de concerns.
+    </p>
+
+    <div class="highlight-box">
+        <h3>Resumen de la Clase</h3>
+        <p>Esta clase ha profundizado en diseño avanzado orientado a objetos, cubriendo principios SOLID, patrones GoF, principios GRASP, DDD táctico, anti-patrones, y diseño para testabilidad. El dominio de estos conceptos permite a ingenieros de software crear sistemas robustos, mantenibles y escalables.</p>
+    </div>
+
+    <div class="nav-buttons">
+        <a href="#" class="btn btn-prev" data-clase="clase6">← Anterior: Verificación Formal</a>
+        <a href="#" class="btn btn-next" data-clase="clase8">Siguiente: Reingeniería →</a>
+    </div>
+</div>

@@ -1,0 +1,301 @@
+<div class="clase-content">
+    <h1>Clase 4: Diseño y Arquitectura de Software</h1>
+
+    <div class="clase-meta">
+        <div class="meta-item">
+            <strong>Módulo:</strong> Fundamentos
+        </div>
+        <div class="meta-item">
+            <strong>Duración:</strong> 4 horas
+        </div>
+        <div class="meta-item">
+            <strong>Nivel:</strong> Avanzado
+        </div>
+    </div>
+
+    <h2>1. Fundamentos del Diseño de Software</h2>
+
+    <p>
+        El diseño de software constituye el proceso técnico mediante el cual los requerimientos se transforman en una representación del software que puede implementarse. Mientras los requerimientos especifican qué debe hacer el sistema, el diseño especifica cómo el sistema logrará esos objetivos. El diseño abarca múltiples niveles de abstracción, desde la arquitectura de alto nivel que define componentes principales y sus interacciones, hasta el diseño detallado que especifica algoritmos, estructuras de datos y interfaces de clases individuales. La calidad del diseño impacta profundamente atributos críticos del software como mantenibilidad, escalabilidad, rendimiento, y confiabilidad.
+    </p>
+
+    <p>
+        El diseño de software es inherentemente una actividad compleja que involucra tomar numerosas decisiones técnicas interrelacionadas. Raramente existe una única solución óptima: el diseñador debe navegar trade-offs entre objetivos conflictivos, como flexibilidad versus simplicidad, rendimiento versus mantenibilidad, o time-to-market versus robustez arquitectónica. Las decisiones de diseño tienen consecuencias duraderas: las estructuras arquitectónicas fundamentales, una vez establecidas, resultan costosas de modificar sustancialmente. Por ello, el diseño requiere combinar conocimiento técnico profundo, experiencia práctica, y pensamiento creativo para concebir soluciones que satisfagan múltiples criterios simultáneamente.
+    </p>
+
+    <div class="info-box">
+        <p><strong>Definición clave:</strong> El diseño de software es el proceso de definir la arquitectura, componentes, interfaces y otras características de un sistema para satisfacer requerimientos especificados, balanceando múltiples atributos de calidad.</p>
+    </div>
+
+    <h3>1.1 Principios Fundamentales del Diseño</h3>
+
+    <p>
+        Ciertos principios fundamentales han emergido a través de décadas de experiencia en construcción de sistemas de software, proporcionando guías valiosas para decisiones de diseño. La abstracción permite gestionar complejidad ocultando detalles irrelevantes y enfocándose en aspectos esenciales. La modularidad divide el sistema en componentes cohesivos con interfaces bien definidas, facilitando comprensión, desarrollo paralelo, testing, y mantenimiento. El ocultamiento de información, principio articulado por David Parnas, prescribe que cada módulo oculte decisiones de diseño que probablemente cambiarán, exponiendo solo interfaces estables.
+    </p>
+
+    <p>
+        La separación de concerns busca dividir el sistema según diferentes aspectos de funcionalidad, minimizando superposición y acoplamiento. Alta cohesión y bajo acoplamiento constituyen objetivos fundamentales: módulos deben tener responsabilidades estrechamente relacionadas (alta cohesión) y dependencias mínimas entre módulos (bajo acoplamiento). Estos principios clásicos mantienen vigencia y relevancia, fundamentando prácticas de diseño contemporáneas. El desafío práctico radica en aplicar estos principios de manera apropiada en contextos específicos, equilibrando pureza conceptual con pragmatismo ingenieril.
+    </p>
+
+    <div class="mermaid">
+    graph TB
+        A[Principios de Diseño de Software] --> B[Abstracción]
+        A --> C[Modularidad]
+        A --> D[Ocultamiento de Información]
+        A --> E[Separación de Concerns]
+        A --> F[Alta Cohesión]
+        A --> G[Bajo Acoplamiento]
+
+        B --> H[Gestión de Complejidad]
+        C --> H
+        D --> H
+        E --> H
+        F --> I[Mantenibilidad]
+        G --> I
+
+        H --> J[Software de Calidad]
+        I --> J
+
+        style A fill:#9b59b6
+        style J fill:#2ecc71,stroke:#27ae60,stroke-width:3px
+    </div>
+
+    <h3>1.2 Niveles de Diseño</h3>
+
+    <p>
+        El diseño de software se estructura típicamente en niveles jerárquicos. El diseño arquitectónico (o arquitectura de software) define la estructura de más alto nivel del sistema, identificando componentes principales, sus responsabilidades, y patrones de interacción entre ellos. Las decisiones arquitectónicas tienen impacto amplio y resultan costosas de cambiar posteriormente, por lo que requieren consideración cuidadosa de múltiples factores incluyendo requerimientos funcionales y no funcionales, restricciones tecnológicas, y consideraciones de negocio.
+    </p>
+
+    <p>
+        El diseño de alto nivel (high-level design) refina la arquitectura, detallando estructura de subsistemas y sus interfaces. El diseño detallado (detailed design) especifica algoritmos, estructuras de datos, y diseño de clases o módulos individuales. Esta jerarquía permite gestionar complejidad mediante niveles de abstracción sucesivos: en cada nivel se razona sobre conceptos apropiados a ese nivel sin quedar abrumado por detalles de niveles inferiores. Sin embargo, los niveles no son estrictamente secuenciales: el diseño es inherentemente iterativo, con feedback entre niveles a medida que se descubren insights.
+    </p>
+
+    <h2>2. Arquitectura de Software</h2>
+
+    <p>
+        La arquitectura de software ha emergido como una subdisciplina fundamental dentro de la Ingeniería de Software. La arquitectura de un sistema de software comprende sus estructuras fundamentales, incluyendo componentes de software, sus propiedades externamente visibles, y las relaciones entre ellos. Las decisiones arquitectónicas establecen las estrategias fundamentales para lograr atributos de calidad como rendimiento, escalabilidad, disponibilidad, seguridad, modificabilidad, y interoperabilidad. La arquitectura también facilita comunicación entre stakeholders y captura decisiones de diseño tempranas que conforman el desarrollo subsecuente.
+    </p>
+
+    <h3>2.1 Estilos y Patrones Arquitectónicos</h3>
+
+    <p>
+        Los estilos arquitectónicos representan soluciones probadas para problemas arquitectónicos recurrentes. Un estilo arquitectónico define un vocabulario de tipos de componentes y conectores, junto con restricciones sobre cómo pueden combinarse. Los estilos arquitectónicos principales incluyen arquitectura en capas, donde componentes se organizan en capas jerárquicas con dependencias unidireccionales hacia capas inferiores; cliente-servidor, que separa funcionalidad en procesos o sistemas independientes que colaboran mediante protocolos de comunicación; y arquitectura basada en componentes, que enfatiza composición de componentes reusables con interfaces bien definidas.
+    </p>
+
+    <p>
+        El estilo pipes-and-filters estructura sistemas como secuencias de componentes de procesamiento (filtros) conectados por conductos (pipes) que transportan datos. Este estilo resulta apropiado para procesamiento de flujos de datos. La arquitectura basada en eventos emplea eventos como mecanismo primario de comunicación entre componentes desacoplados, facilitando escalabilidad y extensibilidad. Arquitecturas orientadas a servicios (SOA) y microservicios, evoluciones contemporáneas, estructuran sistemas como conjuntos de servicios independientes con interfaces bien definidas, optimizando para despliegue independiente, escalabilidad granular, y resilencia.
+    </p>
+
+    <div class="mermaid">
+    graph TB
+        subgraph "Arquitectura en Capas"
+            P[Presentación]
+            P --> L[Lógica de Negocio]
+            L --> D[Acceso a Datos]
+            D --> DB[(Base de Datos)]
+        end
+
+        subgraph "Microservicios"
+            MS1[Servicio Usuarios]
+            MS2[Servicio Pedidos]
+            MS3[Servicio Pagos]
+            MS4[Servicio Inventario]
+
+            API[API Gateway]
+            API --> MS1
+            API --> MS2
+            API --> MS3
+            API --> MS4
+        end
+
+        style P fill:#3498db
+        style L fill:#9b59b6
+        style D fill:#e74c3c
+        style API fill:#2ecc71
+    </div>
+
+    <h3>2.2 Arquitecturas Hexagonales y Clean Architecture</h3>
+
+    <p>
+        La arquitectura hexagonal (también conocida como ports and adapters), propuesta por Alistair Cockburn, busca aislar la lógica de negocio central de dependencias externas como interfaces de usuario, bases de datos, o servicios externos. La lógica de negocio se coloca en el núcleo y se comunica con el mundo exterior exclusivamente mediante interfaces (ports) implementadas por adaptadores. Esta separación facilita testing de la lógica de negocio de manera aislada, intercambio de tecnologías externas sin impactar el core, y evolución independiente de diferentes partes del sistema.
+    </p>
+
+    <p>
+        Clean Architecture, popularizada por Robert Martin (Uncle Bob), propone principios similares organizados en capas concéntricas donde las dependencias apuntan hacia adentro: capas externas dependen de capas internas, nunca al revés. El núcleo contiene entidades de negocio, rodeadas por casos de uso que orquestan flujos de negocio, rodeadas por adaptadores de interfaces y frameworks. Esta inversión de dependencias, implementada mediante inyección de dependencias y principios SOLID, permite que el código de negocio permanezca independiente de frameworks, UI, bases de datos, y otros detalles de implementación.
+    </p>
+
+    <h3>2.3 Documentación Arquitectónica</h3>
+
+    <p>
+        La arquitectura de software debe documentarse para facilitar comunicación entre stakeholders, guiar desarrollo e implementación, soportar análisis de arquitectura, y servir como base para evolución del sistema. El modelo de vistas 4+1 de Philippe Kruchten organiza la descripción arquitectónica en vistas que abordan concerns de diferentes stakeholders: vista lógica (estructura de clases y objetos), vista de proceso (aspectos dinámicos y concurrencia), vista física (mapeo a hardware), vista de desarrollo (organización de módulos de software), y escenarios que ilustran arquitectura mediante casos de uso concretos.
+    </p>
+
+    <p>
+        El estándar IEEE 1471 (posteriormente ISO/IEC/IEEE 42010) proporciona un framework para describir arquitecturas mediante viewpoints y views. Cada viewpoint define perspectiva desde la cual se observa el sistema, apropiada para concerns específicos y stakeholders particulares. El lenguaje de descripción arquitectónica Arc42 proporciona una plantilla estructurada que cubre contexto, restricciones, decisiones arquitectónicas clave, building blocks, conceptos transversales, decisiones de diseño, y riesgos técnicos. La documentación efectiva balancea exhaustividad con pragmatismo, documentando decisiones significativas sin abrumar con detalles triviales.
+    </p>
+
+    <h3>2.4 Evaluación y Análisis de Arquitecturas</h3>
+
+    <p>
+        Las arquitecturas pueden evaluarse mediante diversos métodos formales antes de comprometer recursos significativos a implementación. El método ATAM (Architecture Tradeoff Analysis Method), desarrollado por el SEI (Software Engineering Institute), proporciona un proceso estructurado para evaluar arquitecturas respecto a atributos de calidad, identificar trade-offs, y revelar riesgos arquitectónicos. ATAM involucra stakeholders diversos en workshops facilitados donde se analizan escenarios de atributos de calidad, se evalúa cómo la arquitectura soporta cada escenario, y se identifican puntos de sensibilidad y trade-offs.
+    </p>
+
+    <p>
+        Otros métodos como SAAM (Software Architecture Analysis Method), enfocado en modificabilidad, o CBAM (Cost Benefit Analysis Method), que incorpora análisis económico, proporcionan alternativas para contextos específicos. El análisis arquitectónico cualitativo complementa prototipado y experimentación cuando aspectos críticos de rendimiento, escalabilidad o seguridad requieren validación temprana. La inversión en evaluación arquitectónica resulta modesta comparada con costos de rectificar arquitecturas fundamentalmente inadecuadas después de implementación sustancial.
+    </p>
+
+    <h2>3. Patrones de Diseño</h2>
+
+    <p>
+        Los patrones de diseño representan soluciones probadas a problemas recurrentes de diseño en contextos específicos. Popularizados por el libro seminal "Design Patterns: Elements of Reusable Object-Oriented Software" de Gamma, Helm, Johnson y Vlissides (la "Gang of Four" o GoF), los patrones de diseño han transformado la práctica del diseño orientado a objetos. Un patrón captura conocimiento de diseño de manera que pueda comunicarse, aprenderse y aplicarse efectivamente, proporcionando un vocabulario común para discutir soluciones de diseño.
+    </p>
+
+    <h3>3.1 Patrones Creacionales</h3>
+
+    <p>
+        Los patrones creacionales se enfocan en mecanismos de creación de objetos, incrementando flexibilidad y reuso. El patrón Singleton asegura que una clase tenga una única instancia y proporciona punto de acceso global, útil para gestionar recursos compartidos como conexiones de base de datos o configuración. Factory Method define una interfaz para crear objetos pero permite que subclases decidan qué clase instanciar, desacoplando código cliente de clases concretas. Abstract Factory proporciona interfaz para crear familias de objetos relacionados sin especificar sus clases concretas.
+    </p>
+
+    <p>
+        El patrón Builder separa construcción de objetos complejos de su representación, permitiendo mismo proceso de construcción crear diferentes representaciones. Prototype especifica tipos de objetos a crear usando instancia prototípica y crea nuevos objetos clonando el prototipo. Estos patrones abordan problemas como dependencias rígidas en código cliente, dificultad para cambiar clases concretas usadas, o complejidad de construcción de objetos. Su aplicación apropiada mejora flexibilidad y mantenibilidad, aunque uso excesivo puede introducir complejidad innecesaria.
+    </p>
+
+    <div class="warning-box">
+        <p><strong>Antipatrón común:</strong> Aplicar patrones de diseño indiscriminadamente sin necesidad real introduce complejidad innecesaria. Los patrones deben aplicarse cuando el problema que resuelven efectivamente existe, no como ejercicio académico.</p>
+    </div>
+
+    <h3>3.2 Patrones Estructurales</h3>
+
+    <p>
+        Los patrones estructurales se enfocan en composición de clases y objetos para formar estructuras mayores. El patrón Adapter convierte interfaz de una clase en otra interfaz esperada por clientes, permitiendo colaboración entre clases con interfaces incompatibles. Bridge desacopla abstracción de su implementación permitiendo que varíen independientemente. Composite permite tratar objetos individuales y composiciones de objetos uniformemente, útil para estructuras jerárquicas tipo árbol.
+    </p>
+
+    <p>
+        Decorator añade responsabilidades a objetos dinámicamente, proporcionando alternativa flexible a herencia para extender funcionalidad. Facade proporciona interfaz unificada simplificada a conjunto de interfaces en subsistema, facilitando uso de subsistemas complejos. Proxy proporciona sustituto o placeholder para otro objeto, controlando acceso a él. Flyweight utiliza compartición para soportar eficientemente gran número de objetos de grano fino. Estos patrones abordan problemas de organización estructural, encapsulación de subsistemas, y gestión eficiente de objetos.
+    </p>
+
+    <h3>3.3 Patrones de Comportamiento</h3>
+
+    <p>
+        Los patrones de comportamiento se enfocan en algoritmos y asignación de responsabilidades entre objetos. Observer define dependencia uno-a-muchos entre objetos de modo que cuando un objeto cambia estado, todos sus dependientes son notificados y actualizados automáticamente. Strategy encapsula familia de algoritmos intercambiables, permitiendo que varíen independientemente de clientes que los usan. Command encapsula solicitud como objeto, permitiendo parametrizar clientes con diferentes solicitudes, encolar solicitudes, y soportar operaciones deshacer.
+    </p>
+
+    <p>
+        State permite que un objeto altere su comportamiento cuando su estado interno cambia, aparentando cambiar su clase. Template Method define esqueleto de algoritmo en operación, diferiendo algunos pasos a subclases. Iterator proporciona manera de acceder elementos de objeto agregado secuencialmente sin exponer representación subyacente. Visitor representa operación a realizar sobre elementos de estructura de objetos, permitiendo definir nueva operación sin cambiar clases de elementos operados. Otros patrones comportamentales incluyen Chain of Responsibility, Mediator, Memento, e Interpreter, cada uno resolviendo problemas específicos de diseño comportamental.
+    </p>
+
+    <div class="mermaid">
+    classDiagram
+        class Subject {
+            +attach(Observer)
+            +detach(Observer)
+            +notify()
+        }
+        class Observer {
+            <<interface>>
+            +update()
+        }
+        class ConcreteSubject {
+            -state
+            +getState()
+            +setState()
+        }
+        class ConcreteObserver {
+            -observerState
+            +update()
+        }
+
+        Subject <|-- ConcreteSubject
+        Observer <|-- ConcreteObserver
+        Subject o-- Observer
+        ConcreteObserver ..> ConcreteSubject : observes
+
+        note for Observer "Patrón Observer:\nDefine dependencia 1-a-N\nentre objetos"
+    </div>
+
+    <h3>3.4 Patrones Empresariales</h3>
+
+    <p>
+        Martin Fowler identificó patrones específicos para aplicaciones empresariales en su obra "Patterns of Enterprise Application Architecture". Estos patrones abordan problemas característicos de sistemas empresariales como gestión de transacciones, acceso a datos, lógica de negocio compleja, y presentación. Patrones de acceso a datos incluyen Data Mapper (capa que transfiere datos entre objetos y base de datos manteniendo independencia), Active Record (objeto encapsula fila de base de datos y lógica de acceso a datos), y Repository (media entre capa de dominio y data mapping actuando como colección de objetos en memoria).
+    </p>
+
+    <p>
+        Patrones de lógica de negocio incluyen Transaction Script (organiza lógica de negocio por procedimientos donde cada procedimiento maneja solicitud de presentación), Domain Model (modelo de objetos del dominio que incorpora comportamiento y datos), y Table Module (instancia única maneja lógica de negocio para todas las filas de tabla). Patrones de presentación incluyen Model-View-Controller, Model-View-Presenter, y Model-View-ViewModel, que separan lógica de presentación de lógica de negocio. La selección apropiada de patrones empresariales impacta significativamente mantenibilidad y testabilidad de aplicaciones empresariales.
+    </p>
+
+    <h2>4. Principios SOLID</h2>
+
+    <p>
+        Los principios SOLID, articulados por Robert Martin, representan cinco principios fundamentales de diseño orientado a objetos que promueven código mantenible, flexible y robusto. Estos principios han ganado aceptación amplia como guías fundamentales para diseño de calidad. SOLID constituye un acrónimo de Single Responsibility Principle, Open/Closed Principle, Liskov Substitution Principle, Interface Segregation Principle, y Dependency Inversion Principle.
+    </p>
+
+    <h3>4.1 Single Responsibility Principle (SRP)</h3>
+
+    <p>
+        El Principio de Responsabilidad Única establece que una clase debe tener una única razón para cambiar, es decir, debe tener una única responsabilidad. Cuando una clase asume múltiples responsabilidades, cambios en una responsabilidad pueden impactar o romper código relacionado con otras responsabilidades. SRP promueve alta cohesión: clases cuyos métodos y datos están estrechamente relacionados. Aplicar SRP resulta en clases más pequeñas, focalizadas, fáciles de comprender, testear y mantener. El desafío radica en identificar apropiadamente qué constituye una "responsabilidad única", lo cual requiere comprensión del dominio y anticipación de posibles vectores de cambio.
+    </p>
+
+    <h3>4.2 Open/Closed Principle (OCP)</h3>
+
+    <p>
+        El Principio Abierto/Cerrado establece que entidades de software deben estar abiertas para extensión pero cerradas para modificación. El objetivo es diseñar módulos que puedan extenderse con nuevo comportamiento sin modificar código existente, reduciendo riesgo de introducir defectos en funcionalidad ya probada. OCP típicamente se logra mediante abstracción: definir interfaces o clases abstractas estables y crear nuevas implementaciones para extender comportamiento. Patrones como Strategy y Template Method facilitan aplicación de OCP. Este principio resulta especialmente valioso en sistemas grandes donde modificaciones tienen alto riesgo y costo.
+    </p>
+
+    <h3>4.3 Liskov Substitution Principle (LSP)</h3>
+
+    <p>
+        El Principio de Sustitución de Liskov, formulado por Barbara Liskov, establece que objetos de una clase derivada deben poder reemplazar objetos de la clase base sin alterar corrección del programa. En términos más formales, los subtipos deben ser sustituibles por sus tipos base. Violaciones de LSP crean situaciones donde código cliente debe conocer tipos concretos y manejar casos especiales, erosionando beneficios del polimorfismo. LSP implica que clases derivadas deben honrar contratos establecidos por clases base: precondiciones no pueden fortalecerse, postcondiciones no pueden debilitarse, e invariantes deben preservarse.
+    </p>
+
+    <h3>4.4 Interface Segregation Principle (ISP)</h3>
+
+    <p>
+        El Principio de Segregación de Interfaces establece que clientes no deben forzarse a depender de interfaces que no usan. Interfaces grandes que proporcionan muchos métodos para diferentes tipos de clientes resultan problemáticas: cambios en interfaz por necesidades de un cliente impactan todos los clientes. ISP recomienda dividir interfaces grandes en interfaces más pequeñas y específicas que agrupan métodos relacionados. Clientes dependen solo de interfaces que realmente necesitan. Esto reduce acoplamiento, facilita comprensión, y limita impacto de cambios. ISP se relaciona con SRP aplicado a interfaces.
+    </p>
+
+    <h3>4.5 Dependency Inversion Principle (DIP)</h3>
+
+    <p>
+        El Principio de Inversión de Dependencias establece que módulos de alto nivel no deben depender de módulos de bajo nivel; ambos deben depender de abstracciones. Además, abstracciones no deben depender de detalles; detalles deben depender de abstracciones. Este principio invierte dependencias tradicionales donde capas superiores dependen de capas inferiores. En su lugar, se define interfaz abstracta basada en necesidades de cliente de alto nivel, y módulos de bajo nivel implementan esa interfaz. DIP, implementado típicamente mediante inyección de dependencias, facilita testing (mediante mocks), intercambio de implementaciones, y evolución independiente de capas.
+    </p>
+
+    <h2>5. Domain-Driven Design (DDD)</h2>
+
+    <p>
+        Domain-Driven Design, articulado por Eric Evans, proporciona enfoque para diseñar sistemas complejos centrándose en el modelo del dominio de negocio. DDD reconoce que para sistemas empresariales complejos, la complejidad central radica en el dominio de negocio, no en aspectos técnicos. El objetivo es desarrollar un modelo de dominio rico que capture conocimiento de negocio, expresando lógica de dominio de manera que refleje conceptos del negocio. Este modelo sirve como fundamento para diseño e implementación, y como lenguaje común (ubiquitous language) entre desarrolladores y expertos de dominio.
+    </p>
+
+    <h3>5.1 Building Blocks Tácticos de DDD</h3>
+
+    <p>
+        DDD define building blocks tácticos para implementar modelos de dominio. Entities son objetos con identidad que persiste en el tiempo. Value Objects son objetos inmutables sin identidad conceptual, definidos por sus atributos. Aggregates agrupan entities y value objects en unidades de consistencia con raíz de agregado como punto de acceso. Repositories proporcionan abstracción para acceso a aggregates, encapsulando lógica de persistencia. Domain Services encapsulan lógica de dominio que no pertenece naturalmente a entities o value objects. Domain Events capturan ocurrencias significativas en el dominio.
+    </p>
+
+    <h3>5.2 Patrones Estratégicos de DDD</h3>
+
+    <p>
+        Los patrones estratégicos de DDD abordan diseño a mayor escala. Bounded Contexts establecen límites explícitos dentro de los cuales un modelo particular es válido y consistente. Sistemas grandes típicamente contienen múltiples bounded contexts con modelos distintos. Context Maps documentan relaciones entre bounded contexts. Patrones de integración como Shared Kernel, Customer-Supplier, Conformist, o Anticorruption Layer describen diferentes maneras de relacionar contexts. Estos patrones estratégicos resultan cruciales para diseñar sistemas grandes manteniendo complejidad manejable.
+    </p>
+
+    <h2>6. Diseño para Atributos de Calidad</h2>
+
+    <p>
+        El diseño de software debe optimizar no solo para funcionalidad correcta sino también para atributos de calidad no funcionales. Diferentes atributos requieren estrategias de diseño específicas, frecuentemente en tensión entre sí. Diseñar para rendimiento puede involucrar caching, procesamiento asíncrono, o paralelización, pero puede comprometer simplicidad o consistencia. Diseñar para escalabilidad puede requerir arquitecturas distribuidas y stateless, introduciendo complejidad operacional. Diseñar para seguridad requiere aplicar principios como defensa en profundidad, privilegio mínimo, y fail-secure.
+    </p>
+
+    <p>
+        El diseño para modificabilidad enfatiza modularidad, bajo acoplamiento, y localización de cambios probables. El diseño para testabilidad requiere dependencias inyectables, componentes pequeños con responsabilidades claras, y separación de lógica de negocio de infraestructura. El balance apropiado entre atributos de calidad depende del contexto: sistemas críticos priorizan confiabilidad y seguridad sobre otras consideraciones, mientras startups pueden priorizar velocidad de desarrollo sobre perfección arquitectónica. El diseño efectivo requiere comprender prioridades de atributos de calidad y aplicar tácticas apropiadas.
+    </p>
+
+    <div class="highlight-box">
+        <h3>Resumen de la Clase</h3>
+        <p>
+            Esta clase ha proporcionado una visión integral del diseño y arquitectura de software, cubriendo principios fundamentales, estilos y patrones arquitectónicos, patrones de diseño clásicos y empresariales, principios SOLID, Domain-Driven Design, y diseño para atributos de calidad. El diseño y la arquitectura representan competencias centrales para especialistas en Ingeniería de Software, requiriendo dominio tanto de conocimientos teóricos como experiencia práctica para tomar decisiones de diseño efectivas que balanceen múltiples concerns.
+        </p>
+    </div>
+
+    <div class="nav-buttons">
+        <a href="#" class="btn btn-prev" data-clase="clase3">← Anterior: Ingeniería de Requerimientos</a>
+        <a href="#" class="btn btn-next" data-clase="clase5">Siguiente: Bases de Datos Avanzadas →</a>
+    </div>
+</div>

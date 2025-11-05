@@ -1,0 +1,25 @@
+<div class="clase-content">
+    <h1>Clase 10: Ingeniería Web Dirigida por Modelos</h1>
+    <div class="clase-meta">
+        <div class="meta-item"><strong>Módulo:</strong> Desarrollo de Aplicaciones</div>
+        <div class="meta-item"><strong>Duración:</strong> 4 horas</div>
+    </div>
+    <h2>1. Model-Driven Development</h2>
+    <p>El MDD eleva nivel de abstracción mediante modelos como artefactos primarios. En lugar de codificar directamente, se construyen modelos que capturan aspectos esenciales a nivel más alto. Las transformaciones automatizadas generan código desde modelos. MDA define CIM (Computation Independent Model), PIM (Platform Independent Model), PSM (Platform Specific Model). Las transformaciones model-to-model y model-to-text generan artefactos. MDD promete productividad mediante generación, portabilidad mediante PIMs, y calidad mediante transformaciones verificadas. Sin embargo, requiere inversión en herramientas y aprendizaje de lenguajes de modelado.</p>
+    <h2>2. Lenguajes de Modelado Web</h2>
+    <p>Los lenguajes especializados capturan aspectos web. WebML modela estructura de hipertexto, contenido, presentación, personalización. UWE extiende UML con estereotipos para navegación, presentación, procesos. OOHDM proporciona metodología con diseño conceptual, navegacional, de interfaz abstracta, e implementación. OO-H Method integra modelado OO con navegación y presentación. Estos lenguajes proporcionan primitivas de alto nivel para conceptos web recurrentes como navegación, formularios, autenticación, personalización, evitando codificación repetitiva de bajo nivel.</p>
+    <h2>3. Generación Automática de Código</h2>
+    <p>La generación transforma modelos en código mediante transformaciones model-to-text. Los templates, escritos en lenguajes como Acceleo, Xtend, Velocity, combinan texto estático con elementos dinámicos extraídos de modelos. La generación puede producir código completo de aplicaciones CRUD, o scaffolding que desarrolladores completan. Las transformaciones deben ser idempotentes: regenerar no debe perder modificaciones en áreas protegidas. Los frameworks round-trip mantienen sincronía bidireccional entre modelos y código. La generación efectiva requiere que modelos capturen información suficiente pero no excesiva.</p>
+    <h2>4. Frameworks Low-Code</h2>
+    <p>OutSystems y Mendix son plataformas low-code que permiten desarrollo visual de aplicaciones empresariales mediante modelado gráfico y generación automática. WebRatio implementa WebML comercialmente. Estos frameworks proporcionan editores visuales o textuales, motores de transformación, librerías de runtime, herramientas de despliegue. Los frameworks low-code han ganado tracción para acelerar desarrollo de aplicaciones line-of-business. Sin embargo, presentan limitaciones para aplicaciones con requisitos altamente customizados o que requieren control fino sobre rendimiento.</p>
+    <h2>5. Desafíos de MDD</h2>
+    <p>MDD enfrenta desafíos que limitan adopción. La curva de aprendizaje de lenguajes de modelado y herramientas puede ser pronunciada. Los modelos pueden volverse complejos, perdiendo ventaja de abstracción. La generación puede producir código subóptimo. La customización requiere mecanismos como protected regions o extensión de clases generadas. Los cambios en metamodelos requieren migraciones costosas. Los desarrolladores tradicionales pueden resistir abstracciones de modelado. Los casos de éxito involucran dominios bien acotados con patrones recurrentes claros donde beneficios de generación superan costos de setup.</p>
+    <div class="highlight-box">
+        <h3>Resumen</h3>
+        <p>Esta clase ha explorado ingeniería web dirigida por modelos, desde fundamentos de MDD hasta lenguajes de modelado web, generación automática, frameworks low-code, y desafíos. MDD promete productividad pero requiere inversión y resulta más apropiado para dominios con patrones claros.</p>
+    </div>
+    <div class="nav-buttons">
+        <a href="#" class="btn btn-prev" data-clase="clase9">← Anterior</a>
+        <a href="#" class="btn btn-next" data-clase="clase11">Siguiente →</a>
+    </div>
+</div>
