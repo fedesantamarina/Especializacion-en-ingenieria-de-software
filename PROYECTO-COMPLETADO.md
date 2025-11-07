@@ -1,13 +1,13 @@
-# Proyecto Completado: Sitio Web Educativo - Especialización en Ingeniería de Software UAI
+# Proyecto Completado: Sitio Web Educativo - Diplomado en Ingeniería de Software
 
 ## Resumen del Proyecto
 
-Se ha creado exitosamente un sitio web educativo completo con contenido académico para la Especialización en Ingeniería de Software de la Universidad Abierta Interamericana (UAI).
+Se ha creado exitosamente un sitio web educativo completo con contenido académico para el Diplomado en Ingeniería de Software de Liskov Ed Tech.
 
 ## Características del Sitio
 
 ### Estructura
-- **Header profesional** con información de la especialización
+- **Header profesional** con información del diplomado
 - **Barra lateral de navegación** con 16 clases organizadas en 4 módulos
 - **Contenido principal** con carga dinámica de clases
 - **Footer** con información institucional
@@ -22,7 +22,7 @@ Se ha creado exitosamente un sitio web educativo completo con contenido académi
 ### Módulos del Curso
 
 #### Módulo I: Fundamentos
-1. Introducción a la Especialización en Ingeniería de Software
+1. Introducción al Diplomado en Ingeniería de Software
 2. Métodos Formales en la Ingeniería de Software
 3. Ingeniería de Requerimientos
 4. Diseño y Arquitectura de Software
@@ -43,7 +43,7 @@ Se ha creado exitosamente un sitio web educativo completo con contenido académi
 13. Usabilidad y Experiencia de Usuario
 14. Auditoría Informática y Calidad de Software
 15. Práctica Profesional
-16. Trabajo Final de Especialización
+16. Trabajo Final de Diplomado
 
 ## Tecnologías Utilizadas
 
@@ -63,7 +63,7 @@ sitio-especializacion/
 ├── js/
 │   └── script.js          # Funcionalidad de navegación
 └── clases/
-    ├── clase1.html        # Introducción a la Especialización
+    ├── clase1.html        # Introducción al Diplomado
     ├── clase2.html        # Métodos Formales
     ├── clase3.html        # Ingeniería de Requerimientos
     ├── clase4.html        # Diseño y Arquitectura
@@ -115,10 +115,8 @@ sitio-especializacion/
 
 ## Base Académica
 
-El contenido está basado en el documento oficial:
-- **Especialización en Ingeniería de Software - UAI**
-- **Aprobada por CONEAU**: Resolución N° 2820/23
-- **Dictamen**: Sesión N° 588/23
+El contenido está diseñado para el:
+- **Diplomado en Ingeniería de Software - Liskov Ed Tech**
 
 ## Próximos Pasos Sugeridos
 
