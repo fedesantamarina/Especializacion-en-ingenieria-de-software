@@ -1,8 +1,8 @@
-# Sitio Web - Especialización en Ingeniería de Software UAI
+# Sitio Web - Diplomado en Ingeniería de Software
 
 ## Descripción
 
-Este sitio web educativo contiene el contenido académico completo de la Especialización en Ingeniería de Software de la Universidad Abierta Interamericana (UAI), organizado en 16 clases comprehensivas de aproximadamente 2000 palabras cada una.
+Este sitio web educativo contiene el contenido académico completo del Diplomado en Ingeniería de Software de Liskov Ed Tech, organizado en 16 clases comprehensivas de aproximadamente 2000 palabras cada una.
 
 ## Estructura del Sitio
 
@@ -14,7 +14,7 @@ Este sitio web educativo contiene el contenido académico completo de la Especia
 ## Módulos del Curso
 
 ### Módulo I: Fundamentos
-1. Introducción a la Especialización en Ingeniería de Software
+1. Introducción al Diplomado en Ingeniería de Software
 2. Métodos Formales en la Ingeniería de Software
 3. Ingeniería de Requerimientos
 4. Diseño y Arquitectura de Software
@@ -35,7 +35,7 @@ Este sitio web educativo contiene el contenido académico completo de la Especia
 13. Usabilidad y Experiencia de Usuario
 14. Auditoría Informática y Calidad de Software
 15. Práctica Profesional
-16. Trabajo Final de Especialización
+16. Trabajo Final de Diplomado
 
 ## Características
 
@@ -60,5 +60,4 @@ Este sitio web educativo contiene el contenido académico completo de la Especia
 
 ## Autor
 
-Generado para la Especialización en Ingeniería de Software - UAI
-Basado en el documento oficial aprobado por CONEAU (Resolución N° 2820/23)
+Generado para el Diplomado en Ingeniería de Software - Liskov Ed Tech
