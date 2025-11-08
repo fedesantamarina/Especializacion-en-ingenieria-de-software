@@ -6,16 +6,244 @@
     </div>
     <h2>1. Fundamentos de Calidad de Software</h2>
     <p>La calidad de software es multidimensional, abarcando atributos funcionales y no funcionales. El modelo de calidad ISO/IEC 25010 define ocho características: funcionalidad (cumple requisitos), rendimiento (eficiencia temporal y de recursos), compatibilidad (interopera con otros sistemas), usabilidad (fácil de usar), confiabilidad (funciona sin fallos), seguridad (protege información), mantenibilidad (fácil de modificar), y portabilidad (adaptable a diferentes entornos). Cada característica se descompone en subcaracterísticas medibles. La calidad no es unidimensional sino multifacética, requiriendo balances entre características frecuentemente en tensión.</p>
+
+    <h3>1.1. Modelo de Calidad ISO/IEC 25010</h3>
+    <p><strong>Functional Suitability:</strong> Grado en que producto proporciona funciones satisfaciendo necesidades bajo condiciones especificadas. Las subcaracterísticas incluyen functional completeness (conjunto de funciones cubre todas tareas y objetivos), functional correctness (funciones proporcionan resultados correctos con precisión necesaria), y functional appropriateness (funciones facilitan completar tareas y objetivos). Por ejemplo, software de contabilidad debe calcular impuestos correctamente (correctness), incluir todas funciones requeridas por regulaciones (completeness), y presentar información de forma apropiada para contador (appropriateness).</p>
+
+    <p><strong>Performance Efficiency:</strong> Performance relativo a cantidad de recursos usados bajo condiciones especificadas. Incluye time behavior (tiempos de respuesta, throughput), resource utilization (CPU, memoria, red, storage), y capacity (máximo que sistema puede manejar). Las aplicaciones críticas como trading systems requieren latencia <100ms; sistemas batch priorizan throughput; embedded systems en devices tienen resources limitados. Los trade-offs son comunes: optimizar speed puede requerir más memoria; reducir resource usage puede aumentar tiempo.</p>
+
+    <p><strong>Compatibility:</strong> Grado en que producto puede intercambiar información con otros sistemas y/o realizar funciones requeridas compartiendo mismo environment. Incluye co-existence (funciona sin impacto adverso en mismo environment con otro software) e interoperability (intercambia y usa información con otros sistemas). APIs bien diseñados, uso de estándares (JSON, XML, OAuth), y documentación clara facilitan interoperability. Containerization (Docker) mejora co-existence aislando dependencies.</p>
+
+    <p><strong>Usability:</strong> Cubierto extensamente en Clase 13, incluye recognizability (usuarios reconocen si apropiado para necesidades), learnability, operability (fácil operar y controlar), user error protection, UI aesthetics, y accessibility. La usabilidad directamente impacta adopción y satisfacción usuario.</p>
+
+    <p><strong>Reliability:</strong> Grado en que sistema realiza funciones especificadas bajo condiciones especificadas durante período especificado. Incluye maturity (frecuencia de failures bajo uso normal), availability (sistema operacional y accesible cuando requerido), fault tolerance (opera según intendido ante faults hardware o software), y recoverability (recupera datos y reestablece estado deseado tras interrupción). Las aplicaciones critical mission requieren 99.99% uptime (52 minutos downtime/año); fault tolerance usa redundancia y failover; backup/recovery strategies permiten recoverability.</p>
+
+    <p><strong>Security:</strong> Grado en que información y datos están protegidos. Incluye confidentiality (datos accesibles solo por autorizados), integrity (datos no modificados por no autorizados), non-repudiation (acciones probables), accountability (acciones trazables a entidad), authenticity (identidad de subject/resource probada). OWASP Top 10 identifica vulnerabilidades más críticas. Compliance con GDPR, HIPAA, PCI DSS es mandatorio en dominios regulados.</p>
+
+    <p><strong>Maintainability:</strong> Efectividad y eficiencia con que producto puede ser modificado. Incluye modularity (componentes independientes, cambios limitados en scope), reusability (assets usables en múltiples sistemas), analyzability (fácil diagnosticar fallas o identificar partes a modificar), modifiability (cambios sin defectos o degradación), y testability (criterios establecibles y tests ejecutables). Código limpio, arquitectura bien diseñada, documentación, y tests automáticos mejoran maintainability. La deuda técnica incrementa costo de maintenance.</p>
+
+    <p><strong>Portability:</strong> Efectividad y eficiencia con que sistema puede ser transferido de un environment a otro. Incluye adaptability (adapta efectivamente a diferentes hardware/software), installability (instala/desinstala exitosamente), y replaceability (reemplaza otro producto especificado para mismo propósito en mismo environment). Cross-platform frameworks, VMs, containers, y cloud computing mejoran portability. Configuration management facilita deployment en múltiples environments.</p>
+
+    <div class="mermaid">
+    graph TB
+        A[ISO/IEC 25010<br/>Calidad de Software] --> B[Functional Suitability]
+        A --> C[Performance Efficiency]
+        A --> D[Compatibility]
+        A --> E[Usability]
+        A --> F[Reliability]
+        A --> G[Security]
+        A --> H[Maintainability]
+        A --> I[Portability]
+
+        B --> B1[Completeness<br/>Correctness<br/>Appropriateness]
+        C --> C1[Time Behavior<br/>Resource Utilization<br/>Capacity]
+        D --> D1[Co-existence<br/>Interoperability]
+        E --> E1[Learnability<br/>Operability<br/>Accessibility]
+        F --> F1[Maturity<br/>Availability<br/>Fault Tolerance<br/>Recoverability]
+        G --> G1[Confidentiality<br/>Integrity<br/>Authenticity]
+        H --> H1[Modularity<br/>Reusability<br/>Modifiability<br/>Testability]
+        I --> I1[Adaptability<br/>Installability]
+    </div>
+
+    <h3>1.2. Trade-offs y Balances en Calidad</h3>
+    <p>Las características de calidad frecuentemente compiten, requiriendo trade-offs conscientes. Security vs. Usability: medidas de seguridad (autenticación multi-factor, passwords complejos, timeouts) añaden friction reduciendo usability. El balance apropiado depende de context: banking apps priorizan security; consumer apps priorizan usability. Performance vs. Maintainability: optimizaciones agresivas (bit twiddling, código assembly, caching complejo) mejoran performance pero reducen readability y maintainability. Casos donde performance es crítico (game engines, HFT) justifican complejidad; mayoría de aplicaciones benefician más de código claro.</p>
+
+    <p>Functionality vs. Simplicity: agregar features aumenta funcionalidad pero complica producto. Feature creep resulta en productos confusos con muchas features raramente usadas. El 80/20 rule (80% usuarios usa 20% features) sugiere priorizar core use cases sobre edge cases. Time-to-Market vs. Quality: presión de lanzar rápido puede llevar a sacrificar calidad, acumulando deuda técnica. Sin embargo, lanzar tarde permite competidores capturar mercado. MVP (Minimum Viable Product) balancea: lanzar product básico funcional, iterar basado en feedback.</p>
+
+    <p>La gestión de calidad requiere hacer trade-offs explícitos basados en context: riesgo (software medical device vs. blog personal), regulación (financial software altamente regulado), competencia (mercado saturado vs. nicho), y recursos (startup vs. enterprise). Los quality attributes requirements deben especificarse explícitamente durante requirements engineering, no asumidos.</p>
+
+    <h3>1.3. Caso de Estudio: Toyota Production System y Calidad</h3>
+    <p>Toyota Production System (TPS), origen de Lean Manufacturing, revolucionó manufactura de automóviles con enfoque obsesivo en calidad. El principio "Jidoka" (automatización con human touch) para para línea de producción cuando defecto se detecta, evitando propagar defectos. Cualquier trabajador puede parar línea tirando "Andon cord", priorizando calidad sobre throughput corto plazo. El principio "Kaizen" (mejora continua) institucionaliza culture donde todos buscan mejoras incrementales continuamente.</p>
+
+    <p>Los principios TPS aplicados a software: Jidoka se refleja en Continuous Integration: builds fallan rápidamente cuando tests no pasan, previniendo merge de código defectuoso. Los broken windows theory sugiere que defectos ignorados llevan a más defectos; fixing immediately mantiene quality bar. Kaizen se refleja en retrospectivas, refactoring continuo, y mejora de procesos. Los quality gates en pipelines automatizan: code coverage mínimo, linting, security scans, solo deployando cuando todos pasan.</p>
+
+    <p>Los resultados en Toyota: defectos por vehículo dramáticamente menores que competidores, menos recalls, mayor customer satisfaction. En software: Netflix y Spotify, aplicando continuous delivery con testing robusto, logran deploys múltiples por día con incidentes raros. La lección: invertir en calidad upfront es más eficiente que fix later. El costo de bug aumenta exponencialmente: 1x en development, 10x en QA, 100x en production, 1000x si causa incident crítico.</p>
     <h2>2. Modelos de Madurez y Mejora de Procesos</h2>
     <p>Los modelos de madurez evalúan y guían mejora de procesos de desarrollo. CMMI (Capability Maturity Model Integration) define cinco niveles: Initial (procesos ad-hoc), Managed (proyectos gestionados), Defined (procesos estandarizados organizacionalmente), Quantitatively Managed (procesos medidos y controlados), y Optimizing (mejora continua enfocada). ISO/IEC 15504 (SPICE) proporciona framework para evaluación de procesos. Estos modelos proporcionan roadmaps para mejora sistemática, pero requieren compromiso organizacional significativo. Los modelos de madurez enfatizan institucionalizar mejores prácticas, medir rendimiento de procesos, y mejora continua basada en datos.</p>
+
+    <h3>2.1. CMMI (Capability Maturity Model Integration)</h3>
+    <p><strong>Nivel 1 - Initial:</strong> Procesos impredecibles, poco controlados, reactivos. El éxito depende de esfuerzos heroicos individuales. Projects frecuentemente exceden budget y schedule. Quality y funcionalidad pueden comprometerse para cumplir deadlines. No hay procesos repetibles; cada proyecto reinventa wheel. Las organizaciones Nivel 1 pueden producir productos funcionales, pero mediante esfuerzo caótico insostenible.</p>
+
+    <p><strong>Nivel 2 - Managed:</strong> Projects son gestionados y controlados. Requirements management asegura requisitos acordados. Project planning establece estimates razonables. Project monitoring tracks progreso contra planes. Measurement y análisis proporcionan data objetiva. Configuration management controla versiones. Supplier agreement management gestiona proveedores. Process y product quality assurance aseguran adherencia. El nivel 2 proporciona fundamento: projects pueden repetirse exitosamente porque procesos básicos están en lugar.</p>
+
+    <p><strong>Nivel 3 - Defined:</strong> Procesos caracterizados, entendidos, y descritos en estándares, procedimientos, herramientas, y métodos. La organización tiene proceso estándar adaptable a proyectos específicos. Organizational training asegura que staff tiene skills necesarios. Integrated project management establece y gestiona proyectos basado en procesos estándar. Requirements development captura requisitos comprehensivamente. Technical solution diseña, desarrolla e implementa soluciones. Product integration integra componentes. Verification y validation aseguran producto cumple requisitos. Decision analysis evalúa alternativas formalmente.</p>
+
+    <p><strong>Nivel 4 - Quantitatively Managed:</strong> Procesos controlados usando data cuantitativa. Organizational process performance establece baselines y models de performance. Quantitative project management gestiona proyectos cuantitativamente usando statistical techniques. La variación de proceso es entendida, permitiendo predicción. Los problemas de calidad y performance son identificados estadísticamente y corregidos.</p>
+
+    <p><strong>Nivel 5 - Optimizing:</strong> Mejora continua de procesos basada en understanding cuantitativo. Organizational innovation y deployment identifica e implementa mejoras innovativas. Causal analysis y resolution identifica causas de defectos sistemáticamente y previene recurrencia. La organización continuamente mejora procesos proactivamente, anticipando necesidades futuras.</p>
+
+    <div class="mermaid">
+    graph TD
+        A[Nivel 1: Initial<br/>Procesos ad-hoc<br/>Resultados impredecibles] -->|Gestionar proyectos| B[Nivel 2: Managed<br/>Projects gestionados<br/>Requisitos controlados]
+        B -->|Estandarizar procesos| C[Nivel 3: Defined<br/>Procesos documentados<br/>Consistencia organizacional]
+        C -->|Medir cuantitativamente| D[Nivel 4: Quantitatively Managed<br/>Performance predecible<br/>Control estadístico]
+        D -->|Optimizar continuamente| E[Nivel 5: Optimizing<br/>Mejora continua<br/>Innovation institucional]
+
+        style A fill:#ffcccc
+        style B fill:#ffffcc
+        style C fill:#ccffcc
+        style D fill:#ccffff
+        style E fill:#ccccff
+    </div>
+
+    <h3>2.2. Críticas y Limitaciones de CMMI</h3>
+    <p>CMMI ha sido criticado por: burocracia excesiva (documentation overhead puede sobrecargar teams), inadecuado para development ágil (prescriptive processes contrastan con agilidad), costo alto de implementación (consultores, auditorías, tiempo invertido), y enfoque en proceso sobre resultado (compliance checklist no garantiza quality). Las organizaciones pueden lograr certificación CMMI siguiendo procesos al pie de la letra pero producir software mediocre. La crítica fundamental: CMMI asume que más proceso = mejor software, pero proceso excesivo puede sofocar creativity e innovation.</p>
+
+    <p>Sin embargo, CMMI proporciona valor en contextos apropiados: proyectos grandes con múltiples teams requieren coordinación que procesos facilitan, dominios regulados (defense, aerospace, medical) requieren procesos auditable, y contratos gubernamentales frecuentemente requieren CMMI. La clave es pragmatismo: adoptar prácticas útiles, evitar proceso por proceso. Agile y CMMI no son mutuamente exclusivos; organizaciones han logrado "Agile + CMMI" balanceando disciplina con flexibilidad.</p>
+
+    <h3>2.3. DevOps Maturity Model</h3>
+    <p>Los modelos de madurez más recientes como DevOps Maturity Model reflejan prácticas modernas. Los dominios clave incluyen: <strong>Culture</strong> (colaboración cross-functional, blameless postmortems, psychological safety), <strong>Automation</strong> (CI/CD pipelines, infrastructure as code, automated testing), <strong>Measurement</strong> (observability, DORA metrics - deployment frequency, lead time, MTTR, change failure rate), <strong>Sharing</strong> (knowledge sharing, inner source, communities of practice), <strong>Lean</strong> (WIP limits, flow optimization, eliminar waste). La progresión típica: Manual → Partially Automated → Mostly Automated → Fully Automated & Optimized.</p>
+
+    <p>Google's DORA (DevOps Research and Assessment) identifica elite performers con métricas: deployment frequency (on-demand, múltiples por día), lead time (menos de 1 hora), time to restore service (menos de 1 hora), change failure rate (<15%). Las prácticas asociadas incluyen: trunk-based development, comprehensive test automation, shift left on security, loosely coupled architecture, empowered teams, monitoring y observability. Estas métricas proporcionan objectives cuantitativos versus niveles abstractos de CMMI.</p>
+
     <h2>3. Estándares de Calidad y Certificaciones</h2>
     <p>Los estándares de calidad proporcionan frameworks reconocidos. ISO 9001 define sistema de gestión de calidad aplicable a cualquier organización. ISO/IEC 25010 define modelo de calidad de producto de software. ISO/IEC 12207 define procesos de ciclo de vida de software. Las certificaciones como ISO 9001 demuestran a clientes compromiso con calidad. Los estándares específicos de industria incluyen DO-178C (software aeronáutico), IEC 62304 (software médico), MISRA (automotriz), y PCI DSS (seguridad de pagos). El cumplimiento de estándares puede ser obligatorio en industrias reguladas o proporcionar ventajas competitivas en mercados donde clientes valoran certificaciones.</p>
+
+    <h3>3.1. ISO 9001 - Quality Management Systems</h3>
+    <p>ISO 9001 establece requisitos para quality management system (QMS), aplicable a cualquier organización independiente de tamaño o industria. Los principios fundamentales incluyen: customer focus (entender y cumplir necesidades customer), leadership (establecer unidad de propósito y dirección), engagement of people (empoderar staff competente), process approach (gestionar actividades como procesos), improvement (mejorar performance continuamente), evidence-based decision making (decisiones basadas en análisis de data), y relationship management (gestionar relaciones con parties interesadas).</p>
+
+    <p>La estructura de ISO 9001:2015 sigue High Level Structure: Context of organization (entender organización y stakeholders), Leadership (commitment, policy, roles), Planning (risk y opportunities, quality objectives), Support (resources, competence, awareness, communication, documented information), Operation (planning y control operacional, requirements para products/services, design, production, release), Performance evaluation (monitoring, measurement, analysis, internal audit, management review), y Improvement (nonconformity, corrective action, continual improvement).</p>
+
+    <p>La certificación ISO 9001 requiere: implementar QMS cumpliendo requisitos estándar, documentar procesos y procedimientos, auditoría interna, management review, auditoría externa por certification body acreditado, y surveillance audits periódicos (recertificación cada 3 años). Los beneficios incluyen: procesos mejorados, menos defectos, mayor customer satisfaction, ventaja competitiva (muchos clientes requieren ISO 9001 de suppliers), y cultura de mejora continua.</p>
+
+    <h3>3.2. Estándares Safety-Critical</h3>
+    <p><strong>DO-178C (Software Considerations in Airborne Systems):</strong> Estándar para software aeronáutico, define niveles de criticality (Level A - catastrófico, Level E - sin efecto en safety) y requisitos correspondientes. Level A requiere rigorous testing (Modified Condition/Decision Coverage), formal methods, extensive documentation, independent verification. Boeing 737 MAX accidents destacaron importancia de compliance riguroso: MCAS software no cumplió suficientemente requisitos DO-178C.</p>
+
+    <p><strong>IEC 62304 (Medical Device Software Lifecycle):</strong> Estándar para software médico, define clases de safety (A - sin injury, B - non-serious injury, C - death o serious injury) y procesos correspondientes. Requiere software development planning, requirements analysis, architectural design, detailed design, unit testing, integration testing, system testing, release, y maintenance. FDA (US) y reguladores globales requieren compliance. Therac-25 accidents (1980s) demostraron consecuencias fatales de pobre software quality en medical devices.</p>
+
+    <p><strong>ISO 26262 (Automotive Functional Safety):</strong> Estándar para automotive safety-critical systems, define Automotive Safety Integrity Levels (ASIL A-D), con ASIL D siendo más riguroso. Cubre management, development, production, operation, service, decommissioning. Relevancia aumenta con vehículos autónomos: software controlando braking, steering, acceleration debe cumplir ASIL D.</p>
     <h2>4. Auditoría de Sistemas de Información</h2>
     <p>La auditoría informática evalúa controles, seguridad, y cumplimiento de sistemas de información. Las auditorías pueden ser internas (conducidas por organización) o externas (terceros independientes). Los objetivos incluyen evaluar efectividad de controles, identificar vulnerabilidades, verificar cumplimiento de regulaciones, y recomendar mejoras. Los tipos incluyen auditorías de seguridad, auditorías de cumplimiento (GDPR, SOX, HIPAA), auditorías de procesos, y auditorías de infraestructura. Los auditores examinan documentación, entrevistan personal, revisan configuraciones, analizan logs, y prueban controles. Los hallazgos se reportan con severidades y recomendaciones para remediación.</p>
+
+    <h3>4.1. Tipos de Auditoría Informática</h3>
+    <p><strong>Auditoría de Seguridad:</strong> Evalúa controles de seguridad protegiendo confidentiality, integrity, y availability de información. Examina: access controls (authentication, authorization, least privilege), network security (firewalls, IDS/IPS, segmentation), encryption (datos en tránsito y en reposo), vulnerability management (patching, scanning), incident response (preparedness, procedures), y physical security (datacenter access). Las herramientas incluyen vulnerability scanners (Nessus, Qualys), penetration testing, security configuration reviews, y log analysis. Los hallazgos típicos: passwords débiles, patches faltantes, misconfigurations, privilegios excesivos.</p>
+
+    <p><strong>Auditoría de Cumplimiento:</strong> Verifica adherencia a regulaciones y estándares. SOX (Sarbanes-Oxley) requiere controles sobre financial reporting para públicas US companies, incluyendo IT general controls (cambio management, access control, backup/recovery) y application controls (validaciones, reconciliaciones). GDPR (General Data Protection Regulation) regula procesamiento de personal data en EU, requiriendo consent, data minimization, right to erasure, breach notification. HIPAA (Health Insurance Portability and Accountability Act) protege health information en US. PCI DSS (Payment Card Industry Data Security Standard) protege cardholder data. La no-compliance resulta en multas significativas y daño reputacional.</p>
+
+    <p><strong>Auditoría de Procesos de Desarrollo:</strong> Evalúa SDLC y prácticas engineering. Examina: requirements management, design reviews, code reviews, testing (unit, integration, system, acceptance), change management, release management, y documentation. Identifica gaps: testing inadecuado, documentación faltante, code reviews no realizados, requirements mal gestionados. Las mejoras típicas: implementar CI/CD, automated testing, peer reviews mandatorios, y documentation standards.</p>
+
+    <h3>4.2. Proceso de Auditoría</h3>
+    <p>El proceso de auditoría típicamente incluye cinco fases: <strong>Planning:</strong> Definir scope (sistemas/procesos a auditar), objectives (qué evaluar), resources (auditores, tiempo), y approach (metodología, herramientas). El risk assessment prioriza áreas de mayor riesgo. <strong>Fieldwork:</strong> Recopilar evidencia mediante entrevistas (personal IT, management, usuarios), documentation review (políticas, procedimientos, configuraciones, logs), observation (procesos en acción), y testing (validar controles funcionan). <strong>Analysis:</strong> Evaluar evidencia contra criteria (regulaciones, estándares, best practices), identificar findings (deficiencias, vulnerabilidades, non-compliance), y determinar severidades. <strong>Reporting:</strong> Documentar findings con descripción, impacto, recomendaciones, y management responses. <strong>Follow-up:</strong> Verificar que remediation actions se implementan y son efectivas.</p>
+
+    <p>Los auditores deben mantener independencia y objectividad, evitando conflictos de interés. Las competencias incluyen: conocimiento técnico (IT systems, security, networks), conocimiento de negocio (entender operaciones y riesgos), habilidades analíticas (evaluar evidencia, identificar patterns), y habilidades de comunicación (articular findings, recomendar soluciones). Las certificaciones como CISA (Certified Information Systems Auditor), CISSP (Certified Information Systems Security Professional), y CIA (Certified Internal Auditor) validan expertise.</p>
+
+    <div class="mermaid">
+    graph LR
+        A[Planning] --> B[Fieldwork]
+        B --> C[Analysis]
+        C --> D[Reporting]
+        D --> E[Follow-up]
+
+        A --> A1[Define Scope<br/>Risk Assessment<br/>Resource Planning]
+        B --> B1[Interviews<br/>Documentation<br/>Testing<br/>Observation]
+        C --> C1[Evaluate Evidence<br/>Identify Findings<br/>Assess Severity]
+        D --> D1[Audit Report<br/>Recommendations<br/>Management Response]
+        E --> E1[Verify Remediation<br/>Re-audit if needed]
+    </div>
+
+    <h3>4.3. Caso de Estudio: Equifax Data Breach Audit Failures</h3>
+    <p>Equifax breach (2017) expuso datos personales de 147 millones personas, resultando en multas, lawsuits, y dimisiones ejecutivas. Las investigaciones revelaron múltiples fallas de auditoría y control: vulnerability conocida (Apache Struts CVE-2017-5638) sin patch durante meses pese a severity crítico, certificate expiration no detectado causando fallo de security tool, segmentation inadecuada permitiendo acceso lateral, encryption débil de datos sensibles, y monitoring insuficiente retrasando detección de breach 76 días.</p>
+
+    <p>Los audits posteriores identificaron deficiencias sistemáticas: patch management process inadecuado sin enforcement ni tracking, vulnerability scanning incompleto y irregular, asset inventory desactualizado (no conocían todos sistemas), privileged access management débil, y auditorías internas superficiales no detectando gaps. El GAO (Government Accountability Office) reportó que auditorías internas previas habían identificado algunos issues pero management no implementó remediation completamente.</p>
+
+    <p>Las lecciones: auditorías deben ser rigurosas y comprehensivas, no check-box exercises; findings de auditoría deben tener ownership y deadlines enforcement; management accountability es crítico; automated tools (vulnerability scanning, compliance checking) deben complementar, no reemplazar, auditorías manuales; y auditorías deben evaluar no solo existencia de controles sino efectividad real. El breach costó a Equifax >$1.4 billion en remediation, multas, y settlements - vastamente más que hubiera costado invertir en controles y auditorías apropiados.</p>
+
     <h2>5. Gestión de Calidad en Proyectos</h2>
     <p>La gestión de calidad planifica, asegura, y controla calidad en proyectos. La planificación de calidad define estándares, métricas, y criterios de aceptación. El aseguramiento de calidad verifica que procesos apropiados se siguen correctamente mediante auditorías de proceso. El control de calidad verifica que entregables cumplen criterios mediante testing, inspecciones, y revisiones. Los procesos como revisiones de código peer, inspecciones formales, y walkthroughs detectan defectos tempranamente. Las métricas de calidad rastrean densidad de defectos, cobertura de testing, deuda técnica, y satisfacción de usuario. Los dashboards visualizan métricas, permitiendo decisiones basadas en datos.</p>
+
+    <h3>5.1. Quality Planning</h3>
+    <p>La planificación de calidad define cómo se logrará calidad en proyecto. Los elementos incluyen: Quality Policy (commitment organizacional con calidad), Quality Standards (ISO 9001, CMMI, coding standards específicos de organización), Quality Metrics (medidas específicas - defect density, code coverage, performance targets), Quality Criteria (definición de done, acceptance criteria), Quality Processes (code reviews, testing strategies, release gates), Quality Tools (static analysis, test frameworks, CI/CD), y Quality Roles (quién es responsable de qué aspectos de calidad).</p>
+
+    <p>Los quality objectives deben ser SMART: Specific (concreto y claro), Measurable (cuantificable), Achievable (realista dado constraints), Relevant (alineado con project goals), Time-bound (deadline específico). Ejemplo: "Lograr 80% code coverage con unit tests en todos módulos core antes de release 2.0" versus vago "Mejorar testing". El Cost of Quality incluye: Prevention costs (training, process improvement, tools), Appraisal costs (testing, reviews, audits), Internal failure costs (rework, debugging), y External failure costs (support, patches, recalls). La inversión en prevention y appraisal reduce failure costs significativamente.</p>
+
+    <h3>5.2. Quality Assurance vs Quality Control</h3>
+    <p>QA y QC son complementarios pero distintos. <strong>Quality Assurance</strong> es proactivo, enfocado en proceso: asegurar que procesos correctos se siguen correctamente. Las actividades incluyen: process audits (verificar adherencia a SDLC), training (asegurar equipo tiene skills), process improvement (identificar y eliminar deficiencies), tool selection y standardization. QA responde: "¿Estamos construyendo el producto correctamente?" (siguiendo procesos apropiados). <strong>Quality Control</strong> es reactivo, enfocado en producto: verificar que deliverables cumplen requirements. Las actividades incluyen: testing (unit, integration, system, acceptance), code reviews, inspections, walkthroughs. QC responde: "¿Estamos construyendo el producto correcto?" (cumple requisitos).</p>
+
+    <p>La analogía de manufactura: QA asegura que línea de producción está configurada correctamente, workers están entrenados, materials son correctos; QC inspecciona productos finales identificando defectos. En software: QA establece que developers hacen code reviews, usan automated testing, siguen coding standards; QC ejecuta tests, reviews código específico, valida releases. Ambos son esenciales: QA previene defectos entrando en producto; QC detecta defectos que entran pese a QA.</p>
+
+    <h3>5.3. Métricas de Calidad de Software</h3>
+    <p><strong>Defect Density:</strong> Número de defectos por KLOC (thousand lines of code) o por function point. Típicamente 1-25 defectos/KLOC dependiendo de dominio y methodology. Tracking trend over time indica mejora o degradación de calidad. <strong>Code Coverage:</strong> Porcentaje de código ejecutado por tests. Target típicamente 70-90%; 100% es raramente cost-effective. Statement coverage (líneas ejecutadas), branch coverage (caminos condicionales), path coverage (combinaciones de caminos). <strong>Cyclomatic Complexity:</strong> Mide complejidad de código contando caminos linealmente independientes. Complejidad >10 indica código difícil de testear y mantener. <strong>Technical Debt:</strong> Costo de work adicional causado por elegir solución rápida versus mejor approach. Medido en time (days/weeks de rework), o ratio (technical debt / development time). Tools como SonarQube cuantifican debt.</p>
+
+    <p><strong>Mean Time Between Failures (MTBF):</strong> Tiempo promedio entre failures en production. Mayor MTBF indica mayor reliability. <strong>Mean Time To Repair/Recover (MTTR):</strong> Tiempo promedio para restaurar servicio tras failure. Menor MTTR indica mejor recoverability. <strong>Customer Satisfaction:</strong> Medido con surveys (NPS, CSAT), support tickets (volumen y tipo), y adoption metrics (active users, churn rate). <strong>Velocity/Throughput:</strong> Story points o features completados por iteration. Debe balancearse con calidad: velocity alto con quality bajo no es sostenible.</p>
     <h2>6. Mejora Continua y Retrospectivas</h2>
     <p>La mejora continua busca incrementar calidad y eficiencia sistemáticamente. El ciclo PDCA (Plan-Do-Check-Act) estructura iniciativas de mejora: planificar mejora, implementar, evaluar resultados, y actuar sobre aprendizajes. Las retrospectivas ágiles reflexionan regularmente sobre qué funcionó bien, qué no, y qué mejorar. Las técnicas como Five Whys identifica causas raíz de problemas. Los kaizen events son workshops focalizados en mejora de procesos específicos. La cultura de mejora continua valora aprendizaje sobre culpa, experimentación sobre status quo, y adaptación sobre rigidez. Las organizaciones de alto rendimiento institucionalizan mejora continua mediante tiempo dedicado, apertura a feedback, y empoderamiento de equipos.</p>
+
+    <h3>6.1. Ciclo PDCA (Plan-Do-Check-Act)</h3>
+    <p>El ciclo PDCA (también conocido como Deming Cycle) estructura mejora continua iterativa. <strong>Plan:</strong> Identificar oportunidad de mejora, analizar situación actual, establecer objetivo específico, y diseñar solución. Por ejemplo, "Reducir deployment time de 4 horas a 1 hora mediante automatización de tareas manuales". La planificación incluye definir métricas de éxito, identificar stakeholders, estimar recursos necesarios. <strong>Do:</strong> Implementar cambio en pequeña escala como experimento. Documentar qué se hace, cómo, y cuándo. La implementación pequeña limita riesgo y permite aprendizaje rápido.</p>
+
+    <p><strong>Check:</strong> Monitorear resultados, recopilar data, comparar contra objetivos. "¿Deployment time efectivamente redujo? ¿Hubo efectos no intendidos? ¿Qué aprendimos?" El análisis debe ser objetivo, basado en datos no anécdotas. <strong>Act:</strong> Si experimento exitoso, estandarizar cambio y comunicar ampliamente. Si no exitoso, aprender de fallas y ajustar. Documentar aprendizajes. Luego, identificar siguiente mejora y repetir ciclo. PDCA es iterativo: cada ciclo construye sobre anterior, logrando mejora incremental continua.</p>
+
+    <div class="mermaid">
+    graph TD
+        A[Plan<br/>Identificar mejora<br/>Diseñar solución] --> B[Do<br/>Implementar<br/>en pequeña escala]
+        B --> C[Check<br/>Medir resultados<br/>Analizar data]
+        C --> D[Act<br/>Estandarizar o ajustar<br/>Documentar aprendizajes]
+        D --> E{¿Objetivo logrado?}
+        E -->|Sí| F[Estandarizar<br/>Comunicar]
+        E -->|No| G[Aprender<br/>Ajustar]
+        F --> A
+        G --> A
+    </div>
+
+    <h3>6.2. Retrospectivas Ágiles</h3>
+    <p>Las retrospectivas son ceremonias regulares (típicamente fin de sprint en Scrum) donde equipo reflexiona sobre proceso y identifica mejoras. El formato típico: Set the Stage (crear ambiente seguro, recordar prime directive: "todos hicieron lo mejor posible dado conocimiento, habilidades, recursos y situación"), Gather Data (qué ocurrió durante iteration), Generate Insights (por qué ocurrió, identificar patterns), Decide What to Do (seleccionar 1-3 mejoras actionable), Close (agradecer, commitment). La duración típica es 60-90 minutos por sprint de 2 semanas.</p>
+
+    <p>Las técnicas incluyen: <strong>Start-Stop-Continue:</strong> Qué comenzar hacer, qué dejar de hacer, qué continuar haciendo. Simple y efectivo. <strong>Mad-Sad-Glad:</strong> Categorizar sentimientos sobre eventos. Captura dimensión emocional. <strong>4Ls (Liked, Learned, Lacked, Longed For):</strong> Qué gustó, qué se aprendió, qué faltó, qué se deseaba. <strong>Sailboat:</strong> Metáfora visual: isla goal, viento (lo que ayuda), anclas (lo que frena), rocks (riesgos). <strong>Timeline:</strong> Construir timeline visual de sprint, marcar eventos significativos, discutir peaks y valleys.</p>
+
+    <p>Las mejores prácticas: Psychological safety es crítico - equipo debe sentirse seguro para hablar honestamente sin blame. Facilitator neutro (Scrum Master o rotar) guía conversación sin dominar. Focus en actionable improvements, no solo venting. Limit WIP de mejoras: comprometer a 1-3 items realistas versus laundry list. Follow through: revisar action items de retro anterior, celebrar progreso. Variar formatos: misma técnica repetida se vuelve stale.</p>
+
+    <h3>6.3. Root Cause Analysis: Five Whys</h3>
+    <p>Five Whys es técnica simple para identificar root cause de problema preguntando "¿Por qué?" iterativamente. Ejemplo: Problema: "Production deployment falló". ¿Por qué? "Test suite no pasó". ¿Por qué? "Nuevo código introdujo regression". ¿Por qué? "Code review no detectó issue". ¿Por qué? "Reviewer no ejecutó tests localmente". ¿Por qué? "No hay process requeriendo ejecutar tests antes de aprobar PR". Root cause identificado: falta de process. Solution: implementar CI que bloquea merge si tests fallan, hacer obligatorio que CI pase antes de code review.</p>
+
+    <p>Los cinco "whys" no son literales - puede ser tres o siete. La clave es profundizar más allá de síntomas superficiales hasta root cause sistémico. Las trampas comunes: stopping too early (identificar síntoma como cause), blaming people versus procesos (root cause raramente es "Juan cometió error" sino "proceso permitió error sin detección"), multiple root causes (problemas complejos tienen causas múltiples, usar diagrama fishbone). La técnica complementa PDCA: Five Whys identifica root cause (Plan), solución se implementa (Do), efectividad se mide (Check), y se estandariza o ajusta (Act).</p>
+
+    <h3>6.4. Blameless Postmortems</h3>
+    <p>Los postmortems (también llamados incident reviews) analizan incidentes significativos para prevenir recurrencia. "Blameless" significa enfocarse en factors sistémicos, no individuos. El formato típico: Timeline (secuencia de eventos), Impact (usuarios afectados, downtime, revenue loss), Root Cause (qué falló y por qué), Contributing Factors (condiciones permitieron o exacerbaron incident), Action Items (remediaciones específicas con owners y deadlines), y Lessons Learned (insights generales). El postmortem se documenta y comparte ampliamente para aprendizaje organizacional.</p>
+
+    <p>Etsy, pionero en blameless postmortems, estableció cultura donde incidentes son learning opportunities. El principio: personas no fallan, sistemas fallan. Si engineer cometió error, preguntar: "¿Por qué sistema permitió ese error? ¿Qué safeguards faltaron?" Por ejemplo, si engineer accidentalmente elimina production database, blame approach castiga engineer; blameless approach pregunta: "¿Por qué engineer tenía permiso destructivo en production? ¿Por qué no había backups automatizados? ¿Por qué comando destructivo no requería confirmation?" Las mejoras resultantes previenen category completa de errores.</p>
+
+    <p>Los beneficios: Engineers reportan incidentes rápidamente sin miedo; learnings se comparten aumentando knowledge organizacional; culture de psychological safety mejora collaboration y innovation. Las acciones típicas: agregar automated safeguards, mejorar monitoring/alerting, actualizar runbooks, training, y architecture improvements reduciendo blast radius. Google's SRE book documenta extensivamente práctica de blameless postmortems como fundamento de reliability engineering.</p>
+
+    <h2>7. Ejercicios Prácticos</h2>
+
+    <h3>Ejercicio 1: Evaluación de Madurez de Procesos</h3>
+    <p><strong>Objetivo:</strong> Evaluar madurez de procesos de desarrollo en organización usando CMMI como framework.</p>
+    <p><strong>Contexto:</strong> Seleccionar organización (puede ser employer actual, proyecto open source, o scenario hipotético).</p>
+    <p><strong>Tareas:</strong></p>
+    <ol>
+        <li>Evaluar organización contra Process Areas clave de CMMI Nivel 2 y 3: Requirements Management, Project Planning, Configuration Management, Quality Assurance, Requirements Development, Technical Solution, Verification, Validation.</li>
+        <li>Para cada Process Area, documentar: prácticas actuales, evidencia (documentos, herramientas, procesos observables), gaps (qué falta o es inadecuado), y nivel actual estimado.</li>
+        <li>Identificar top 5 gaps más críticos impactando calidad o eficiencia.</li>
+        <li>Para cada gap, proponer mejora específica: qué implementar, cómo, recursos necesarios, timeline, y beneficio esperado.</li>
+        <li>Priorizar mejoras usando matriz effort/impact y crear roadmap de 6-12 meses.</li>
+    </ol>
+    <p><strong>Entregable:</strong> Reporte de evaluación de madurez (5-6 páginas) con assessment actual, gaps identificados, propuestas de mejora priorizadas, y roadmap de implementación.</p>
+
+    <h3>Ejercicio 2: Planificación de Auditoría de Seguridad</h3>
+    <p><strong>Contexto:</strong> Una organización financiera necesita auditoría de seguridad de aplicación web manejando datos sensibles de clientes.</p>
+    <p><strong>Tareas:</strong></p>
+    <ol>
+        <li>Definir scope de auditoría: sistemas en scope, aspectos a evaluar (authentication, authorization, data encryption, vulnerability management, logging/monitoring).</li>
+        <li>Identificar frameworks y estándares relevantes (OWASP Top 10, PCI DSS, relevant regulations).</li>
+        <li>Diseñar plan de auditoría: fases (planning, fieldwork, analysis, reporting), actividades en cada fase, timeline (duración estimada), y recursos necesarios (auditores, herramientas).</li>
+        <li>Crear checklist de controles a evaluar, organizados por categoría con criterios específicos.</li>
+        <li>Diseñar template de audit report con secciones: Executive Summary, Scope, Methodology, Findings (con severities: Critical, High, Medium, Low), Recommendations, y Management Response.</li>
+        <li>Para 3 findings hipotéticos de diferentes severities, documentar completamente: descripción, evidence, impact, risk rating, y recommendation.</li>
+    </ol>
+    <p><strong>Entregable:</strong> Plan completo de auditoría (5-6 páginas) incluyendo todos elementos listados, listo para ejecutar.</p>
+
+    <h3>Ejercicio 3: Implementación de Mejora Continua</h3>
+    <p><strong>Contexto:</strong> Un equipo de desarrollo enfrenta deployment process lento y propenso a errores, resultando en releases tardíos y incidents frecuentes.</p>
+    <p><strong>Tareas:</strong></p>
+    <ol>
+        <li>Aplicar Five Whys para identificar root causes del problema. Documentar cada "why" y respuesta hasta llegar a causas fundamentales.</li>
+        <li>Diseñar experimento PDCA para addressing root cause principal: Plan (objetivo específico SMART, solución propuesta, métricas de éxito), Do (cómo implementar pilot), Check (qué medir y cómo), Act (criterios para estandarizar o ajustar).</li>
+        <li>Definir métricas de calidad y performance para tracking continuo: deployment frequency, lead time, change failure rate, MTTR, y al menos 2 métricas adicionales relevantes.</li>
+        <li>Diseñar dashboard mostrando métricas clave visualmente. Sketch mockup del dashboard identificando visualizaciones (line charts, bar charts, gauges).</li>
+        <li>Crear template de retrospective para equipo, incluyendo: agenda detallada, técnica específica a usar, tiempo por sección, y formato de documentation de action items.</li>
+        <li>Proponer 5 action items concretos surgiendo de análisis, priorizados por impact y effort.</li>
+    </ol>
+    <p><strong>Entregable:</strong> Plan de mejora continua (6-7 páginas) con root cause analysis, PDCA experiment design, métricas y dashboard design, retrospective template, y action items priorizados.</p>
     <div class="highlight-box">
         <h3>Resumen</h3>
         <p>Esta clase ha cubierto auditoría informática y calidad de software, incluyendo fundamentos de calidad, modelos de madurez, estándares y certificaciones, auditoría de sistemas, gestión de calidad en proyectos, y mejora continua. La calidad sistemática requiere procesos disciplinados, medición rigurosa, y compromiso organizacional con excelencia.</p>

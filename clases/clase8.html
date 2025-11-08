@@ -1,25 +1,250 @@
 <div class="clase-content">
     <h1>Clase 8: Reingeniería y Refactoring de Software</h1>
+
     <div class="clase-meta">
         <div class="meta-item"><strong>Módulo:</strong> Tecnologías Avanzadas</div>
         <div class="meta-item"><strong>Duración:</strong> 4 horas</div>
+        <div class="meta-item"><strong>Nivel:</strong> Avanzado</div>
     </div>
+
     <h2>1. Fundamentos de Reingeniería de Software</h2>
-    <p>La reingeniería de software aborda el desafío de mantener y modernizar sistemas legacy que, aunque funcionales, presentan limitaciones significativas en términos de mantenibilidad, rendimiento, o alineación con requisitos contemporáneos. Los sistemas legacy frecuentemente constituyen activos críticos de negocio que no pueden reemplazarse abruptamente, requiriendo estrategias de evolución gradual. La reingeniería comprende actividades de análisis del sistema existente (reverse engineering), rediseño mejorado, y reimplementación (forward engineering). El objetivo consiste en preservar funcionalidad mientras se mejoran atributos de calidad, reduce deuda técnica, y moderniza tecnologías subyacentes.</p>
+    <p>
+        La reingeniería de software aborda el desafío de mantener y modernizar sistemas legacy que, aunque funcionales, presentan limitaciones significativas en términos de mantenibilidad, rendimiento, o alineación con requisitos contemporáneos. Los sistemas legacy frecuentemente constituyen activos críticos de negocio que no pueden reemplazarse abruptamente, requiriendo estrategias de evolución gradual. La reingeniería comprende actividades de análisis del sistema existente (reverse engineering), rediseño mejorado, y reimplementación (forward engineering). El objetivo consiste en preservar funcionalidad mientras se mejoran atributos de calidad, reduce deuda técnica, y moderniza tecnologías subyacentes.
+    </p>
+
+    <h3>1.1 El Ciclo de Reingeniería: Reverse y Forward Engineering</h3>
+    <p>
+        El reverse engineering extrae especificaciones de diseño, arquitectura, y requisitos desde implementación existente. Las técnicas incluyen análisis estático de código, extracción de modelos arquitecturales, recuperación de relaciones entre componentes, y mining de repositorios de código para entender evolución histórica. Herramientas como Structure101, Lattix, o Understand generan visualizaciones de dependencias, métricas de complejidad, y detección de anti-patrones. El forward engineering toma estos modelos, aplica mejoras de diseño, y genera nueva implementación. El restructuring modifica estructura sin cambiar funcionalidad, mientras el reengineering puede alterar funcionalidad. El redocumentation genera documentación actualizada desde código. La comprensión profunda del sistema existente es prerequisito para reingeniería exitosa.
+    </p>
+
+    <div class="mermaid">
+    graph LR
+        A[Sistema Legacy] --> B[Reverse Engineering]
+        B --> C[Análisis & Modelos]
+        C --> D[Diseño Mejorado]
+        D --> E[Forward Engineering]
+        E --> F[Sistema Modernizado]
+        C --> G[Documentación]
+
+        style A fill:#e74c3c
+        style F fill:#2ecc71
+        style C fill:#3498db
+    </div>
+
     <h2>2. Refactoring: Mejora Continua del Diseño</h2>
-    <p>El refactoring, popularizado por Martin Fowler, consiste en modificar estructura interna del código sin alterar su comportamiento externo observable. El refactoring sistemático mantiene código limpio, reduciendo deuda técnica incremental que se acumula durante desarrollo rápido. Los refactorings catalogados por Fowler incluyen Extract Method, Inline Method, Rename Variable, Move Method, Extract Class, Inline Class, Replace Conditional with Polymorphism, entre muchos otros. Los IDEs modernos como IntelliJ IDEA, Eclipse, o Visual Studio proporcionan refactorings automatizados que preservan semántica mientras transforman estructura. La práctica efectiva requiere suite comprehensiva de pruebas que verifiquen que refactorings no introducen regresiones.</p>
+    <p>
+        El refactoring, popularizado por Martin Fowler, consiste en modificar estructura interna del código sin alterar su comportamiento externo observable. El refactoring sistemático mantiene código limpio, reduciendo deuda técnica incremental que se acumula durante desarrollo rápido. Los refactorings catalogados por Fowler incluyen Extract Method, Inline Method, Rename Variable, Move Method, Extract Class, Inline Class, Replace Conditional with Polymorphism, entre muchos otros. Los IDEs modernos como IntelliJ IDEA, Eclipse, o Visual Studio proporcionan refactorings automatizados que preservan semántica mientras transforman estructura. La práctica efectiva requiere suite comprehensiva de pruebas que verifiquen que refactorings no introducen regresiones.
+    </p>
+
+    <h3>2.1 Catálogo Detallado de Refactorings Fundamentales</h3>
+    <p>
+        Extract Method identifica fragmento de código cohesivo y lo convierte en método separado con nombre descriptivo, reduciendo Long Method y mejorando reusabilidad. Extract Variable introduce variable explicativa para expresión compleja, mejorando legibilidad. Rename refactorings (variable, método, clase) mejoran expresividad del código mediante nombres reveladores. Move Method/Field reubica responsabilidades donde pertenecen conceptualmente, reduciendo Feature Envy y mejorando cohesión. Extract Class divide clase con múltiples responsabilidades en clases focalizadas, respetando Single Responsibility. Introduce Parameter Object reemplaza Long Parameter List con objeto que encapsula parámetros relacionados. Replace Conditional with Polymorphism elimina switch statements creando jerarquía polimórfica, respetando Open/Closed. Cada refactoring tiene precondiciones, mecánica, y motivación específicas documentadas en el catálogo de Fowler.
+    </p>
+
+    <h3>2.2 Refactorings de Datos y Expresiones</h3>
+    <p>
+        Replace Magic Number with Symbolic Constant elimina números mágicos introduciendo constantes nombradas. Encapsulate Field reemplaza acceso directo a campos con getters/setters, permitiendo evolución futura. Replace Type Code with Subclasses transforma códigos numéricos en jerarquía de tipos, habilitando polimorfismo. Self Encapsulate Field fuerza acceso a campos propios mediante getters/setters incluso internamente, facilitando subclassing. Replace Data Value with Object transforma dato primitivo en objeto de dominio con comportamiento y validación. Change Value to Reference/Change Reference to Value alterna entre semántica de valor e identidad según requisitos. Introduce Null Object elimina null checks introduciendo objeto con comportamiento neutro. Los refactorings de datos son fundamentales para evolucionar modelos de dominio conforme crece comprensión.
+    </p>
+
+    <div class="mermaid">
+    graph TB
+        subgraph "Refactorings por Categoría"
+            A[Composición de Métodos<br/>Extract/Inline Method]
+            B[Movimiento de Features<br/>Move Method/Field]
+            C[Organización de Datos<br/>Encapsulate Field]
+            D[Simplificación Condicional<br/>Replace with Polymorphism]
+            E[Generalización<br/>Extract Superclass/Interface]
+        end
+
+        A --> F[Código Más Limpio]
+        B --> F
+        C --> F
+        D --> F
+        E --> F
+        F --> G[Mejor Mantenibilidad]
+        F --> H[Menos Bugs]
+
+        style F fill:#2ecc71
+        style G fill:#3498db
+    </div>
+
     <h2>3. Code Smells y Detección de Problemas</h2>
-    <p>Los code smells son síntomas de problemas de diseño subyacentes. Duplicated Code viola DRY, incrementando mantenimiento. Long Method dificulta comprensión. Large Class viola Single Responsibility. Long Parameter List complica uso. Divergent Change indica clase con múltiples razones de cambio. Shotgun Surgery requiere múltiples cambios pequeños dispersos para modificar funcionalidad. Feature Envy indica método más interesado en otra clase. Data Clumps sugieren objetos conceptuales no modelados. Primitive Obsession usa tipos primitivos en lugar de objetos de dominio. Switch Statements sugieren polimorfismo. Las herramientas de análisis estático detectan automáticamente muchos smells, priorizando refactorings.</p>
+    <p>
+        Los code smells son síntomas de problemas de diseño subyacentes. Duplicated Code viola DRY, incrementando mantenimiento. Long Method dificulta comprensión. Large Class viola Single Responsibility. Long Parameter List complica uso. Divergent Change indica clase con múltiples razones de cambio. Shotgun Surgery requiere múltiples cambios pequeños dispersos para modificar funcionalidad. Feature Envy indica método más interesado en otra clase. Data Clumps sugieren objetos conceptuales no modelados. Primitive Obsession usa tipos primitivos en lugar de objetos de dominio. Switch Statements sugieren polimorfismo. Las herramientas de análisis estático detectan automáticamente muchos smells, priorizando refactorings.
+    </p>
+
+    <h3>3.1 Code Smells de Acoplamiento y Cohesión</h3>
+    <p>
+        Inappropriate Intimacy ocurre cuando clases acceden excesivamente a detalles internos de otras, violando encapsulación. Message Chains (Law of Demeter violations) crean acoplamiento transitivo frágil mediante cadenas como a.getB().getC().doSomething(). Middle Man delega todas las operaciones sin agregar valor. Incomplete Library Class requiere funcionalidad en librería que no podemos modificar, solucionable mediante Extension Methods o Adapter. Lazy Class tiene responsabilidad tan mínima que no justifica existencia. Speculative Generality añade flexibilidad nunca usada. Temporary Field contiene valores solo bajo ciertas circunstancias, confundiendo propósito del objeto. Comments excesivos frecuentemente compensan código poco claro; mejor refactorizar código para ser auto-explicativo. La identificación sistemática de smells guía refactoring efectivo.
+    </p>
+
+    <h3>3.2 Herramientas de Detección Automatizada</h3>
+    <p>
+        SonarQube detecta code smells mediante reglas configurables, calculando Technical Debt en tiempo estimado para corrección. PMD y Checkstyle (Java) analizan código estáticamente buscando problemas comunes. CodeClimate proporciona análisis multi-lenguaje con scoring de mantenibilidad. ReSharper (.NET) integra detección de smells en IDE con quick-fixes. ESLint (JavaScript) detecta patrones problemáticos mediante reglas extensibles. Pylint (Python) verifica convenciones y detecta errores. Las herramientas modernas emplean machine learning para detectar anomalías comparando con corpus de código. La integración en CI/CD proporciona feedback continuo. Sin embargo, las herramientas detectan síntomas; el juicio humano determina refactorings apropiados considerando contexto de negocio.
+    </p>
+
     <h2>4. Gestión de Deuda Técnica</h2>
-    <p>La deuda técnica representa costo futuro de mantenimiento causado por decisiones subóptimas de diseño o implementación. Ward Cunningham acuñó la metáfora: como deuda financiera, genera 'intereses' (esfuerzo adicional) que consumen recursos. La deuda técnica puede ser deliberada (decisiones conscientes por time-to-market) o inadvertida (ignorancia o descuido). La gestión efectiva requiere hacerla visible mediante métricas (complejidad ciclomática, acoplamiento, cobertura de tests), priorizar pago basado en dolor actual y futuro, y asignar tiempo explícito para refactoring en sprints. El Technical Debt Quadrant de Fowler clasifica deuda como prudente/imprudente y deliberada/inadvertida, guiando estrategias de gestión.</p>
+    <p>
+        La deuda técnica representa costo futuro de mantenimiento causado por decisiones subóptimas de diseño o implementación. Ward Cunningham acuñó la metáfora: como deuda financiera, genera 'intereses' (esfuerzo adicional) que consumen recursos. La deuda técnica puede ser deliberada (decisiones conscientes por time-to-market) o inadvertida (ignorancia o descuido). La gestión efectiva requiere hacerla visible mediante métricas (complejidad ciclomática, acoplamiento, cobertura de tests), priorizar pago basado en dolor actual y futuro, y asignar tiempo explícito para refactoring en sprints. El Technical Debt Quadrant de Fowler clasifica deuda como prudente/imprudente y deliberada/inadvertida, guiando estrategias de gestión.
+    </p>
+
+    <h3>4.1 El Cuadrante de Deuda Técnica y Estrategias</h3>
+    <p>
+        El Quadrant de Martin Fowler clasifica deuda técnica en cuatro tipos. Deuda Prudente y Deliberada surge de decisiones conscientes: "Debemos lanzar ahora, refactorizaremos después". Deuda Imprudente y Deliberada ignora consecuencias: "No tenemos tiempo para diseño". Deuda Prudente e Inadvertida se descubre post-facto: "Ahora sabemos cómo deberíamos haberlo hecho". Deuda Imprudente e Inadvertida resulta de incompetencia: "¿Qué son capas?". La estrategia de gestión varía: deuda prudente deliberada debe pagarse según plan; deuda imprudente requiere educación del equipo; deuda inadvertida requiere refactoring cuando se descubre. El registro explícito de deuda técnica en backlogs, con estimación de intereses e impacto, facilita priorización racional.
+    </p>
+
+    <h3>4.2 Métricas y Monitoreo de Deuda Técnica</h3>
+    <p>
+        Las métricas cuantifican deuda técnica objetivamente. SQALE (Software Quality Assessment based on Lifecycle Expectations) calcula Technical Debt Ratio comparando costo de remediación con costo de desarrollo desde cero. Code Coverage indica qué proporción de código está verificada por tests; cobertura baja aumenta riesgo de regresiones. Complexity metrics (ciclomática, cognitiva) identifican código difícil de mantener. Duplication percentage cuantifica violaciones de DRY. Coupling y cohesion metrics revelan problemas arquitecturales. Issue density (bugs/KLOC) indica calidad general. La evolución temporal de métricas es crucial: tendencia creciente de complejidad o decreciente de cobertura señala degradación. Los dashboards de calidad hacen métricas visibles a equipo y stakeholders, facilitando decisiones informadas sobre inversión en calidad.
+    </p>
+
+    <div class="mermaid">
+    graph TB
+        A[Deuda Técnica] --> B{Tipo}
+        B -->|Deliberada & Prudente| C[Plan de Pago]
+        B -->|Deliberada & Imprudente| D[Educación]
+        B -->|Inadvertida & Prudente| E[Refactoring]
+        B -->|Inadvertida & Imprudente| F[Capacitación]
+
+        C --> G[Reducción Sistemática]
+        E --> G
+        D --> H[Prevención Futura]
+        F --> H
+
+        style A fill:#e74c3c
+        style G fill:#2ecc71
+        style H fill:#3498db
+    </div>
+
     <h2>5. Modernización de Sistemas Legacy</h2>
-    <p>Los sistemas legacy presentan desafíos únicos: documentación inadecuada, tecnologías obsoletas, arquitectura monolítica rígida, y expertise escaso. Las estrategias de modernización incluyen encapsulation (wrapper con interfaces modernas), rehosting (migrar a infraestructura moderna sin cambiar código), replatforming (migrar a plataforma diferente con cambios mínimos), refactoring (reestructurar mejorando diseño), rearchitecting (alterar arquitectura sustancialmente), rebuilding (reescribir desde cero), y replacing (adquirir producto comercial). La estrategia apropiada depende de valor de negocio, estado técnico, riesgo, y recursos. El patrón Strangler Fig permite reemplazo gradual migrando funcionalidad incrementalmente hacia nuevo sistema mientras el legacy continúa operando.</p>
+    <p>
+        Los sistemas legacy presentan desafíos únicos: documentación inadecuada, tecnologías obsoletas, arquitectura monolítica rígida, y expertise escaso. Las estrategias de modernización incluyen encapsulation (wrapper con interfaces modernas), rehosting (migrar a infraestructura moderna sin cambiar código), replatforming (migrar a plataforma diferente con cambios mínimos), refactoring (reestructurar mejorando diseño), rearchitecting (alterar arquitectura sustancialmente), rebuilding (reescribir desde cero), y replacing (adquirir producto comercial). La estrategia apropiada depende de valor de negocio, estado técnico, riesgo, y recursos. El patrón Strangler Fig permite reemplazo gradual migrando funcionalidad incrementalmente hacia nuevo sistema mientras el legacy continúa operando.
+    </p>
+
+    <h3>5.1 El Patrón Strangler Fig en Detalle</h3>
+    <p>
+        El patrón Strangler Fig, nombrado por Martin Fowler según higueras que crecen alrededor de árboles huésped, permite migración gradual de sistemas legacy. La estrategia comienza identificando bounded contexts o módulos funcionalmente cohesivos. Se construye nuevo sistema paralelamente, interceptando requests mediante facade o proxy. Inicialmente, facade delega al sistema legacy. Gradualmente, funcionalidad se reimplementa en nuevo sistema; facade enruta requests correspondientes al nuevo sistema. Eventualmente, toda funcionalidad migra y sistema legacy se retira. Esta aproximación minimiza riesgo big-bang, permite aprendizaje incremental, y mantiene sistema operacional durante migración. Casos exitosos incluyen migración de monolitos a microservicios en organizaciones como Amazon y Netflix.
+    </p>
+
+    <h3>5.2 Estrategias de Migración de Datos</h3>
+    <p>
+        La migración de datos legacy presenta desafíos significativos. Las estrategias incluyen big-bang cutover (migrar todos los datos simultáneamente durante ventana de mantenimiento), trickle migration (migrar datos incrementalmente), parallel operation (sistemas antiguo y nuevo operan simultáneamente con sincronización bidireccional). La extracción, transformación, y carga (ETL) convierte datos de esquema legacy a esquema moderno, aplicando limpieza y normalización. Las validaciones verifican integridad y completitud post-migración mediante reconciliación de totales, sampling, y validación de reglas de negocio. El rollback plan es esencial dado que migraciones pueden descubrir inconsistencias inesperadas. Las herramientas especializadas como Flyway o Liquibase gestionan evolución de esquemas versionando migraciones y aplicándolas incrementalmente.
+    </p>
+
+    <h2>6. Caso de Estudio: Reingeniería en la Industria</h2>
+    <p>
+        Consideremos reingeniería de sistema bancario core legacy construido en COBOL mainframe en los años 1980. El sistema procesaba millones de transacciones diarias con alta confiabilidad, pero carecía de flexibilidad para productos modernos (banca online, APIs móviles), expertise COBOL escaseaba, y costos de mainframe eran prohibitivos. La estrategia adoptó enfoque híbrido. Primero, encapsulation: exponiendo funcionalidad legacy mediante APIs RESTful usando middleware de integración, permitiendo desarrollo de aplicaciones modernas sobre core legacy. Segundo, selective re-implementation: módulos de alto valor y frecuente cambio (gestión de productos, cálculo de intereses) se reimplementaron en Java con arquitectura de microservicios. Tercero, strangler pattern: nuevo sistema gradualmente asumió funcionalidad, manteniendo sistema legacy para operaciones restantes.
+    </p>
+
+    <h3>6.1 Desafíos y Lecciones Aprendidas</h3>
+    <p>
+        La reingeniería enfrentó múltiples desafíos. La documentación del sistema legacy era obsoleta o inexistente; reverse engineering mediante análisis de código y entrevistas con expertos fue necesario. Las reglas de negocio estaban embebidas implícitamente en código COBOL, requiriendo extracción cuidadosa. La migración de datos reveló inconsistencias acumuladas durante décadas. Las dependencias ocultas causaron fallos inesperados al migrar módulos. El testing exhaustivo fue crítico: test de regresión comparaba outputs del sistema legacy vs nuevo para miles de escenarios. La aproximación incremental permitió learning by doing y ajuste de estrategia. Las lecciones incluyen: invertir en comprensión profunda antes de reimplementar, mantener paridad funcional antes de innovar, automatizar testing exhaustivo, y planificar 2-3x el tiempo inicialmente estimado.
+    </p>
+
+    <h2>7. Técnicas Avanzadas de Refactoring</h2>
+    <p>
+        Las técnicas avanzadas abordan refactorings complejos de gran escala. Branch by Abstraction permite refactoring de dependencias fundamentales sin romper build: introducir abstracción, gradualmente migrar clientes a usar abstracción, cambiar implementación subyacente, remover abstracción si deseado. Parallel Change (también Expand-Contract) modifica interfaces preservando compatibilidad: expandir interface añadiendo nueva versión, migrar clientes a nueva versión, contraer removiendo versión antigua. Feature Toggles permiten integración continua de features incompletas, habilitándolas solo cuando completas. Asset Capture identifica y extrae componentes reutilizables de sistemas legacy. Cada técnica facilita evolución segura de sistemas en producción.
+    </p>
+
+    <h3>7.1 Refactoring de Arquitectura</h3>
+    <p>
+        El refactoring arquitectural transforma estructura de alto nivel del sistema. De monolito a microservicios: identificar bounded contexts, extraer servicios independientemente deployables, implementar comunicación mediante APIs o messaging. De layered a hexagonal: separar lógica de negocio de infraestructura mediante puertos y adaptadores. De database-centric a domain-centric: encapsular acceso a base de datos detrás de repositories, mover lógica de negocio de stored procedures a objetos de dominio. De síncrono a asíncrono: introducir messaging para operaciones no requieren respuesta inmediata, mejorando throughput y resiliencia. El refactoring arquitectural requiere incrementalidad: cambios big-bang son prohibitivamente riesgosos. Strangler pattern y Branch by Abstraction son técnicas habilitadoras clave.
+    </p>
+
+    <h2>8. Testing y Refactoring</h2>
+    <p>
+        Los tests automatizados son prerequisito para refactoring seguro, verificando que transformaciones preservan comportamiento. El dilema surge con legacy code sin tests: modificar código sin tests es riesgoso, pero añadir tests requiere hacer código testeable, frecuentemente requiriendo refactoring. Michael Feathers en "Working Effectively with Legacy Code" propone técnicas para romper dependencias sin tests: Sprout Method/Class añade nueva funcionalidad en código nuevo testeable, Wrap Method envuelve método legacy en nuevo código testeable. Las seams son puntos donde comportamiento puede alterarse sin modificar código, habilitando testing: object seams (dependency injection), preprocessing seams (macros C++), link seams (linking diferentes implementaciones). Caracterization tests documentan comportamiento actual del sistema, detectando cambios inadvertidos durante refactoring.
+    </p>
+
+    <h3>8.1 Mutation Testing para Validar Suite de Tests</h3>
+    <p>
+        El mutation testing evalúa calidad de suite de tests introduciendo mutaciones (pequeños cambios como invertir condicional, cambiar operador, modificar constante) en código bajo prueba. Si tests fallan, el mutante es "killed" (bueno); si tests pasan, el mutante "survives" (malo, indica gap en tests). El mutation score (% mutantes killed) cuantifica efectividad de tests; coverage alto pero mutation score bajo indica tests que ejercitan código sin verificar comportamiento correcto. Herramientas como PIT (Java), Stryker (JavaScript/TypeScript), mutmut (Python) automatizan mutation testing. Aunque computacionalmente costoso, mutation testing proporciona confianza en suite de tests crítica para refactoring seguro. El uso típico es para código crítico o previo a refactoring mayor.
+    </p>
+
+    <h2>9. Refactoring y Rendimiento</h2>
+    <p>
+        El refactoring prioriza claridad y mantenibilidad, ocasionalmente sacrificando rendimiento. Donald Knuth advirtió: "Premature optimization is the root of all evil". La estrategia recomendada es refactorizar primero para diseño limpio, luego optimizar basado en profiling. El diseño limpio frecuentemente facilita optimización: código modular permite optimizar hot paths sin afectar resto del sistema, abstracciones claras permiten intercambiar implementaciones (reemplazar ArrayList con LinkedList), y separación de concerns facilita caching o paralelización. Ocasionalmente, optimización requiere violar abstracciones; este trade-off debe ser consciente y documentado. Los performance tests deben incluirse en suite de regresión, alertando degradaciones de rendimiento causadas por refactorings.
+    </p>
+
+    <h2>10. Comparación de Enfoques: Refactoring vs Rewrite</h2>
+    <p>
+        La decisión entre refactoring incremental y rewrite desde cero es crítica. El refactoring preserva funcionalidad existente, minimiza riesgo, y permite valor incremental. Sin embargo, puede ser lento para transformaciones arquitecturales mayores, y deuda técnica extrema puede hacer código irreparable. El rewrite permite diseño limpio sin restricciones legacy, adopción de tecnologías modernas, y eliminación de features obsoletas. Sin embargo, es altamente riesgoso: proyectos de rewrite frecuentemente subestiman complejidad, descubren reglas de negocio implícitas tardíamente, y sufren scope creep. Los rewrites totales tienen tasa de fracaso alta (Netscape Navigator es caso famoso). La aproximación pragmática es refactoring continuo con rewrites selectivos de componentes específicos usando strangler pattern.
+    </p>
+
+    <div class="mermaid">
+    graph TB
+        A{Sistema Legacy} --> B{Evaluación}
+        B -->|Deuda Manejable| C[Refactoring Incremental]
+        B -->|Deuda Extrema| D[Análisis Profundo]
+        D --> E{Valor de Negocio}
+        E -->|Alto| F[Strangler + Rewrite Selectivo]
+        E -->|Bajo| G[Mantener o Retirar]
+        C --> H[Mejora Gradual]
+        F --> H
+
+        style A fill:#e74c3c
+        style C fill:#3498db
+        style F fill:#f39c12
+        style H fill:#2ecc71
+    </div>
+
+    <h2>11. Ejercicios Prácticos de Reingeniería</h2>
+    <p>
+        Para consolidar comprensión, se proponen ejercicios prácticos. Ejercicio 1: Aplicar serie de refactorings catalogados (Extract Method, Replace Conditional with Polymorphism, Introduce Parameter Object) a código legacy proporcionado, verificando mediante tests que comportamiento se preserva. Ejercicio 2: Analizar proyecto open source usando herramientas de análisis estático (SonarQube), identificar top 10 code smells, y proponer refactorings específicos priorizados por impacto. Ejercicio 3: Implementar Strangler Pattern para migrar módulo de aplicación monolítica a microservicio independiente, manteniendo sistema operacional durante migración. Ejercicio 4: Crear caracterization tests para código legacy sin tests, documentando comportamiento actual como baseline para refactoring subsecuente.
+    </p>
+
+    <h3>11.1 Laboratorio: Migración de Base de Datos Legacy</h3>
+    <p>
+        Laboratorio práctico: Dado esquema de base de datos legacy desnormalizado con redundancia y falta de integridad referencial, diseñar esquema normalizado moderno. Implementar migración ETL que extrae datos legacy, aplica transformaciones (normalización, limpieza, resolución de inconsistencias), y carga en nuevo esquema. Implementar validaciones que verifican integridad y completitud (totales reconcilian, foreign keys válidas, constraints satisfechas). Documentar problemas encontrados y resoluciones. Implementar estrategia de rollback. Este ejercicio desarrolla skills críticos en migración de datos, componente esencial de modernización de sistemas legacy que frecuentemente constituye mayor riesgo en proyectos de reingeniería. La experiencia práctica con datos reales revela desafíos no aparentes en diseño teórico: inconsistencias acumuladas, edge cases inesperados, y complejidad de mantener integridad durante transición.
+    </p>
+
+    <h2>12. Refactoring en Contextos Específicos</h2>
+    <p>
+        Diferentes dominios requieren consideraciones específicas para refactoring. En aplicaciones web, refactoring del frontend debe considerar compatibilidad cross-browser y rendimiento en cliente. En sistemas embebidos, restricciones de memoria y tiempo real limitan refactorings aceptables. En sistemas distribuidos, refactoring de APIs requiere versionado cuidadoso y backwards compatibility. En aplicaciones de datos, refactoring de pipelines debe preservar reproducibilidad de resultados. En contratos inteligentes blockchain, refactoring es particularmente complejo dado inmutabilidad del código deployado; patterns como proxy contracts permiten upgradeability. Comprender contexto específico del dominio es crucial para refactoring efectivo y seguro.
+    </p>
+
+    <h3>12.1 Refactoring de Bases de Datos</h3>
+    <p>
+        El database refactoring transforma esquema preservando información y manteniendo compatibilidad con aplicaciones. Los refactorings incluyen Rename Column, Split Column, Merge Columns, Move Column, Introduce Surrogate Key, Replace Type Code with Property Flags, entre otros. La estrategia típica es transition period: versión nueva y antigua del esquema coexisten, triggers o views mantienen sincronización, aplicaciones migran gradualmente, finalmente versión antigua se retira. Las herramientas como Liquibase o Flyway versionan esquemas y automatizan aplicación de migraciones. El database refactoring es particularmente delicado dado que esquema es compartido por múltiples aplicaciones potencialmente, y datos son activo crítico. Continuous database integration aplica principios de CI/CD a evolución de esquemas.
+    </p>
+
+    <h2>13. El Futuro de Refactoring: IA y Automatización</h2>
+    <p>
+        Las técnicas emergentes aplican inteligencia artificial a refactoring. El machine learning entrenado en corpus de código puede sugerir refactorings basados en patrones comunes en proyectos high-quality. Los Large Language Models como Codex pueden generar refactorings basados en descripciones en lenguaje natural. El program synthesis automáticamente genera implementaciones alternativas optimizadas funcionalmente equivalentes. Sin embargo, la automatización completa enfrenta desafíos: preservar semántica requiere análisis profundo frecuentemente indecidible, comprender intención de diseño requiere contexto de negocio, y evaluar trade-offs requiere juicio humano. El futuro probable es human-AI collaboration: IA sugiere refactorings y genera implementaciones, humanos proveen dirección estratégica y validan resultados. Las herramientas contemporáneas como IntelliCode (Microsoft) y Kite ya aplican ML para sugerencias contextuales.
+    </p>
+
+    <h2>14. Refactoring Organizacional y Procesos</h2>
+    <p>
+        El refactoring efectivo requiere soporte organizacional más allá de herramientas técnicas. La cultura de ingeniería debe valorar calidad de código: reservar tiempo explícito para refactoring en sprints, reconocer refactoring como trabajo valioso, y celebrar mejoras de calidad tanto como nuevas features. El technical leadership debe defender refactoring ante presión de short-term deadlines: articular costo de deuda técnica en términos de negocio (velocity reducido, bugs incrementados, dificultad de recruiting), negociar balance razonable entre features y calidad. Los code reviews deben evaluar calidad de diseño no solo corrección funcional: sugerir refactorings durante review, compartir knowledge de patrones y principios. El pair programming facilita refactoring: dos desarrolladores colaborando detectan smells más efectivamente y aprenden técnicas mutuamente. La inversión organizacional en calidad de código genera retornos compuestos a largo plazo mediante reducción de fricción en desarrollo y mantenimiento.
+    </p>
+
+    <h3>14.1 Boy Scout Rule y Mejora Incremental</h3>
+    <p>
+        La Boy Scout Rule establece: "deja el código más limpio de como lo encontraste". Cada cambio al código es oportunidad de mejora incremental: renombrar variable confusa, extraer método largo, eliminar duplicación pequeña. Los refactorings oportunistas acumulados continuamente previenen degradación gradual. Sin embargo, require disciplina: refactorings deben ser pequeños (minutos, no días), enfocados (relacionados con cambio primario), y verificados (tests pasan). Los commits deben separar refactorings de cambios funcionales facilitando review. La mejora incremental es sostenible: no requiere grandes proyectos de cleanup disruptivos, se integra naturalmente en flujo de desarrollo, y distribuye esfuerzo uniformemente. La metáfora es mantenimiento continuo vs dejar acumular hasta necesitar renovación mayor.
+    </p>
+
+    <h2>15. Refactoring y Metodologías Ágiles</h2>
+    <p>
+        Las metodologías ágiles (XP, Scrum) incorporan refactoring fundamentalmente. XP prescribe refactoring merciless: refactorizar continuamente manteniendo diseño simple. TDD integra refactoring en ciclo red-green-refactor: implementar mínimo para pasar test, luego refactorizar mejorando diseño. El sprint retrospectives discuten deuda técnica y planifican refactorings. El definition of done incluye código limpio: features no están "done" hasta que diseño es satisfactorio. Sin embargo, agilidad mal entendida puede sacrificar calidad: "move fast and break things" sin inversión en calidad genera deuda técnica insostenible. El sustainable pace de XP reconoce que calidad permite velocity sostenido long-term. La verdadera agilidad balancea respuesta rápida a cambios con fundamentos técnicos sólidos. Los equipos maduros integran refactoring naturalmente como práctica estándar, no como actividad excepcional requiriendo justificación especial ante management.
+    </p>
+
+    <h2>16. Aspectos Económicos de Refactoring</h2>
+    <p>
+        El refactoring tiene costo explícito (tiempo de ingenieros) y beneficios menos visibles (mantenimiento futuro simplificado, bugs reducidos, velocidad sostenida). El business case para refactoring requiere cuantificación: estimar tiempo ahorrado en features futuras gracias a diseño mejorado, calcular reducción de bugs y costos asociados, proyectar impacto en velocity de equipo. El Technical Debt Ratio de SQALE cuantifica deuda como porcentaje de tiempo de desarrollo: ratio 5% significa que 5% del esfuerzo se desperdicia navegando complejidad innecesaria. Las métricas longitudinales demuestran valor: graficar velocity del equipo, frecuencia de bugs, tiempo para implementar features, correlacionando con inversión en calidad. Los stakeholders entienden ROI, no abstracciones técnicas: comunicar refactoring en términos de business impact (time-to-market, costo de mantenimiento, riesgo).
+    </p>
+
+    <h3>16.1 Estrategias de Priorización de Refactoring</h3>
+    <p>
+        No todo código merece refactoring: código rara vez modificado puede permanecer imperfecto sin costo significativo. La priorización debe considerar: frecuencia de cambio (código modificado frecuentemente causa dolor recurrente), complejidad actual (código muy complejo dificulta cambios), impacto en negocio (módulos críticos justifican mayor inversión). La matriz pain/effort identifica refactorings high-impact low-effort como quick wins. El value-driven refactoring enfoca esfuerzo donde genera mayor retorno: refactorizar justo antes de añadir feature relacionada, cuando beneficio es inmediato. El opportunistic refactoring aprovecha contexto: desarrollador trabajando en módulo tiene comprensión fresca facilitando refactoring efectivo. El strategic refactoring aborda deuda arquitectural mayor: requiere planning deliberado y coordinación de equipo. Las métricas de hotspots identifican archivos modificados frecuentemente con alta complejidad, señalando candidates óptimos para refactoring. El análisis de commit history revela patterns de cambio, informando decisiones de refactoring basadas en datos concretos en lugar de intuición.
+    </p>
+
     <div class="highlight-box">
         <h3>Resumen de la Clase</h3>
-        <p>Esta clase ha cubierto técnicas de reingeniería y refactoring de software, desde identificación de code smells hasta gestión de deuda técnica y modernización de sistemas legacy. Estas competencias resultan esenciales para mantener calidad de sistemas a largo plazo.</p>
+        <p>Esta clase ha cubierto exhaustivamente técnicas de reingeniería y refactoring de software, desde fundamentos de reverse engineering hasta refactorings catalogados, detección de code smells, gestión de deuda técnica, y modernización de sistemas legacy. Hemos explorado el patrón Strangler Fig para migración gradual, técnicas avanzadas como Branch by Abstraction, refactoring arquitectural, y la relación crítica entre testing y refactoring seguro. El caso de estudio de sistema bancario legacy ilustró desafíos reales y estrategias pragmáticas. Discutimos trade-offs entre refactoring vs rewrite, contextos específicos de dominio, refactoring de bases de datos, y tendencias futuras con IA. Los aspectos organizacionales y económicos demuestran que refactoring exitoso requiere más que herramientas técnicas: necesita cultura de ingeniería, soporte de management, y comprensión de business value. La Boy Scout Rule y refactoring oportunista proporcionan estrategias pragmáticas de mejora continua. Las metodologías ágiles correctamente aplicadas integran refactoring naturalmente. Los ejercicios prácticos propuestos permiten desarrollar skills hands-on en refactoring y migración de datos. Estas competencias resultan esenciales para mantener calidad de sistemas a largo plazo, reducir deuda técnica, y evolucionar sistemas legacy hacia arquitecturas modernas sin disrumpir operaciones de negocio.</p>
     </div>
+
     <div class="nav-buttons">
-        <a href="#" class="btn btn-prev" data-clase="clase7">← Anterior</a>
-        <a href="#" class="btn btn-next" data-clase="clase9">Siguiente →</a>
+        <a href="#" class="btn btn-prev" data-clase="clase7">← Anterior: Diseño OO Avanzado</a>
+        <a href="#" class="btn btn-next" data-clase="clase9">Siguiente: Proyecto Integrador →</a>
     </div>
 </div>

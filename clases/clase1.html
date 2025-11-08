@@ -61,6 +61,86 @@
         Además de los aspectos técnicos, la Ingeniería de Software moderna debe considerar factores como la escalabilidad, seguridad, usabilidad, mantenibilidad y sostenibilidad. Los sistemas actuales operan en entornos distribuidos, heterogéneos y dinámicos, interactúan con múltiples stakeholders, y deben adaptarse continuamente a requisitos cambiantes. Esta complejidad multidimensional justifica la necesidad de formación especializada a nivel de posgrado, donde se profundiza en conceptos avanzados y se desarrollan competencias para abordar desafíos complejos.
     </p>
 
+    <div class="mermaid">
+    graph TB
+        subgraph "Dimensiones de la Ingeniería de Software"
+            D1[Dimensión Técnica]
+            D2[Dimensión Organizacional]
+            D3[Dimensión Humana]
+            D4[Dimensión Económica]
+        end
+
+        D1 --> T1[Arquitectura]
+        D1 --> T2[Algoritmos]
+        D1 --> T3[Estructuras de Datos]
+        D1 --> T4[Paradigmas de Programación]
+
+        D2 --> O1[Procesos]
+        D2 --> O2[Metodologías]
+        D2 --> O3[Gestión de Configuración]
+        D2 --> O4[Control de Calidad]
+
+        D3 --> H1[Trabajo en Equipo]
+        D3 --> H2[Comunicación]
+        D3 --> H3[Liderazgo]
+        D3 --> H4[Ética Profesional]
+
+        D4 --> E1[Estimación de Costos]
+        D4 --> E2[Retorno de Inversión]
+        D4 --> E3[Gestión de Recursos]
+        D4 --> E4[Análisis de Riesgos]
+
+        style D1 fill:#3498db
+        style D2 fill:#9b59b6
+        style D3 fill:#e74c3c
+        style D4 fill:#f39c12
+    </div>
+
+    <h3>1.3 El Rol de la Ingeniería de Software en la Transformación Digital</h3>
+
+    <p>
+        En la era actual de transformación digital, la Ingeniería de Software juega un papel central en la modernización de industrias tradicionales y en la creación de nuevos modelos de negocio. Las organizaciones de todos los sectores están reimaginando sus procesos, productos y servicios mediante el software. Desde la banca digital hasta la medicina personalizada, desde las ciudades inteligentes hasta la agricultura de precisión, el software se ha convertido en el enabler fundamental de la innovación.
+    </p>
+
+    <p>
+        La transformación digital no consiste simplemente en digitalizar procesos existentes, sino en repensar fundamentalmente cómo se crea y entrega valor. Esto requiere profesionales de software que comprendan no solo la tecnología, sino también los dominios de aplicación, los modelos de negocio, y las implicaciones sociales y éticas de los sistemas que construyen. La Ingeniería de Software proporciona los métodos y herramientas para navegar esta complejidad, asegurando que la transformación digital se ejecute de manera controlada, predecible y exitosa.
+    </p>
+
+    <h3>1.4 Desafíos Contemporáneos en Ingeniería de Software</h3>
+
+    <p>
+        Los profesionales de la Ingeniería de Software enfrentan desafíos significativos que requieren soluciones innovadoras y conocimientos profundos. Entre estos desafíos destacan: la gestión de la complejidad en sistemas de gran escala, la integración de sistemas legados con tecnologías modernas, la garantía de seguridad en un panorama de amenazas en constante evolución, y la necesidad de desarrollar software sostenible que minimice el impacto ambiental.
+    </p>
+
+    <p>
+        Otro desafío crítico es el de la deuda técnica: las decisiones de diseño e implementación subóptimas que se acumulan con el tiempo y dificultan el mantenimiento y evolución del software. La gestión efectiva de la deuda técnica requiere un equilibrio cuidadoso entre la velocidad de desarrollo a corto plazo y la sostenibilidad a largo plazo. Los ingenieros de software deben desarrollar la capacidad de identificar, cuantificar y priorizar la deuda técnica, así como de comunicar efectivamente sus implicaciones a stakeholders no técnicos.
+    </p>
+
+    <div class="mermaid">
+    mindmap
+        root((Desafíos Contemporáneos))
+            Complejidad
+                Sistemas Distribuidos
+                Microservicios
+                Arquitecturas Híbridas
+            Seguridad
+                Amenazas Cibernéticas
+                Privacidad de Datos
+                Cumplimiento Regulatorio
+            Calidad
+                Testing Continuo
+                Automatización
+                Monitoreo en Producción
+            Sostenibilidad
+                Eficiencia Energética
+                Código Limpio
+                Gestión de Deuda Técnica
+            Integración
+                Sistemas Legados
+                APIs y Servicios
+                DevOps
+    </div>
+
     <h2>2. Objetivos Académicos y Profesionales del Diplomado</h2>
 
     <p>
@@ -240,7 +320,209 @@
         </p>
     </div>
 
-    <h2>6. Reflexiones Finales y Perspectivas</h2>
+    <h2>6. Casos de Estudio: Proyectos Exitosos y Lecciones Aprendidas</h2>
+
+    <p>
+        El análisis de proyectos reales proporciona valiosas lecciones sobre la aplicación práctica de los principios de Ingeniería de Software. A continuación, examinamos varios casos de estudio que ilustran tanto éxitos como fracasos en proyectos de software de gran envergadura, extrayendo enseñanzas que serán aplicables a lo largo de todo el diplomado.
+    </p>
+
+    <h3>6.1 Caso de Estudio: Sistema de Reservas de Aerolíneas</h3>
+
+    <p>
+        Los sistemas de reservas de aerolíneas representan uno de los ejemplos más emblemáticos de sistemas de software críticos de alta disponibilidad. Sistemas como SABRE, desarrollado originalmente por IBM y American Airlines en la década de 1960, han evolucionado continuamente durante más de cinco décadas. Estos sistemas manejan millones de transacciones diarias, requieren disponibilidad del 99.999%, y deben integrarse con cientos de sistemas heterogéneos de aerolíneas, agencias de viajes y proveedores de servicios.
+    </p>
+
+    <p>
+        Las lecciones clave de este tipo de sistemas incluyen: la importancia de la arquitectura modular para facilitar la evolución continua, la necesidad de estrategias sofisticadas de testing y deployment para minimizar interrupciones, y el valor de mantener compatibilidad hacia atrás mientras se introduce innovación. La gestión de la complejidad en estos sistemas requiere equipos multidisciplinarios altamente capacitados, procesos rigurosos de control de calidad, y una cultura organizacional que valore la confiabilidad sobre la velocidad de entrega.
+    </p>
+
+    <div class="mermaid">
+    graph LR
+        subgraph "Arquitectura de Sistema de Reservas"
+            UI[Interfaz de Usuario]
+            API[API Gateway]
+            AUTH[Autenticación]
+            SEARCH[Motor de Búsqueda]
+            BOOK[Sistema de Reservas]
+            PAY[Procesamiento de Pagos]
+            NOTIF[Notificaciones]
+            DB[(Base de Datos Principal)]
+            CACHE[(Cache Distribuido)]
+        end
+
+        UI --> API
+        API --> AUTH
+        API --> SEARCH
+        API --> BOOK
+        BOOK --> PAY
+        BOOK --> NOTIF
+        SEARCH --> CACHE
+        BOOK --> DB
+        CACHE --> DB
+
+        style API fill:#3498db
+        style DB fill:#e74c3c
+        style CACHE fill:#f39c12
+    </div>
+
+    <h3>6.2 Caso de Estudio: Healthcare.gov - Un Fracaso Instructivo</h3>
+
+    <p>
+        El lanzamiento inicial de Healthcare.gov en 2013 constituye un caso de estudio valioso sobre lo que puede salir mal en proyectos de software de gran escala. El sitio web, diseñado para facilitar el acceso a seguros médicos en Estados Unidos, experimentó fallas catastróficas en su lanzamiento, siendo incapaz de manejar el volumen de usuarios y presentando errores críticos de funcionalidad. El proyecto había costado cientos de millones de dólares y su fracaso inicial tuvo repercusiones políticas y sociales significativas.
+    </p>
+
+    <p>
+        Las lecciones aprendidas incluyen: la importancia de testing realista de carga y performance antes del lanzamiento, los riesgos de integración tardía entre múltiples subsistemas desarrollados por diferentes contratistas, la necesidad de involucrar usuarios reales tempranamente en el proceso de desarrollo, y los peligros de fechas de lanzamiento inflexibles dictadas por factores externos. El caso también ilustra la importancia del liderazgo técnico fuerte y la necesidad de estructuras de gobernanza claras en proyectos que involucran múltiples organizaciones.
+    </p>
+
+    <h3>6.3 Transformación Ágil en Grandes Corporaciones</h3>
+
+    <p>
+        Numerosas organizaciones tradicionales han emprendido transformaciones ágiles a gran escala. Empresas como ING Bank, Spotify y Walmart han documentado sus experiencias transformando organizaciones de miles de desarrolladores hacia modelos de trabajo ágiles. Estos casos revelan que la adopción de metodologías ágiles trasciende cambios meramente técnicos o metodológicos, requiriendo transformaciones culturales profundas y rediseño de estructuras organizacionales.
+    </p>
+
+    <p>
+        Los elementos comunes en transformaciones exitosas incluyen: compromiso explícito del liderazgo ejecutivo, inversión significativa en capacitación y coaching, rediseño de espacios físicos de trabajo para facilitar colaboración, reestructuración de equipos en torno a productos en lugar de proyectos, y paciencia para permitir que nuevas prácticas se arraiguen antes de evaluar resultados. Las transformaciones fallidas típicamente se caracterizan por adopción superficial de prácticas sin cambios en valores y cultura subyacentes.
+    </p>
+
+    <div class="mermaid">
+    graph TB
+        subgraph "Factores de Éxito en Transformación Ágil"
+            F1[Liderazgo Comprometido]
+            F2[Equipos Cross-funcionales]
+            F3[Autonomía de Equipos]
+            F4[Foco en Valor de Negocio]
+            F5[Mejora Continua]
+            F6[Cultura de Aprendizaje]
+        end
+
+        F1 --> EXITO[Transformación Exitosa]
+        F2 --> EXITO
+        F3 --> EXITO
+        F4 --> EXITO
+        F5 --> EXITO
+        F6 --> EXITO
+
+        EXITO --> R1[Mayor Productividad]
+        EXITO --> R2[Mejor Calidad]
+        EXITO --> R3[Mayor Satisfacción]
+        EXITO --> R4[Time-to-Market Reducido]
+
+        style EXITO fill:#2ecc71,stroke:#27ae60,stroke-width:3px
+        style F1 fill:#3498db
+        style F2 fill:#9b59b6
+        style F3 fill:#e74c3c
+        style F4 fill:#f39c12
+        style F5 fill:#1abc9c
+        style F6 fill:#34495e
+    </div>
+
+    <h2>7. Tendencias Futuras en Ingeniería de Software</h2>
+
+    <p>
+        La Ingeniería de Software continúa evolucionando rápidamente, impulsada por avances tecnológicos, cambios en las necesidades de negocio, y nuevos paradigmas de desarrollo. Comprender las tendencias emergentes permite a los profesionales anticipar cambios y posicionarse estratégicamente para el futuro.
+    </p>
+
+    <h3>7.1 Inteligencia Artificial y Machine Learning en el Desarrollo de Software</h3>
+
+    <p>
+        La inteligencia artificial está transformando múltiples aspectos del desarrollo de software. Herramientas de asistencia de código impulsadas por AI, como GitHub Copilot, están cambiando la forma en que los desarrolladores escriben código. Estas herramientas pueden generar código a partir de descripciones en lenguaje natural, sugerir completaciones contextuales, detectar patrones de código problemático, y ayudar en tareas de refactorización. Sin embargo, también plantean desafíos relacionados con la calidad del código generado, la comprensión profunda versus la generación superficial, y cuestiones de propiedad intelectual.
+    </p>
+
+    <p>
+        Más allá de la asistencia en codificación, el machine learning se está aplicando para predecir defectos en código, optimizar procesos de testing, estimar esfuerzos de desarrollo con mayor precisión, y automatizar tareas de mantenimiento. Los sistemas de software también incorporan cada vez más capacidades de ML como funcionalidad core, requiriendo que los ingenieros de software comprendan los desafíos únicos de desarrollar, desplegar y mantener sistemas basados en ML, incluyendo gestión de datos de entrenamiento, monitoreo de drift en modelos, y explicabilidad de decisiones.
+    </p>
+
+    <h3>7.2 Computación Cuántica y sus Implicaciones</h3>
+
+    <p>
+        Aunque todavía en etapas tempranas de desarrollo, la computación cuántica promete revolucionar ciertos tipos de computación. Los algoritmos cuánticos pueden potencialmente resolver problemas que son intratables para computadoras clásicas, con aplicaciones en criptografía, optimización, simulación molecular y machine learning. Los ingenieros de software deberán familiarizarse con paradigmas de programación completamente nuevos, lenguajes especializados como Q# o Qiskit, y arquitecturas híbridas que combinan procesamiento clásico y cuántico.
+    </p>
+
+    <h3>7.3 Software Sostenible y Green Computing</h3>
+
+    <p>
+        La sostenibilidad ambiental está emergiendo como consideración crítica en el desarrollo de software. Los centros de datos consumen cantidades significativas de energía, y el código ineficiente contribuye al desperdicio energético. La Ingeniería de Software verde se enfoca en minimizar el impacto ambiental mediante optimización de algoritmos para eficiencia energética, diseño de arquitecturas que minimicen transferencias de datos innecesarias, y desarrollo de prácticas para medir y reducir la huella de carbono del software.
+    </p>
+
+    <div class="mermaid">
+    timeline
+        title Evolución y Futuro de la Ingeniería de Software
+        1960-1970 : Crisis del Software
+                  : Nacimiento de la disciplina
+                  : Primeros modelos formales
+        1980-1990 : Ingeniería de Software Estructurada
+                  : Programación Orientada a Objetos
+                  : CASE Tools
+        2000-2010 : Metodologías Ágiles
+                  : Open Source mainstream
+                  : Cloud Computing
+        2010-2020 : DevOps y Continuous Delivery
+                  : Microservicios
+                  : Containerización
+        2020-2030 : AI-Assisted Development
+                  : Quantum Computing
+                  : Sustainable Software
+                  : Edge Computing
+    </div>
+
+    <h2>8. Competencias del Siglo XXI para Ingenieros de Software</h2>
+
+    <p>
+        El éxito profesional en Ingeniería de Software requiere más que competencias técnicas. Los ingenieros de software deben desarrollar un conjunto amplio de habilidades que abarcan dimensiones técnicas, interpersonales, de negocio y éticas.
+    </p>
+
+    <h3>8.1 Competencias Técnicas Fundamentales</h3>
+
+    <p>
+        Las competencias técnicas fundamentales incluyen dominio de múltiples paradigmas de programación (orientado a objetos, funcional, reactivo), comprensión profunda de estructuras de datos y algoritmos, conocimiento de sistemas operativos y redes, familiaridad con bases de datos relacionales y NoSQL, y competencia en herramientas de desarrollo modernas incluyendo sistemas de control de versiones, entornos de integración continua, y plataformas de containerización.
+    </p>
+
+    <h3>8.2 Pensamiento Sistémico y Arquitectónico</h3>
+
+    <p>
+        Los ingenieros de software deben desarrollar la capacidad de pensar en términos de sistemas completos, no solo componentes aislados. Esto implica comprender trade-offs arquitectónicos, anticipar implicaciones de decisiones de diseño, considerar atributos de calidad como performance, escalabilidad y seguridad desde etapas tempranas, y diseñar para evolución futura. El pensamiento arquitectónico requiere la habilidad de abstraer complejidad, identificar patrones, y comunicar diseños efectivamente mediante diagramas, documentación y presentaciones.
+    </p>
+
+    <h3>8.3 Competencias Interpersonales y de Comunicación</h3>
+
+    <p>
+        El desarrollo de software es fundamentalmente una actividad colaborativa. Los ingenieros deben comunicarse efectivamente con diversos stakeholders: colegas técnicos, gerentes de producto, usuarios finales, y ejecutivos de negocio. Esto requiere la capacidad de traducir conceptos técnicos complejos a lenguaje comprensible para audiencias no técnicas, escuchar activamente para entender requisitos y restricciones, proporcionar y recibir feedback constructivo, y resolver conflictos de manera profesional.
+    </p>
+
+    <h3>8.4 Aprendizaje Continuo y Adaptabilidad</h3>
+
+    <p>
+        Dada la velocidad de cambio tecnológico, la capacidad de aprender continuamente constituye quizás la competencia más crítica. Los ingenieros de software deben mantenerse actualizados con tecnologías emergentes, evaluar críticamente nuevas herramientas y frameworks, y adaptar sus prácticas según evoluciona la disciplina. Esto requiere curiosidad intelectual, humildad para reconocer las limitaciones del conocimiento propio, y disciplina para invertir tiempo en aprendizaje incluso bajo presiones de entrega.
+    </p>
+
+    <div class="mermaid">
+    graph TB
+        subgraph "Competencias del Ingeniero de Software Moderno"
+            T[Competencias Técnicas]
+            S[Pensamiento Sistémico]
+            I[Habilidades Interpersonales]
+            A[Aprendizaje Continuo]
+            E[Consciencia Ética]
+            N[Conocimiento de Negocio]
+        end
+
+        T --> P[Profesional Completo]
+        S --> P
+        I --> P
+        A --> P
+        E --> P
+        N --> P
+
+        P --> V1[Impacto en Proyectos]
+        P --> V2[Crecimiento Profesional]
+        P --> V3[Liderazgo Técnico]
+        P --> V4[Innovación]
+
+        style P fill:#2ecc71,stroke:#27ae60,stroke-width:3px
+    </div>
+
+    <h2>9. Reflexiones Finales y Perspectivas</h2>
 
     <p>
         La Ingeniería de Software enfrenta continuamente nuevos desafíos derivados de la creciente complejidad de los sistemas, la aceleración del cambio tecnológico, y las expectativas crecientes respecto a la calidad, seguridad y usabilidad del software. La formación especializada a nivel de posgrado resulta esencial para preparar profesionales capaces de liderar la industria del software hacia estándares más elevados de profesionalismo y excelencia técnica.
@@ -248,6 +530,10 @@
 
     <p>
         Este diplomado representa un compromiso con la formación de recursos humanos de alta calificación que puedan contribuir significativamente al desarrollo de la industria informática nacional e internacional. Los egresados estarán preparados no solo para aplicar conocimientos existentes, sino también para generar nuevos conocimientos, innovar en prácticas y procesos, y liderar transformaciones en sus organizaciones. El éxito del programa se medirá por el impacto que sus egresados logren en sus ámbitos profesionales y por sus contribuciones al avance de la disciplina.
+    </p>
+
+    <p>
+        A medida que avanzamos en las clases subsiguientes, profundizaremos en cada uno de los temas introducidos en esta sesión inaugural. Cada clase construirá sobre los fundamentos establecidos aquí, proporcionando conocimientos teóricos rigurosos complementados con aplicaciones prácticas y estudios de caso. El viaje que inicia hoy conducirá a una comprensión profunda y multifacética de la Ingeniería de Software como disciplina científica y práctica profesional.
     </p>
 
     <div class="nav-buttons">

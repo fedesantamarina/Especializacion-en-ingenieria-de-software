@@ -75,9 +75,175 @@
         La verificación efectiva debe integrarse en el flujo de desarrollo mediante pipelines CI/CD que ejecutan automáticamente suites de pruebas, análisis estático, y verificaciones de seguridad en cada commit o pull request. Los pipelines pueden incluir múltiples etapas: lint y análisis estático rápidos, pruebas unitarias, pruebas de integración, análisis de cobertura, security scanning, y pruebas de rendimiento. Los resultados se reportan automáticamente, bloqueando merges que no pasen criterios de calidad. Esta automatización proporciona feedback rápido, mantiene calidad consistente, y libera a desarrolladores de tareas repetitivas de verificación manual.
     </p>
 
+    <div class="mermaid">
+    graph LR
+        A[Commit/PR] --> B[Pipeline CI/CD]
+        B --> C[Lint & Análisis Estático]
+        B --> D[Tests Unitarios]
+        B --> E[Tests Integración]
+        C --> F{Quality Gate}
+        D --> F
+        E --> F
+        F -->|Pasa| G[Merge Permitido]
+        F -->|Falla| H[Bloqueo & Reporte]
+        H --> I[Desarrollador Corrige]
+        I --> A
+
+        style F fill:#f39c12
+        style G fill:#2ecc71
+        style H fill:#e74c3c
+    </div>
+
+    <h3>6.1 Arquitectura de Pipelines de Verificación</h3>
+    <p>
+        El diseño de pipelines de verificación requiere balance entre exhaustividad y tiempo de feedback. Los pipelines típicamente se organizan en etapas con fail-fast approach: análisis estático rápido (segundos), pruebas unitarias (minutos), pruebas de integración (decenas de minutos), y pruebas end-to-end (horas). Los pipelines pueden ejecutarse en diferentes contextos: pre-commit hooks local, verificaciones en PR, builds de integración continua, y verificaciones nocturnas exhaustivas. La paralelización de etapas independientes acelera feedback. Los quality gates establecen umbrales mínimos para cobertura de código, complejidad ciclomática, duplicación, y deuda técnica, bloqueando automáticamente código que no cumple estándares.
+    </p>
+
+    <h2>7. Teorema de Rice y Limitaciones de la Verificación</h2>
+    <p>
+        El Teorema de Rice establece que todas las propiedades semánticas no triviales de programas son indecidibles: no existe algoritmo general que determine si un programa arbitrario satisface cualquier propiedad semántica específica. Esto tiene implicaciones profundas para verificación: problemas como determinar si un programa termina (halting problem), si dos programas son equivalentes, o si un programa contiene bugs, son fundamentalmente indecidibles en el caso general. Las técnicas de verificación práctica navegan estas limitaciones mediante aproximaciones: el análisis estático acepta falsos positivos o negativos, el testing no puede ser exhaustivo, y el model checking requiere abstracciones o acotamiento de profundidad. Comprender estas limitaciones fundamentales ayuda a aplicar técnicas de verificación realísticamente.
+    </p>
+
+    <h3>7.1 Sound vs. Complete Analysis</h3>
+    <p>
+        Los análisis estáticos enfrentan trade-off fundamental entre soundness y completeness. Un análisis sound nunca pierde errores reales (no falsos negativos) pero puede reportar errores que no existen (falsos positivos). Un análisis complete nunca reporta falsos positivos pero puede perder errores reales (falsos negativos). El análisis sound resulta crucial para sistemas safety-critical donde perder errores resulta inaceptable. El análisis complete resulta preferible cuando falsos positivos excesivos causan alert fatigue que lleva a ignorar reportes. Los análisis prácticos típicamente sacrifican soundness completo para reducir falsos positivos: por ejemplo, el análisis de punteros puede asumir que ciertos punteros nunca son null. El diseño de herramientas de análisis debe considerar cuidadosamente este trade-off basado en el contexto de aplicación.
+    </p>
+
+    <h2>8. Caso de Estudio: Verificación en Sistemas Críticos</h2>
+    <p>
+        Los sistemas críticos en aviación, medicina, y automoción requieren niveles de verificación extraordinariamente rigurosos debido al potencial de pérdida de vidas. El software aeronáutico certificado bajo DO-178C requiere extensiva verificación estructural y funcional, con requisitos específicos según nivel de criticidad (A-E). Los sistemas de nivel A (fallo catastrófico) requieren Modified Condition/Decision Coverage (MC/DC), verificación formal de requisitos, y análisis exhaustivo de todos los casos de error. El proceso de certificación revisa artefactos de verificación, casos de prueba, trazabilidad entre requisitos y tests, y análisis de cobertura.
+    </p>
+
+    <h3>8.1 Verificación Formal en el Proyecto seL4</h3>
+    <p>
+        El microkernel seL4 representa logro notable en verificación formal: es el primer kernel de sistema operativo con prueba matemática completa de corrección funcional. El proyecto, desarrollado por NICTA/Data61, verificó formalmente que la implementación en C cumple su especificación formal en Isabelle/HOL. La verificación garantiza ausencia de buffer overflows, null pointer dereferences, arithmetic overflow, y comportamiento indefinido. Además, se verificó que el kernel satisface propiedades de seguridad como aislamiento de memoria entre procesos. El esfuerzo requirió aproximadamente 20 años-persona y generó 200,000 líneas de pruebas formales para 10,000 líneas de código C. Aunque intensivo, este nivel de verificación proporciona garantías imposibles de lograr mediante testing convencional.
+    </p>
+
+    <h3>8.2 Análisis Estático en el Proyecto Apache</h3>
+    <p>
+        El proyecto Apache HTTP Server integra análisis estático sistemáticamente mediante Coverity Scan. La herramienta detecta automáticamente defectos como resource leaks, null pointer dereferences, buffer overflows, y concurrency issues. Durante la década de uso, Coverity ha identificado miles de defectos en Apache, muchos de ellos sutiles y difíciles de detectar mediante testing. El proyecto prioriza corrección de defectos de alta prioridad antes de releases, manteniendo baja densidad de defectos. La integración continua ejecuta análisis en cada commit, proporcionando feedback inmediato a desarrolladores. Este caso demuestra viabilidad y beneficios de análisis estático integrado en proyectos open source de gran escala.
+    </p>
+
+    <h2>9. Comparación de Herramientas de Verificación</h2>
+    <p>
+        El ecosistema de herramientas de verificación es extenso y diverso. Para análisis estático, SonarQube proporciona análisis multi-lenguaje con dashboard centralizado, métricas de calidad, y detección de vulnerabilidades. Coverity ofrece análisis profundo con baja tasa de falsos positivos, ampliamente usado en industria. Clang Static Analyzer, integrado en LLVM, proporciona análisis gratuito para C/C++/Objective-C. FindBugs/SpotBugs analiza bytecode Java detectando bugs comunes. ESLint domina análisis de JavaScript con configurabilidad extrema. Pylint y mypy proporcionan análisis estático y type checking para Python. La selección de herramientas debe considerar lenguajes soportados, tipos de defectos detectados, tasa de falsos positivos, integración con IDEs/CI, y costo.
+    </p>
+
+    <div class="mermaid">
+    graph TB
+        subgraph "Herramientas de Análisis Estático"
+            A[SonarQube<br/>Multi-lenguaje]
+            B[Coverity<br/>C/C++/Java/C#]
+            C[Clang Analyzer<br/>C/C++/Objective-C]
+            D[SpotBugs<br/>Java]
+            E[ESLint<br/>JavaScript]
+            F[Pylint/mypy<br/>Python]
+        end
+
+        subgraph "Características"
+            G[Bajo Falsos Positivos]
+            H[Cobertura Amplia]
+            I[Integración CI/CD]
+            J[Dashboard Central]
+        end
+
+        A --> J
+        A --> I
+        B --> G
+        B --> H
+        C --> I
+        D --> I
+        E --> I
+        F --> I
+
+        style A fill:#3498db
+        style B fill:#9b59b6
+        style G fill:#2ecc71
+    </div>
+
+    <h3>9.1 Frameworks de Testing: JUnit, pytest, Jest</h3>
+    <p>
+        Los frameworks de testing han evolucionado significativamente. JUnit 5 (Jupiter) introduce arquitectura modular, soporte para testing paramétrico, nested tests, y extensiones poderosas. La anotación @ParameterizedTest permite ejecutar misma prueba con múltiples inputs, reduciendo duplicación. Los nested tests organizan casos relacionados jerárquicamente. Pytest se ha convertido en estándar de facto para Python, con fixtures potentes, captura automática de assertions, y plugins extensivos. Las fixtures proporcionan setup/teardown reutilizable con dependency injection automática. Jest domina testing JavaScript/TypeScript con snapshot testing, mocking integrado, y paralelización automática. Los snapshots capturan output esperado, detectando regresiones inadvertidas. La elección de framework afecta productividad significativamente.
+    </p>
+
+    <h2>10. Mejores Prácticas de Verificación</h2>
+    <p>
+        La verificación efectiva requiere disciplina y proceso. Primero, la cultura de calidad debe valorar verificación: management debe asignar tiempo explícito, y equipos deben considerar verificación parte integral del desarrollo, no overhead prescindible. Segundo, la automatización es crucial: verificaciones manuales son tediosas, propensas a errores, y no escalan. Tercero, feedback rápido maximiza valor: detectar defectos minutos después de introducirlos es órdenes de magnitud más barato que detectarlos semanas después. Cuarto, métricas guían mejora: rastrear densidad de defectos, cobertura de tests, y deuda técnica hace progreso visible. Quinto, balance pragmático: verificación exhaustiva de código no crítico desperdicia recursos; enfoque debe ser proporcional al riesgo.
+    </p>
+
+    <h3>10.1 Anti-patrones en Verificación</h3>
+    <p>
+        Diversos anti-patrones socavan efectividad de verificación. Testing por cobertura persigue porcentaje alto sin considerar calidad de tests: tests que ejercitan código sin verificar comportamiento correcto proporcionan falsa seguridad. Dependencia excesiva en testing manual resulta en verificación inconsistente y no repetible. Ignorar falsos positivos de análisis estático lleva a alert fatigue donde reportes legítimos se pierden en ruido. Testing tardío, relegado al final del ciclo de desarrollo, descubre defectos cuando corrección resulta costosa y disruptiva. Falta de trazabilidad entre requisitos y tests oscurece qué funcionalidad está verificada. Ausencia de tests de regresión permite que bugs corregidos reaparezcan. Reconocer y evitar estos anti-patrones resulta tan importante como aplicar prácticas positivas. La educación continua del equipo sobre mejores prácticas y anti-patrones comunes fortalece cultura de calidad organizacional.
+    </p>
+
+    <h2>11. Verificación de Propiedades de Seguridad</h2>
+    <p>
+        La verificación de propiedades de seguridad (security) requiere técnicas especializadas. El taint analysis rastrea flujo de datos no confiables desde fuentes (user input, network) hasta sinks peligrosos (SQL queries, command execution), detectando vulnerabilidades de injection. El análisis de información flow verifica que datos sensibles no filtren a canales públicos, crucial para confidencialidad. La verificación de autorización asegura que operaciones sensibles verifican permisos apropiadamente. El fuzzing genera inputs malformados o adversariales, descubriendo crashes o comportamiento anómalo. Los security scanners como OWASP ZAP o Burp Suite prueban aplicaciones web para vulnerabilidades OWASP Top 10. La verificación de seguridad debe integrarse desde diseño (security by design) no como afterthought.
+    </p>
+
+    <h2>12. Ejercicios Prácticos de Verificación</h2>
+    <p>
+        Para consolidar comprensión, se proponen ejercicios prácticos. Ejercicio 1: Configurar pipeline CI/CD con GitHub Actions o GitLab CI que ejecute linting, pruebas unitarias, análisis de cobertura, y security scanning. Establecer quality gates que bloqueen merges con cobertura inferior a 80%. Ejercicio 2: Implementar property-based tests usando Hypothesis (Python) o fast-check (JavaScript) para función de ordenamiento, especificando propiedades como idempotencia, resultado ordenado, y preservación de elementos. Ejercicio 3: Usar model checker TLA+ para verificar protocolo de consensus como Raft, especificando safety properties (nunca dos líderes simultáneos) y liveness properties (eventualmente progreso). Ejercicio 4: Aplicar refactoring systematic a código legacy con code smells, asegurando mediante tests que comportamiento se preserva.
+    </p>
+
+    <h3>12.1 Laboratorio: Análisis Estático Comparativo</h3>
+    <p>
+        Laboratorio práctico: Seleccionar proyecto open source mediano (10-50 KLOC) y aplicar múltiples herramientas de análisis estático (SonarQube, herramienta específica del lenguaje). Comparar resultados: tipos de defectos detectados por cada herramienta, overlap entre herramientas, falsos positivos estimados. Analizar 20 defectos reportados, clasificarlos por severidad y tipo, y determinar cuáles son genuinos. Priorizar corrección basada en impacto. Este ejercicio proporciona experiencia práctica con herramientas reales y desarrolla criterio para interpretar resultados de análisis estático, skill crucial para ingenieros de software profesionales. El análisis comparativo permite comprender fortalezas y limitaciones de diferentes aproximaciones, informando selección de herramientas para proyectos futuros basada en evidencia empírica.
+    </p>
+
+    <h2>13. Verificación en Contextos Específicos</h2>
+    <p>
+        Diferentes dominios requieren enfoques de verificación adaptados. En desarrollo de APIs, contract testing con herramientas como Pact verifica que consumidores y proveedores acuerdan contratos de interfaz. En sistemas distribuidos, testing de chaos engineering (Netflix Chaos Monkey) inyecta fallos intencionalmente para verificar resiliencia. En aplicaciones de datos/ML, verificación incluye testing de pipelines de datos, validación de modelos, y monitoreo de drift. En sistemas embebidos, hardware-in-the-loop testing verifica software en hardware objetivo. En blockchain/contratos inteligentes, verificación formal resulta particularmente crucial dado que errores pueden ser irreversibles y económicamente catastróficos. Comprender estos contextos especializados amplía toolkit de verificación del ingeniero.
+    </p>
+
+    <h3>13.1 Verificación de Sistemas Concurrentes</h3>
+    <p>
+        Los sistemas concurrentes presentan desafíos únicos de verificación debido a no-determinismo, race conditions, deadlocks, y livelocks. El testing convencional es insuficiente: bugs concurrentes son notoriamente difíciles de reproducir y depurar. El model checking resulta particularmente valioso, explorando exhaustivamente interleavings de eventos concurrentes. Herramientas como Java PathFinder ejecutan programas Java explorando sistemáticamente estados, detectando deadlocks y violaciones de propiedades. Thread sanitizers como ThreadSanitizer detectan data races dinámicamente mediante instrumentación. El systematic testing (CHESS de Microsoft) controla scheduling de threads para exploración determinista. Las especificaciones de comportamiento concurrente usando temporal logic (LTL, CTL) expresan propiedades como mutual exclusion o eventual progress, verificables mediante model checking.
+    </p>
+
+    <h2>14. Verificación Formal con Asistentes de Pruebas</h2>
+    <p>
+        Los asistentes de pruebas interactivos como Coq, Isabelle/HOL, Lean, o Agda permiten construcción de pruebas matemáticas formales verificadas mecánicamente. A diferencia de model checkers automáticos, los asistentes requieren guía humana para construcción de pruebas, pero pueden verificar propiedades arbitrariamente complejas sin limitación de explosión de estados. Los teoremas se expresan en lógica de orden superior, y el asistente verifica que cada paso de la prueba es válido. Las aplicaciones incluyen verificación de algoritmos críticos, kernels de sistemas operativos (seL4), compiladores (CompCert), y protocolos criptográficos. El extraction permite generar código ejecutable desde especificaciones verificadas formalmente, proporcionando implementación correcta por construcción.
+    </p>
+
+    <h3>14.1 El Proyecto CompCert: Compilador Verificado</h3>
+    <p>
+        CompCert es compilador de C verificado formalmente desarrollado en Coq por Xavier Leroy y equipo. La especificación formal define semántica del lenguaje fuente C, lenguaje objetivo assembly, y cada fase de compilación. La prueba matemática establece que código compilado preserva semántica del código fuente: si programa fuente tiene cierto comportamiento, el código compilado tendrá comportamiento equivalente. Esta garantía resulta extraordinaria comparada con compiladores convencionales que frecuentemente contienen bugs introduciendo comportamiento erróneo. CompCert ha sido evaluado empíricamente: estudios comparativos con GCC y LLVM encontraron que CompCert no tenía bugs de generación de código incorrecto, mientras GCC y LLVM tenían múltiples bugs. El trade-off es que CompCert optimiza menos agresivamente que compiladores comerciales, aunque genera código razonablemente eficiente. CompCert demuestra viabilidad de software verified formally para sistemas de infraestructura crítica.
+    </p>
+
+    <h2>15. Análisis Dinámico y Runtime Verification</h2>
+    <p>
+        El análisis dinámico ejecuta código instrumentado monitoreando comportamiento en runtime. Las técnicas incluyen profiling (identificar hotspots de rendimiento), memory checking (detectar leaks, buffer overflows), concurrency analysis (detectar data races, deadlocks), y taint tracking (rastrear flujo de datos no confiables). Valgrind es framework popular que proporciona múltiples herramientas: Memcheck detecta errores de memoria, Helgrind detecta race conditions, Cachegrind profile uso de cache. AddressSanitizer, MemorySanitizer, y ThreadSanitizer son sanitizers de LLVM que detectan errores mediante instrumentación eficiente. El análisis dinámico complementa análisis estático: detecta errores en paths realmente ejecutados, evita falsos positivos del análisis estático, pero solo verifica ejecuciones observadas, no todas las posibles.
+    </p>
+
+    <h3>15.1 Runtime Verification de Propiedades Temporales</h3>
+    <p>
+        Runtime verification monitorea ejecución de sistema verificando continuamente que satisface especificaciones formales. Las propiedades típicamente se expresan en temporal logic (LTL, MTL) o mediante autómatas. Los monitores se sintetizan automáticamente desde especificaciones, ejecutando paralelamente al sistema monitoreado. Cuando violación se detecta, monitor puede alertar, logging detalles, o tomar acción correctiva. Runtime verification es particularmente valiosa para sistemas donde verificación estática completa es intratable, pero monitoreo de propiedades críticas en runtime es factible. Las aplicaciones incluyen verificación de protocolos de comunicación, sistemas financieros, y dispositivos médicos. Los frameworks como JavaMOP, BeepBeep, o RV-Monitor facilitan especificación de propiedades y generación de monitores.
+    </p>
+
+    <h2>16. Verificación de Propiedades de Ciberseguridad</h2>
+    <p>
+        La verificación de propiedades de ciberseguridad requiere técnicas especializadas que van más allá de corrección funcional. Las propiedades incluyen confidencialidad (información sensible no filtra a observadores no autorizados), integridad (datos no son modificados por entidades no autorizadas), disponibilidad (sistema responde a requests legítimos), autenticación (identidad de usuarios es verificada), y autorización (permisos son enforcement correctamente). El information flow analysis rastrea flujo de información desde fuentes clasificadas (high-security) a sinks públicos (low-security), detectando violaciones de confidencialidad. El symbolic execution explora paths del programa sistemáticamente, particularmente útil para detectar vulnerabilidades como buffer overflows o injection attacks. Los security scanners automáticos como Fortify, Checkmarx, o Veracode analizan aplicaciones buscando vulnerabilidades conocidas.
+    </p>
+
+    <h3>16.1 Fuzzing para Descubrimiento de Vulnerabilidades</h3>
+    <p>
+        El fuzzing genera inputs malformados o aleatorios intentando provocar crashes, hangs, o comportamiento anómalo indicativo de vulnerabilidades. El coverage-guided fuzzing (AFL, libFuzzer) monitorea qué código es ejercitado, mutando inputs para maximizar cobertura y explorar nuevos paths. El mutation-based fuzzing modifica inputs válidos; generation-based fuzzing genera inputs desde gramática del formato. El symbolic execution-assisted fuzzing (SAGE, Driller) combina fuzzing con análisis simbólico, usando constraint solving para generar inputs que alcanzan paths específicos. El fuzzing ha descubierto miles de vulnerabilidades en software ampliamente usado incluido navegadores, sistemas operativos, y librerías. Google Project Zero, Microsoft Security Response Center, y otros equipos de seguridad emplean fuzzing sistemáticamente. Las plataformas como OSS-Fuzz proporcionan fuzzing continuo de proyectos open source críticos.
+    </p>
+
+    <h2>17. Certificación y Estándares de Verificación</h2>
+    <p>
+        Diversos dominios requieren certificación formal de software según estándares específicos. DO-178C certifica software aeronáutico, requiriendo verificación rigurosa proporcional a criticidad. IEC 61508 certifica sistemas eléctricos/electrónicos/programables relacionados con seguridad en industria. ISO 26262 certifica sistemas automotrices, particularmente relevante para vehículos autónomos. IEC 62304 certifica software de dispositivos médicos. Common Criteria (ISO/IEC 15408) certifica seguridad de productos IT. Estos estándares especifican procesos de desarrollo, técnicas de verificación requeridas, documentación mandatoria, y niveles de rigor basados en riesgo. La certificación típicamente requiere evidencia exhaustiva de verificación, trazabilidad entre requisitos y tests, análisis de cobertura, y auditoría por terceros independientes. El cumplimiento de estándares incrementa significativamente esfuerzo y costo de desarrollo, pero es obligatorio para sistemas críticos de safety o security.
+    </p>
+
+    <h2>18. Tendencias Emergentes en Verificación</h2>
+    <p>
+        Las tendencias emergentes están transformando verificación de software. El machine learning para verificación emplea modelos entrenados en corpus de código para predecir bugs, generar tests automáticamente, o aprender invariantes. El continuous verification integra verificación formal en CI/CD, ejecutando model checking o theorem proving incrementalmente. El cloud-based verification distribuye tareas de verificación computacionalmente intensivas en infraestructura cloud, acelerando análisis. El specification mining extrae especificaciones formales automáticamente desde código existente o ejecuciones observadas, reduciendo esfuerzo manual de especificación. El differential verification compara versiones de software verificando equivalencia o identificando diferencias semánticas, útil para validar refactorings o patches. Estas tendencias están haciendo verificación formal más accesible y práctica para desarrollo mainstream, democratizando técnicas previamente reservadas para sistemas críticos de alta especificación. La integración de verificación en herramientas de desarrollo cotidianas reduce fricción, permitiendo que equipos adopten prácticas rigurosas sin interrumpir flujos de trabajo establecidos.
+    </p>
+
     <div class="highlight-box">
         <h3>Resumen de la Clase</h3>
-        <p>Esta clase ha explorado técnicas de verificación formal de software, desde análisis estático y testing sistemático hasta model checking y property-based testing. La verificación rigurosa resulta esencial para construir software confiable, especialmente en sistemas críticos. La integración de verificación en pipelines CI/CD automatiza detección temprana de defectos, mejorando significativamente calidad del software.</p>
+        <p>Esta clase ha explorado técnicas de verificación formal de software en profundidad, desde análisis estático y testing sistemático hasta model checking, property-based testing, y asistentes de pruebas interactivos. Hemos examinado limitaciones fundamentales establecidas por el Teorema de Rice, analizado casos de estudio de sistemas críticos como seL4 y CompCert, comparado herramientas de verificación comerciales y open source, y discutido mejores prácticas y anti-patrones. La verificación de sistemas concurrentes, análisis dinámico, runtime verification, y técnicas especializadas de ciberseguridad como fuzzing demuestran la amplitud del campo. Los estándares de certificación y tendencias emergentes con machine learning indican la evolución continua de la disciplina. La verificación rigurosa resulta esencial para construir software confiable, especialmente en sistemas críticos donde fallos pueden tener consecuencias catastróficas. La integración de verificación en pipelines CI/CD automatiza detección temprana de defectos, mejorando significativamente calidad del software. Los ejercicios prácticos propuestos permiten consolidar comprensión mediante aplicación hands-on de técnicas aprendidas, desarrollando competencias esenciales para ingenieros de software profesionales.</p>
     </div>
 
     <div class="nav-buttons">

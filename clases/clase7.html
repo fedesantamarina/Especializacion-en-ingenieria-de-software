@@ -61,9 +61,203 @@
         Los anti-patrones son soluciones recurrentes que parecen beneficiosas pero resultan contraproducentes. God Class concentra excesiva funcionalidad violando Single Responsibility. Spaghetti Code carece de estructura clara. Los code smells catalogados por Fowler son síntomas de problemas de diseño: Long Method, Large Class, Long Parameter List, Feature Envy, Data Clumps. El diseño para testabilidad facilita escritura de pruebas efectivas mediante inyección de dependencias, clases pequeñas con responsabilidades focalizadas, y separación de lógica de negocio de infraestructura. El diseño testeable típicamente resulta en mejor diseño general: bajo acoplamiento, alta cohesión, y separación de concerns.
     </p>
 
+    <div class="mermaid">
+    graph TB
+        A[Código con Anti-patrones] --> B[God Class]
+        A --> C[Spaghetti Code]
+        A --> D[Shotgun Surgery]
+        B --> E[Problemas de Mantenimiento]
+        C --> E
+        D --> E
+        E --> F[Refactoring]
+        F --> G[Aplicar SOLID]
+        F --> H[Aplicar Patrones]
+        G --> I[Código Limpio]
+        H --> I
+        I --> J[Fácil Testing]
+        I --> K[Fácil Evolución]
+
+        style E fill:#e74c3c
+        style I fill:#2ecc71
+    </div>
+
+    <h3>4.1 Catálogo de Anti-Patrones Comunes</h3>
+    <p>
+        El Golden Hammer aplica herramienta familiar a todos los problemas ("cuando solo tienes un martillo, todo parece un clavo"). Premature Optimization sacrifica claridad por rendimiento antes de medir necesidad real. Lava Flow retiene código obsoleto o experimental que nadie se atreve a eliminar. Big Ball of Mud carece de arquitectura coherente. Copy-Paste Programming duplica código en lugar de abstraer. Poltergeist son clases con vida corta y propósito limitado que complican diseño. El reconocimiento temprano de anti-patrones permite refactoring preventivo antes que problemas escalen. La documentación de decisiones arquitecturales ayuda a evitar repetir anti-patrones: registrar por qué ciertas aproximaciones fueron rechazadas previene redescubrimiento doloroso.
+    </p>
+
+    <h3>4.2 Principios de Diseño Testeable</h3>
+    <p>
+        El diseño testeable facilita verificación automatizada. La inyección de dependencias permite sustituir dependencias reales con mocks/stubs, aislando unidad bajo prueba. Las interfaces abstractas facilitan creación de test doubles. Las clases pequeñas con responsabilidad única simplifican razonamiento y prueba. La separación de lógica de negocio de side effects (I/O, bases de datos, red) permite testing de lógica pura sin infraestructura compleja. El principio de Command-Query Separation distingue comandos (modifican estado, no retornan valor) de queries (retornan valor, no modifican estado), simplificando testing. Los frameworks de dependency injection como Spring, Guice, o Dagger automatizan gestión de dependencias, facilitando configuración de tests con dependencias simuladas.
+    </p>
+
+    <h2>5. Caso de Estudio: Evolución de Diseño en Proyecto Real</h2>
+    <p>
+        Consideremos evolución de diseño en sistema de comercio electrónico. Inicialmente, OrderService era God Class manejando validación, cálculo de precios, aplicación de descuentos, verificación de inventario, procesamiento de pagos, y notificaciones. Este diseño violaba Single Responsibility, dificultaba testing (requerir base de datos, gateway de pago, y servicio de email para cualquier prueba), y complicaba evolución (añadir método de pago requería modificar clase masiva). El refactoring aplicó principios SOLID: extraer PricingService (calcula precios aplicando reglas de negocio), InventoryService (verifica disponibilidad), PaymentService (procesa pagos), NotificationService (envía emails/SMS). OrderService quedó como coordinador delgado aplicando patrón Facade. Cada servicio tiene interfaz clara, permitiendo testing independiente con mocks.
+    </p>
+
+    <h3>5.1 Implementación de Patrones en el Refactoring</h3>
+    <p>
+        El refactoring empleó múltiples patrones. Strategy encapsula algoritmos de pricing (descuentos por volumen, códigos promocionales, pricing dinámico) como implementaciones de interfaz PricingStrategy, seleccionables dinámicamente. Chain of Responsibility procesa validaciones de orden secuencialmente (validación de items, verificación de inventario, validación de dirección de envío), cada handler decidiendo si procesa o pasa al siguiente. Observer permite que múltiples componentes reaccionen a eventos (cuando orden se completa, NotificationService envía confirmación, InventoryService reserva items, AnalyticsService registra métrica). Factory Method abstrae creación de diferentes tipos de órdenes (retail, wholesale, subscription). El diseño resultante es extensible (añadir tipo de orden o estrategia de pricing requiere nueva implementación de interfaz existente) y testeable (cada componente prueba independientemente).
+    </p>
+
+    <h2>6. Domain-Driven Design Táctico Profundizado</h2>
+    <p>
+        Domain-Driven Design distingue entre DDD estratégico (bounded contexts, context mapping, ubiquitous language) y DDD táctico (building blocks para modelado de dominio). Los Entities tienen identidad que persiste a través de cambios de atributos: un Customer con ID 123 permanece el mismo Customer aunque cambie nombre o dirección. Los Value Objects carecen de identidad conceptual y son inmutables: Money(100, USD) es equivalente a cualquier otro Money(100, USD). Los Aggregates agrupan Entities y Value Objects en unidades de consistencia con Aggregate Root como punto de entrada: Order es aggregate root conteniendo OrderItems, garantizando invariantes (total = suma de items) mediante encapsulación. Los Repositories abstraen persistencia de Aggregates, proporcionando ilusión de colección en memoria.
+    </p>
+
+    <h3>6.1 Domain Services y Application Services</h3>
+    <p>
+        Los Domain Services encapsulan lógica de dominio que no pertenece naturalmente a ninguna Entity o Value Object: TransferService(fromAccount, toAccount, amount) implementa transferencia bancaria involucrando dos Accounts. Los Application Services orquestan casos de uso coordinando Entities, Repositories, y Domain Services: OrderApplicationService.placeOrder() obtiene Customer de repository, crea Order, verifica inventario mediante InventoryService, procesa pago mediante PaymentService, y persiste Order. Los Application Services son transactionally consistent, típicamente delimitando transacciones. Esta separación mantiene lógica de dominio pura, independiente de infraestructura, facilitando testing de reglas de negocio complejas sin dependencias técnicas.
+    </p>
+
+    <div class="mermaid">
+    graph TB
+        subgraph "DDD Tactical Patterns"
+            E[Entity<br/>Identidad persistente]
+            V[Value Object<br/>Inmutable, sin identidad]
+            A[Aggregate<br/>Unidad de consistencia]
+            R[Repository<br/>Abstracción persistencia]
+            DS[Domain Service<br/>Lógica entre entidades]
+            AS[Application Service<br/>Orquestación]
+        end
+
+        AS --> E
+        AS --> R
+        AS --> DS
+        A --> E
+        A --> V
+        R --> A
+
+        style A fill:#3498db
+        style AS fill:#2ecc71
+        style DS fill:#f39c12
+    </div>
+
+    <h2>7. Evolución y Mantenimiento de Diseño</h2>
+    <p>
+        El diseño no es estático: debe evolucionar conforme cambian requisitos y crece comprensión del dominio. La refactorización continua previene degradación gradual hacia Big Ball of Mud. Las arquitecturas limpias (Hexagonal Architecture, Onion Architecture, Clean Architecture de Uncle Bob) organizan dependencias para que lógica de negocio no dependa de detalles técnicos. El principio de Dependency Inversion es central: capas internas (dominio) definen interfaces que capas externas (infraestructura) implementan. Esto permite evolucionar tecnologías de persistencia, frameworks web, o mecanismos de comunicación sin modificar lógica de negocio. Las arquitecturas modulares facilitan evolución incremental de componentes independientes.
+    </p>
+
+    <h3>7.1 Arquitecturas Hexagonal y Puertos-Adaptadores</h3>
+    <p>
+        La Arquitectura Hexagonal de Alistair Cockburn separa lógica de negocio (hexágono central) de mecanismos externos mediante puertos (interfaces) y adaptadores (implementaciones). Los puertos primarios (driving ports) son invocados por actores externos (UI, API, tests): OrderManagement es puerto, RestOrderController es adaptador. Los puertos secundarios (driven ports) son invocados por lógica de negocio: OrderRepository es puerto, JpaOrderRepository y InMemoryOrderRepository son adaptadores. Esta arquitectura facilita testing (usar adaptadores in-memory en tests), evolución de tecnologías (reemplazar adaptador sin modificar lógica), y claridad conceptual (lógica de negocio permanece agnóstica de detalles técnicos). El patrón ha ganado amplia adopción en microservicios y sistemas complejos.
+    </p>
+
+    <h2>8. Comparación de Frameworks de Inyección de Dependencias</h2>
+    <p>
+        Spring Framework (Java) proporciona IoC container robusto con inyección por constructor, setter, o field. Las anotaciones @Component, @Service, @Repository, y @Autowired simplifican configuración. Spring gestiona scopes (singleton, prototype, request, session), lifecycle callbacks, y configuración flexible vía XML, Java config, o anotaciones. Guice (Google) enfatiza configuración programática Java con binding modules, evitando XML. Dagger 2 genera código de inyección en compile-time, eliminando reflection runtime para performance óptima en Android. En ecosistema .NET, Microsoft.Extensions.DependencyInjection es built-in en ASP.NET Core. Para JavaScript/TypeScript, InversifyJS proporciona DI basado en decoradores. La selección depende de lenguaje, performance requirements, y preferencias de configuración.
+    </p>
+
+    <h2>9. Métricas de Calidad de Diseño</h2>
+    <p>
+        Las métricas objetivas evalúan calidad de diseño cuantitativamente. La Complejidad Ciclomática mide número de caminos linealmente independientes a través de código, correlacionándose con dificultad de testing y probabilidad de defectos. El Acoplamiento Aferente (Ca) cuenta dependencias entrantes a módulo; Acoplamiento Eferente (Ce) cuenta dependencias salientes. La Inestabilidad I = Ce / (Ca + Ce) mide propensión al cambio. La Distancia de la Secuencia Principal D = |A + I - 1| mide desviación de balance ideal entre abstracción e inestabilidad. El Lack of Cohesion of Methods (LCOM) mide cohesión dentro de clases. Herramientas como SonarQube, NDepend, o Structure101 calculan métricas automáticamente, identificando componentes problemáticos.
+    </p>
+
+    <h3>9.1 Interpretación y Umbrales de Métricas</h3>
+    <p>
+        Las métricas requieren interpretación contextual. Complejidad Ciclomática superior a 10 sugiere método complejo que debería descomponerse; superior a 20 indica complejidad alta riesgosa. Sin embargo, cierta complejidad puede ser esencial (parsing, state machines). La Inestabilidad alta en módulos de dominio core sugiere diseño frágil; en módulos de presentación puede ser aceptable. El LCOM alto indica clase con responsabilidades dispares. Los umbrales absolutos son guías, no leyes: contexto específico determina aceptabilidad. Las tendencias importan más que valores absolutos: incremento sostenido de complejidad o acoplamiento señala degradación arquitectural requiriendo atención. El monitoreo continuo en pipelines CI/CD hace evolución de métricas visible.
+    </p>
+
+    <h2>10. Diseño para Extensibilidad: Plugins y Microkernel</h2>
+    <p>
+        Los sistemas extensibles permiten añadir funcionalidad sin modificar código existente, mediante arquitecturas de plugin o microkernel. Eclipse IDE es ejemplo canónico: core mínimo proporciona plataforma, funcionalidad se añade mediante plugins descubiertos dinámicamente. Los plugins implementan extension points (interfaces) definidos por core. El Service Provider Interface (SPI) de Java facilita descubrimiento dinámico de implementaciones. OSGi proporciona modelo sofisticado de módulos con versionado, dependency resolution, y hot-swapping. Esta arquitectura respeta Open/Closed Principle radicalmente: extensión sin modificación. Los trade-offs incluyen complejidad adicional y overhead de indirección.
+    </p>
+
+    <h2>11. Patrones de Diseño Modernos</h2>
+    <p>
+        Los patrones contemporáneos complementan GoF clásico. Null Object proporciona objeto con comportamiento neutro en lugar de null, evitando null checks. Specification encapsula reglas de negocio como objetos combinables con operadores lógicos, facilitando queries complejas. Event Sourcing persiste todos cambios como eventos inmutables en lugar de estado actual, proporcionando audit trail completo y permitiendo time travel. CQRS (Command Query Responsibility Segregation) separa modelo de escritura de modelo de lectura, optimizando cada uno independientemente. Saga orquesta transacciones distribuidas como secuencia de transacciones locales compensables. Estos patrones son especialmente relevantes en arquitecturas de microservicios y sistemas reactivos.
+    </p>
+
+    <div class="mermaid">
+    graph LR
+        subgraph "CQRS Pattern"
+            C[Command] --> CM[Write Model]
+            CM --> DB1[(Event Store)]
+            DB1 --> S[Event Handlers]
+            S --> RM[Read Model]
+            RM --> DB2[(Query DB)]
+            Q[Query] --> DB2
+        end
+
+        style CM fill:#e74c3c
+        style RM fill:#3498db
+        style DB1 fill:#f39c12
+    </div>
+
+    <h2>12. Ejercicios Prácticos de Diseño OO</h2>
+    <p>
+        Para consolidar comprensión, se proponen ejercicios. Ejercicio 1: Refactorizar clase God Class identificando responsabilidades y extrayendo clases cohesivas. Verificar que refactoring preserva comportamiento mediante tests. Ejercicio 2: Implementar patrón Strategy para sistema de cálculo de impuestos con múltiples jurisdicciones, permitiendo configuración dinámica. Ejercicio 3: Diseñar modelo de dominio para sistema de biblioteca usando DDD táctico: identificar Aggregates (Book, Member, Loan), Value Objects (ISBN, Address), Repositories, y Domain Services (LoanService para validación de préstamos). Ejercicio 4: Aplicar Arquitectura Hexagonal a API REST, separando lógica de dominio de framework web mediante puertos y adaptadores. Implementar múltiples adaptadores (REST, GraphQL) para mismo puerto.
+    </p>
+
+    <h3>12.1 Laboratorio: Análisis de Diseño de Proyecto Open Source</h3>
+    <p>
+        Laboratorio práctico: Seleccionar proyecto open source establecido (Spring Framework, Apache Kafka, Hibernate). Analizar arquitectura: identificar aplicación de patrones GoF, adherencia a principios SOLID, uso de DDD patterns. Generar métricas de complejidad y acoplamiento usando herramientas. Identificar áreas de excelencia en diseño y áreas problemáticas. Proponer refactorings específicos con justificación basada en principios. Presentar análisis documentado. Este ejercicio desarrolla capacidad crítica de evaluar diseño de sistemas reales, skill esencial para arquitectos de software.
+    </p>
+
+    <h2>13. Perspectivas Contemporáneas sobre OO</h2>
+    <p>
+        El paradigma orientado a objetos enfrenta críticas y complementos de paradigmas alternativos. La programación funcional enfatiza inmutabilidad, funciones puras, y composición funcional, evitando problemas de estado compartido. Lenguajes multi-paradigma como Scala, Kotlin, o Swift integran OO y funcional. Las críticas a OO incluyen acoplamiento temporal (orden de llamadas a métodos importa), complejidad de jerarquías profundas, y dificultad de razonamiento sobre estado mutable compartido. Los diseños OO modernos incorporan elementos funcionales: preferencia por inmutabilidad (Value Objects), separación de datos y comportamiento (anemic domain model debate), y functional core / imperative shell architecture. La comprensión multi-paradigma permite seleccionar herramienta apropiada para cada problema.
+    </p>
+
+    <h3>13.1 Composición sobre Herencia</h3>
+    <p>
+        El principio "favor composition over inheritance" refleja experiencia acumulada con problemas de herencia: jerarquías frágiles donde cambios en superclases rompen subclases (fragile base class problem), violaciones de Liskov Substitution en herencias inapropiadas, y dificultad de reusar comportamiento de múltiples clases (problema mitigado por interfaces pero no resuelto completamente). La composición mediante inyección de dependencias proporciona flexibilidad superior: comportamientos se combinan dinámicamente en lugar de fijarse estáticamente en jerarquía. Los lenguajes modernos favorecen composición: Rust usa traits y composición en lugar de herencia clásica, Go usa composición de structs, Kotlin favorece composition mediante delegation. El diseño efectivo usa herencia conservadoramente para modelar relaciones is-a genuinas, prefiriendo composición para reutilización de comportamiento.
+    </p>
+
+    <h2>14. Patrones de Concurrencia y Paralelismo</h2>
+    <p>
+        El diseño de sistemas concurrentes requiere patrones especializados. Active Object desacopla invocación de método de ejecución, con queue de requests procesados por thread dedicado. Monitor Object sincroniza acceso concurrente a objeto mediante locks y condition variables. Thread Pool mantiene pool de threads worker reutilizables, evitando overhead de crear threads repetidamente. Future/Promise representa resultado de computación asíncrona, permitiendo código asíncrono sin callbacks anidados. Actor Model encapsula estado y comportamiento en actores que comunican vía mensajes asíncronos, evitando shared mutable state. Reactive Streams proporciona procesamiento asíncrono de streams de datos con backpressure. Estos patrones facilitan diseño correcto de sistemas concurrentes, evitando race conditions, deadlocks, y problemas de performance.
+    </p>
+
+    <h3>14.1 El Modelo de Actores en Profundidad</h3>
+    <p>
+        El modelo de actores, formulado por Carl Hewitt, constituye paradigma de concurrencia donde actores son unidades primitivas de computación. Cada actor tiene mailbox privado que recibe mensajes asincrónicamente. En respuesta a mensajes, actor puede: enviar mensajes a otros actores, crear nuevos actores, designar comportamiento para próximo mensaje. El actor model evita compartir estado mutable: cada actor encapsula estado privado accesible solo mediante mensajes. Esto elimina race conditions y simplifica razonamiento sobre concurrencia. Erlang/OTP y Akka (Scala/Java) son implementaciones maduras del modelo. Las aplicaciones incluyen sistemas distribuidos, telecomunicaciones, y processing de eventos a gran escala. Los supervision trees en Erlang implementan tolerancia a fallos: supervisors monitorean workers reiniciándolos al fallar, permitiendo sistemas self-healing.
+    </p>
+
+    <h2>15. Diseño de APIs y Contratos de Interfaz</h2>
+    <p>
+        El diseño de APIs efectivas requiere consideración cuidadosa de usabilidad, evolución, y compatibilidad. Las APIs deben ser intuitivas: nombres claros, consistencia en convenciones, comportamiento predecible. Las APIs deben ser difíciles de usar incorrectamente: tipos fuertes previenen errores, defaults sensibles minimizan configuración, validación temprana detecta errores. Las APIs deben evolucionar gracefully: versionado semántico comunica cambios, deprecation gradual permite migración, backwards compatibility preserva clientes existentes. Los contratos de interfaz especifican precondiciones (lo que cliente debe garantizar), postcondiciones (lo que implementación garantiza), e invariantes (propiedades siempre verdaderas). Design by Contract, popularizado por Eiffel, hace contratos explícitos y verificables.
+    </p>
+
+    <h3>15.1 Versionado y Evolución de APIs</h3>
+    <p>
+        La evolución de APIs presenta desafíos significativos. Los cambios breaking (remover operaciones, cambiar firmas, alterar semántica) rompen clientes existentes, requiriendo coordinación cuidadosa. Los cambios backwards-compatible (añadir operaciones, parámetros opcionales, extensiones) permiten evolución sin romper clientes. Las estrategias de versionado incluyen: URI versioning (/api/v1/, /api/v2/), header-based versioning (Accept: application/vnd.company.v1+json), parameter-based versioning (?version=1). Los hypermedia APIs (HATEOAS) incluyen links dinámicos permitiendo evolución server-side sin cambiar clientes. Los contratos evolutivos usando Consumer-Driven Contracts (Pact) verifican que cambios de API no rompen consumidores conocidos. La documentación viva mediante OpenAPI/Swagger mantiene especificaciones sincronizadas con implementación.
+    </p>
+
+    <h2>16. Arquitectura de Software y Estilos Arquitecturales</h2>
+    <p>
+        La arquitectura de software define estructura de alto nivel del sistema: componentes principales, relaciones entre ellos, y principios guiando diseño y evolución. Los estilos arquitecturales son templates reutilizables: Layered Architecture organiza sistema en capas con dependencias unidireccionales (presentación → negocio → persistencia). Microservices descomponen sistema en servicios pequeños independientemente deployables comunicando vía APIs. Event-Driven Architecture procesa eventos asincrónicamente mediante publish-subscribe. Pipe-and-Filter conecta componentes de procesamiento mediante flujos de datos. Space-Based Architecture distribuye procesamiento y datos en múltiples nodos sin base de datos centralizada. La selección de estilo arquitectural afecta fundamentalmente atributos de calidad: performance, scalability, modifiability, testability.
+    </p>
+
+    <h3>16.1 Trade-offs Arquitecturales y Análisis</h3>
+    <p>
+        Toda decisión arquitectural involucra trade-offs: optimizar un atributo de calidad típicamente compromete otros. Microservices mejoran deployability y scalability pero complican distributed transactions y debugging. Caching mejora performance pero complica consistencia. Replicación mejora availability pero complica consistency. El Architecture Tradeoff Analysis Method (ATAM) del SEI proporciona proceso sistemático para evaluar arquitecturas: identificar stakeholders y drivers de negocio, documentar arquitectura, generar árbol de utilidad priorizando atributos de calidad, analizar architectural approaches respecto atributos, identificar sensitivity points (decisiones críticas), y tradeoff points (decisiones con impactos contrapuestos). El análisis sistemático de trade-offs fundamenta decisiones arquitecturales en lugar de intuición o preferencia tecnológica.
+    </p>
+
+    <h2>17. Caso de Estudio: Netflix y Arquitectura de Microservicios</h2>
+    <p>
+        Netflix ejemplifica adopción exitosa de microservicios a escala masiva. Inicialmente sistema monolítico en datacenter propio, Netflix migró gradualmente a arquitectura de microservicios en AWS. El sistema actual comprende cientos de microservicios: cada uno owner de datos específicos, deployable independientemente, escalable horizontalmente. La comunicación es predominantemente asíncrona vía mensajería. Los patrones aplicados incluyen: API Gateway (Zuul) rutea requests a servicios apropiados, Circuit Breaker (Hystrix) previene cascading failures aislando servicios fallidos, Service Discovery (Eureka) permite servicios localizar dependencias dinámicamente, Distributed Tracing (Zipkin) rastrea requests a través de múltiples servicios. Chaos Engineering (Chaos Monkey) inyecta fallos sistemáticamente verificando resiliencia. La migración no fue trivial: requirió cambios organizacionales (equipos autónomos owner de servicios), inversión en tooling, y tolerancia para aprendizaje incremental.
+    </p>
+
+    <h2>18. Diseño para Sistemas Distribuidos</h2>
+    <p>
+        Los sistemas distribuidos presentan desafíos únicos ausentes en sistemas centralizados. El teorema CAP establece que sistemas distribuidos no pueden simultáneamente garantizar Consistency, Availability, y Partition tolerance: bajo particiones de red, debe escogerse entre consistencia y disponibilidad. Los sistemas AP (como Cassandra) favorecen availability; sistemas CP (como HBase) favorecen consistency. El teorema PACELC extiende CAP: incluso sin particiones, existe trade-off entre latencia y consistencia. Los consenso protocols (Paxos, Raft) permiten múltiples nodos acordar valores consistentemente a pesar de fallos. Las distributed transactions usando Two-Phase Commit garantizan atomicidad pero bloquean recursos durante coordinación. Los patrones Saga implementan transacciones distribuidas como secuencia de transacciones locales compensables, evitando locks distribuidos.
+    </p>
+
+    <h3>18.1 Consistencia Eventual y CRDTs</h3>
+    <p>
+        La consistencia eventual permite replicas divergir temporalmente, convergiendo eventualmente a mismo estado. Este modelo habilita alta disponibilidad y performance, usado extensivamente en sistemas de gran escala (DNS, caches distribuidos, bases de datos NoSQL). Los Conflict-free Replicated Data Types (CRDTs) son estructuras de datos especialmente diseñadas para replicación: actualizaciones concurrentes siempre convergen determinísticamente sin coordinación. Los CRDTs incluyen Grow-Only Sets, Two-Phase Sets, Counters, Registers, y Maps. Las aplicaciones incluyen collaborative editing (Google Docs), distributed databases (Riak), y mobile sync. Los CRDTs proporcionan fundamento teórico sólido para consistencia eventual, garantizando convergencia mediante propiedades algebraicas (comutatividad, asociatividad, idempotencia).
+    </p>
+
+    <h2>19. Seguridad en Diseño de Software</h2>
+    <p>
+        El diseño seguro (Security by Design) integra seguridad desde inicio, no como afterthought. Los principios incluyen: Least Privilege concede mínimos permisos necesarios, Defense in Depth aplica múltiples capas de seguridad, Fail Securely asegura que fallos no comprometen seguridad, Separation of Duties previene que entidad única tenga control completo, Complete Mediation verifica permisos en cada acceso. Los patrones de seguridad incluyen: Authentication/Authorization separa identificación de permisos, Role-Based Access Control asigna permisos mediante roles, Secure Session Management maneja sessions resistente a hijacking, Input Validation sanitiza datos no confiables. Los threat models como STRIDE (Spoofing, Tampering, Repudiation, Information Disclosure, Denial of Service, Elevation of Privilege) identifican sistemáticamente amenazas.
+    </p>
+
     <div class="highlight-box">
         <h3>Resumen de la Clase</h3>
-        <p>Esta clase ha profundizado en diseño avanzado orientado a objetos, cubriendo principios SOLID, patrones GoF, principios GRASP, DDD táctico, anti-patrones, y diseño para testabilidad. El dominio de estos conceptos permite a ingenieros de software crear sistemas robustos, mantenibles y escalables.</p>
+        <p>Esta clase ha profundizado exhaustivamente en diseño avanzado orientado a objetos y arquitectura de software. Hemos cubierto principios SOLID, patrones GoF, principios GRASP, DDD táctico, anti-patrones, y diseño para testabilidad. Exploramos arquitecturas limpias como Hexagonal Architecture, analizamos métricas de calidad de diseño, examinamos frameworks de inyección de dependencias, y discutimos patrones contemporáneos como CQRS y Event Sourcing. Los patrones de concurrencia, especialmente el modelo de actores, proporcionan herramientas para sistemas concurrentes correctos. El diseño de APIs efectivas, estilos arquitecturales, y consideraciones de sistemas distribuidos amplían perspectiva más allá de diseño orientado a objetos tradicional. El caso de estudio de Netflix ilustra aplicación de microservicios a escala masiva. Los conceptos de consistencia eventual, CRDTs, y teorema CAP son fundamentales para sistemas distribuidos modernos. La seguridad integrada desde diseño previene vulnerabilidades. Los ejercicios propuestos permiten consolidar comprensión mediante diseño hands-on. El dominio de estos conceptos permite a ingenieros de software crear sistemas robustos, mantenibles, escalables y seguros que evolucionan gracefully conforme cambian requisitos y escalan a millones de usuarios.</p>
     </div>
 
     <div class="nav-buttons">

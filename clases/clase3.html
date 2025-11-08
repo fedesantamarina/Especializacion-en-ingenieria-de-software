@@ -265,6 +265,156 @@
         Las técnicas de minería de requerimientos aplican análisis automatizado a fuentes como documentos existentes, logs de sistemas, feedback de usuarios en redes sociales, y repositorios de código para extraer o inferir requerimientos. Los enfoques basados en aprendizaje automático pueden identificar patrones, detectar inconsistencias, o incluso predecir requerimientos faltantes. La crowd requirements engineering explora cómo involucrar grandes comunidades de stakeholders en elicitación y priorización de requerimientos, particularmente relevante para software de consumo masivo. Estas tendencias prometen transformar significativamente prácticas de ingeniería de requerimientos en la próxima década.
     </p>
 
+    <div class="mermaid">
+    graph TB
+        A[Técnicas de Elicitación] --> B[Entrevistas]
+        A --> C[Observación]
+        A --> D[Workshops]
+        A --> E[Prototipado]
+        A --> F[Cuestionarios]
+        A --> G[Análisis de Documentos]
+
+        B --> H[Estructuradas]
+        B --> I[Semi-estructuradas]
+        B --> J[No estructuradas]
+
+        D --> K[JAD Sessions]
+        D --> L[Focus Groups]
+        D --> M[Brainstorming]
+
+        E --> N[Baja Fidelidad]
+        E --> O[Alta Fidelidad]
+        E --> P[Prototipos Evolutivos]
+
+        style A fill:#9b59b6
+        style B fill:#3498db
+        style D fill:#e74c3c
+        style E fill:#2ecc71
+    </div>
+
+    <h2>7. Caso de Estudio: Sistema de Gestión Hospitalaria</h2>
+
+    <p>
+        Para ilustrar la aplicación práctica de principios de ingeniería de requerimientos, consideremos el desarrollo de un sistema integral de gestión hospitalaria. Este caso de estudio demuestra desafíos típicos en elicitación, análisis, especificación y gestión de requerimientos en un dominio complejo con múltiples stakeholders, restricciones regulatorias estrictas, y requerimientos no funcionales críticos.
+    </p>
+
+    <h3>7.1 Contexto y Stakeholders</h3>
+
+    <p>
+        El hospital regional "San Martín" requiere reemplazar su sistema legacy fragmentado (múltiples sistemas no integrados para admisiones, farmacia, laboratorio, e historia clínica en papel) con sistema unificado. Los stakeholders incluyen médicos con limitado tiempo para entrenamiento, enfermeras que necesitan acceso móvil a información de pacientes, personal administrativo que gestiona facturación y seguros, farmacéuticos que requieren integración con sistemas de inventario, directivos que necesitan reportes analíticos para toma de decisiones, pacientes que desean acceso a sus propios registros médicos, y reguladores que imponen requisitos de privacidad y seguridad estrictos bajo normativas HIPAA y locales.
+    </p>
+
+    <p>
+        La diversidad de stakeholders presenta desafíos inmediatos: diferentes vocabularios (terminología médica versus administrativa), prioridades conflictivas (médicos priorizan completitud de información clínica mientras administrativos priorizan eficiencia de procesos de facturación), y diferentes niveles de alfabetización tecnológica. La elicitación requirió múltiples técnicas: entrevistas con cada tipo de stakeholder, observación de flujos de trabajo actuales en diferentes departamentos, workshops facilitados para resolver conflictos entre grupos, y prototipado iterativo para validar interfaces de usuario con usuarios finales.
+    </p>
+
+    <h3>7.2 Requerimientos Funcionales Clave</h3>
+
+    <p>
+        Los requerimientos funcionales principales incluyen gestión integral de pacientes (registro, admisión, alta), historia clínica electrónica con capacidad para múltiples tipos de notas clínicas y documentación multimedia, prescripción electrónica con verificación de interacciones medicamentosas y alergias, gestión de órdenes de laboratorio e imagenología con integración de resultados, scheduling de citas y recursos (salas de operación, equipos médicos), gestión de facturación con integración a sistemas de seguros, y reportes regulatorios automatizados.
+    </p>
+
+    <p>
+        Un requerimiento funcional específico ilustra complejidades típicas: "El sistema debe permitir a médicos autorizados prescribir medicamentos, verificando automáticamente contra alergias documentadas del paciente, interacciones con medicamentos actuales, contraindicaciones basadas en condiciones médicas, y dosis apropiadas según peso y edad del paciente. Prescripciones de medicamentos controlados deben requerir autenticación adicional y registrarse en sistema de monitoreo estatal. El sistema debe alertar sobre prescripciones potencialmente problemáticas pero permitir override justificado por el médico." Este requerimiento involucra múltiples reglas de negocio, integraciones externas, consideraciones de seguridad, y balance entre soporte de decisión y autonomía clínica.
+    </p>
+
+    <h3>7.3 Requerimientos No Funcionales Críticos</h3>
+
+    <p>
+        Los requerimientos no funcionales resultaron particularmente críticos. Disponibilidad del sistema debe ser 99.9% (downtime máximo de 43 minutos mensuales) ya que indisponibilidad impacta directamente atención de pacientes. Tiempo de respuesta para operaciones comunes debe ser inferior a 2 segundos para mantener productividad clínica. La seguridad debe cumplir HIPAA: encriptación de datos en reposo y tránsito, controles de acceso granulares basados en roles, auditoría completa de accesos a información de pacientes, y protocolos de autenticación robustos.
+    </p>
+
+    <p>
+        La usabilidad presenta requisitos especiales: interfaces deben ser intuitivas para usuarios con entrenamiento mínimo, accesibles para usuarios con discapacidades (cumpliendo WCAG 2.1 nivel AA), y optimizadas para eficiencia (minimizando clicks para tareas frecuentes). La interoperabilidad requiere soporte de estándares HL7 FHIR para intercambio de información con otros sistemas de salud, y capacidad de exportar datos en formatos estándar. La escalabilidad debe soportar crecimiento proyectado del hospital de 200 a 400 camas en cinco años. Estos requerimientos no funcionales impactan profundamente decisiones arquitectónicas y tecnológicas.
+    </p>
+
+    <h3>7.4 Gestión de Cambios y Evolución</h3>
+
+    <p>
+        Durante el proyecto, múltiples cambios significativos de requerimientos emergieron. Cambios regulatorios introdujeron nuevos requisitos de reporte. Feedback de prototipos reveló necesidades no articuladas inicialmente. La pandemia COVID-19 introdujo requisitos urgentes para telemedicina y triaje remoto no contemplados originalmente. La gestión efectiva de estos cambios requirió proceso formal de control de cambios: cada cambio propuesto era evaluado por comité multidisciplinario considerando impacto en cronograma, costo, arquitectura, y otros requerimientos. La trazabilidad mantenida entre requerimientos, componentes de diseño, código, y casos de prueba facilitó análisis de impacto preciso.
+    </p>
+
+    <div class="mermaid">
+    sequenceDiagram
+        participant S as Stakeholder
+        participant A as Analista
+        participant E as Equipo Desarrollo
+        participant C as Comité Cambios
+
+        S->>A: Solicita cambio de requerimiento
+        A->>A: Documenta propuesta
+        A->>E: Solicita análisis de impacto
+        E->>A: Retorna estimación impacto
+        A->>C: Presenta propuesta con análisis
+        C->>C: Evalúa prioridad y factibilidad
+        alt Cambio Aprobado
+            C->>A: Aprueba cambio
+            A->>E: Actualiza especificación
+            E->>E: Implementa cambio
+            E->>S: Valida con stakeholder
+        else Cambio Rechazado/Diferido
+            C->>S: Comunica decisión y justificación
+        end
+    </div>
+
+    <h2>8. Antipatrones en Ingeniería de Requerimientos</h2>
+
+    <p>
+        Así como existen patrones de buenas prácticas, también existen antipatrones que representan errores comunes que deben evitarse. Reconocer estos antipatrones ayuda a prevenirlos en proyectos reales.
+    </p>
+
+    <h3>8.1 Gold Plating</h3>
+
+    <p>
+        El gold plating ocurre cuando desarrolladores o analistas agregan funcionalidades no solicitadas que consideran "deseables" sin validación con stakeholders. Aunque bien intencionado, esto consume recursos en características que pueden no tener valor real para usuarios, desvía esfuerzo de requerimientos genuinos, y aumenta complejidad del sistema. La solución consiste en disciplina rigurosa: implementar únicamente requerimientos explícitamente validados y priorizados por stakeholders, resistiendo tentación de agregar "nice-to-have" sin autorización.
+    </p>
+
+    <h3>8.2 Requirements Creep y Scope Creep</h3>
+
+    <p>
+        El requirements creep (o scope creep) refiere a adición descontrolada de requerimientos después de establecido el scope inicial del proyecto. Pequeñas adiciones individuales parecen menores, pero acumulativamente pueden descarrilar cronogramas y presupuestos. El scope creep frecuentemente resulta de procesos de control de cambios débiles o ausentes, incapacidad de decir "no" a stakeholders influyentes, o falta de visión clara del producto. La prevención requiere baseline de requerimientos claramente definida, proceso formal de control de cambios con evaluación rigurosa de impacto, y comunicación transparente sobre consecuencias de cambios en cronograma y costo.
+    </p>
+
+    <h3>8.3 Analysis Paralysis</h3>
+
+    <p>
+        El analysis paralysis ocurre cuando equipos se quedan atascados en análisis interminable, postergando indefinidamente decisiones o progreso a implementación. Esto puede resultar de perfeccionismo, temor a tomar decisiones incorrectas, o falta de criterios claros para considerar análisis "suficientemente completo". Aunque análisis riguroso es importante, debe balancearse con pragmatismo: análisis debe ser "suficientemente bueno" para proceder, reconociendo que cierto conocimiento solo se adquiere mediante implementación e iteración. Los enfoques ágiles mitigan este antipatrón mediante énfasis en iteración rápida y feedback continuo sobre análisis exhaustivo upfront.
+    </p>
+
+    <h3>8.4 Especificaciones Ambiguas</h3>
+
+    <p>
+        Las especificaciones ambiguas utilizan lenguaje vago que permite múltiples interpretaciones. Términos como "rápido", "fácil de usar", "escalable", o "robusto" sin definiciones cuantificables constituyen ejemplos clásicos. La ambigüedad conduce a malentendidos, implementaciones que no satisfacen expectativas, y conflictos entre stakeholders y desarrolladores. La solución requiere disciplina en especificación: utilizar métricas cuantificables, definir claramente términos de dominio, emplear modelos y diagramas para complementar texto, y validar comprensión mediante técnicas como paraphrasing o prototipos.
+    </p>
+
+    <h2>9. Ejercicios Prácticos</h2>
+
+    <h3>9.1 Ejercicio de Elicitación: Sistema de Biblioteca Universitaria</h3>
+
+    <p>
+        <strong>Escenario:</strong> Una universidad desea modernizar su sistema de gestión bibliotecaria. Actualmente usan sistema legacy de los años 90. La biblioteca tiene 500,000 volúmenes, 10,000 usuarios activos (estudiantes, profesores, personal), y múltiples sucursales en campus diferentes.
+    </p>
+
+    <p>
+        <strong>Tarea:</strong> Diseñe un plan de elicitación de requerimientos que incluya: (1) Identificación de stakeholders clave y sus concerns específicos; (2) Selección de técnicas de elicitación apropiadas para cada grupo de stakeholders, justificando sus elecciones; (3) Diseño de preguntas específicas para entrevistas con bibliotecarios, estudiantes, y administradores; (4) Propuesta de workshop de requerimientos, incluyendo agenda y ejercicios facilitados; (5) Diseño de prototipo de baja fidelidad para validar conceptos de interfaz de usuario.
+    </p>
+
+    <h3>9.2 Ejercicio de Análisis: Resolución de Conflictos</h3>
+
+    <p>
+        <strong>Escenario:</strong> En proyecto de desarrollo de plataforma de e-learning, han emergido conflictos entre requerimientos de diferentes stakeholders: (1) Profesores requieren herramientas sofisticadas de creación de contenido multimedia con curva de aprendizaje significativa; (2) Estudiantes priorizan interfaz simple e intuitiva sin complejidad; (3) Administradores académicos requieren reportes comprehensivos de analytics que incrementan overhead de captura de datos; (4) Departamento de IT impone restricciones de seguridad que limitan ciertas funcionalidades deseadas.
+    </p>
+
+    <p>
+        <strong>Tarea:</strong> (1) Analice naturaleza de cada conflicto (técnico versus organizacional, fundamental versus superficial); (2) Proponga estrategias de negociación para resolver cada conflicto; (3) Diseñe soluciones de compromiso que satisfagan parcialmente necesidades conflictivas; (4) Priorice requerimientos usando método MoSCoW, justificando decisiones; (5) Documente trade-offs y rationale para decisiones tomadas.
+    </p>
+
+    <h3>9.3 Ejercicio de Especificación: Convertir Requerimientos Vagos en Precisos</h3>
+
+    <p>
+        <strong>Tarea:</strong> Los siguientes requerimientos son vagos o ambiguos. Reescríbalos como requerimientos precisos, verificables y completos: (1) "El sistema debe ser rápido"; (2) "El sistema debe ser seguro"; (3) "El sistema debe ser fácil de usar"; (4) "El sistema debe manejar muchos usuarios"; (5) "El sistema debe estar disponible casi todo el tiempo". Para cada requerimiento, especifique métricas cuantificables, condiciones de prueba, y criterios de aceptación claros.
+    </p>
+
     <div class="highlight-box">
         <h3>Resumen de la Clase</h3>
         <p>

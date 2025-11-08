@@ -287,6 +287,162 @@
         El diseño para modificabilidad enfatiza modularidad, bajo acoplamiento, y localización de cambios probables. El diseño para testabilidad requiere dependencias inyectables, componentes pequeños con responsabilidades claras, y separación de lógica de negocio de infraestructura. El balance apropiado entre atributos de calidad depende del contexto: sistemas críticos priorizan confiabilidad y seguridad sobre otras consideraciones, mientras startups pueden priorizar velocidad de desarrollo sobre perfección arquitectónica. El diseño efectivo requiere comprender prioridades de atributos de calidad y aplicar tácticas apropiadas.
     </p>
 
+    <div class="mermaid">
+    graph TB
+        A[Tácticas Arquitectónicas] --> B[Disponibilidad]
+        A --> C[Rendimiento]
+        A --> D[Seguridad]
+        A --> E[Modificabilidad]
+        A --> F[Testabilidad]
+
+        B --> B1[Detección de Fallos]
+        B --> B2[Recuperación]
+        B --> B3[Prevención]
+
+        C --> C1[Gestión de Recursos]
+        C --> C2[Gestión de Demanda]
+        C --> C3[Arbitración]
+
+        D --> D1[Resistir Ataques]
+        D --> D2[Detectar Ataques]
+        D --> D3[Recuperación]
+
+        E --> E1[Localizar Modificaciones]
+        E --> E2[Prevenir Efecto Onda]
+        E --> E3[Diferir Binding Time]
+
+        F --> F1[Controlar Observabilidad]
+        F --> F2[Controlar Controlabilidad]
+        F --> F3[Limitar Complejidad]
+
+        style A fill:#9b59b6
+        style B fill:#2ecc71
+        style C fill:#3498db
+        style D fill:#e74c3c
+    </div>
+
+    <h2>7. Caso de Estudio: Rediseño Arquitectónico de Plataforma de E-Commerce</h2>
+
+    <p>
+        Este caso de estudio ilustra el proceso de evolucionar una arquitectura monolítica a microservicios, demostrando consideraciones de diseño arquitectónico, trade-offs, y patrones aplicados en contexto real.
+    </p>
+
+    <h3>7.1 Arquitectura Monolítica Original</h3>
+
+    <p>
+        La plataforma de e-commerce "ShopFast" operó exitosamente durante cinco años con arquitectura monolítica tradicional de tres capas: capa de presentación (aplicación web MVC), capa de lógica de negocio (servicios y reglas de negocio), y capa de acceso a datos (ORM sobre base de datos relacional PostgreSQL). El monolito contenía funcionalidad completa: gestión de catálogo de productos, carrito de compras, procesamiento de órdenes, gestión de inventario, facturación, CRM, y sistema de recomendaciones.
+    </p>
+
+    <p>
+        Inicialmente, esta arquitectura proporcionó ventajas significativas: desarrollo rápido de nuevas características, debugging y testing simplificados en ambiente de desarrollo local, despliegue straightforward (single deployable unit), y transacciones ACID simples dentro del monolito. Sin embargo, a medida que el negocio escaló a millones de usuarios, el equipo de desarrollo creció a 50 ingenieros, y la base de código alcanzó cientos de miles de líneas, emergieron problemas críticos: despliegues riesgosos requiriendo downtime, escalabilidad limitada (todo el sistema debía escalar conjuntamente), tiempos de compilación y arranque prolongados, y coordinación compleja entre equipos trabajando en el mismo codebase.
+    </p>
+
+    <h3>7.2 Decisión de Migración a Microservicios</h3>
+
+    <p>
+        El análisis arquitectónico reveló que diferentes componentes del sistema tenían características radicalmente diferentes. El catálogo de productos experimentaba lecturas masivas pero escrituras ocasionales, apropiado para caching agresivo. El procesamiento de órdenes requería transacciones ACID estrictas y consistencia fuerte. El sistema de recomendaciones requería poder computacional significativo y podía tolerar consistencia eventual. El inventario requería actualizaciones frecuentes con concurrencia alta. Forzar todos estos componentes en arquitectura única con mismas características operacionales resultaba subóptimo.
+    </p>
+
+    <p>
+        La decisión de migrar a microservicios fue impulsada por necesidad de: escalabilidad independiente de componentes según demanda, despliegue independiente permitiendo releases frecuentes sin riesgo global, aislamiento de fallos limitando impacto de problemas, autonomía de equipos cada uno responsable de servicios específicos, y flexibilidad tecnológica permitiendo seleccionar stacks óptimos para cada servicio. Sin embargo, se reconocieron trade-offs: incremento de complejidad operacional, desafíos de consistencia de datos distribuidos, latencia de comunicación inter-servicios, y overhead de gestión de servicios múltiples.
+    </p>
+
+    <h3>7.3 Diseño de Arquitectura de Microservicios</h3>
+
+    <p>
+        El sistema se descompuso en microservicios mediante Domain-Driven Design, identificando bounded contexts: Product Catalog Service, Inventory Service, Order Service, Payment Service, Customer Service, Recommendation Service, Notification Service, y Search Service. Cada servicio encapsula datos y lógica de negocio de su dominio, exponiendo APIs RESTful o gRPC. Los servicios se diseñaron para ser stateless cuando es posible, facilitando escalabilidad horizontal.
+    </p>
+
+    <p>
+        La arquitectura incorporó patrones arquitectónicos específicos: API Gateway (usando Kong) como punto de entrada único manejando autenticación, rate limiting, y routing; Service Discovery (usando Consul) para registro y descubrimiento dinámico de instancias de servicios; Circuit Breaker (usando Hystrix) para prevenir cascading failures; Event-Driven Architecture (usando Kafka) para comunicación asíncrona y desacoplamiento; y CQRS para Order Service, separando modelos de lectura y escritura. Cada servicio mantiene su propia base de datos (polyglot persistence), con Product Catalog usando MongoDB, Order Service usando PostgreSQL, y Recommendation Service usando Cassandra.
+    </p>
+
+    <div class="mermaid">
+    graph TB
+        Client[Clientes Web/Mobile] --> Gateway[API Gateway]
+
+        Gateway --> Auth[Auth Service]
+        Gateway --> Catalog[Catalog Service]
+        Gateway --> Order[Order Service]
+        Gateway --> Search[Search Service]
+
+        Order --> Payment[Payment Service]
+        Order --> Inventory[Inventory Service]
+        Order --> Notification[Notification Service]
+
+        Catalog --> CatalogDB[(MongoDB)]
+        Order --> OrderDB[(PostgreSQL)]
+        Inventory --> InventoryDB[(Redis)]
+
+        Order -.->|Eventos| Kafka[Kafka Event Bus]
+        Notification -.->|Consume| Kafka
+        Recommendation[Recommendation Service] -.->|Consume| Kafka
+
+        ServiceDiscovery[Service Discovery] -.->|Registro| Catalog
+        ServiceDiscovery -.->|Registro| Order
+        ServiceDiscovery -.->|Registro| Payment
+
+        style Gateway fill:#e74c3c
+        style Kafka fill:#9b59b6
+        style ServiceDiscovery fill:#3498db
+    </div>
+
+    <h3>7.4 Estrategia de Migración Incremental</h3>
+
+    <p>
+        La migración se ejecutó incrementalmente mediante patrón Strangler Fig: nuevas funcionalidades se implementaron como microservicios, mientras funcionalidad existente se extraía gradualmente del monolito. El API Gateway ruteaba solicitudes a microservicios cuando disponibles, cayendo back al monolito para funcionalidad aún no migrada. Este enfoque minimizó riesgo permitiendo validación de arquitectura nueva progresivamente. La migración completa requirió 18 meses, pero beneficios comenzaron a materializarse después de los primeros servicios críticos fueron extraídos.
+    </p>
+
+    <h2>8. Refactoring y Technical Debt</h2>
+
+    <h3>8.1 Naturaleza del Technical Debt</h3>
+
+    <p>
+        El concepto de technical debt, introducido por Ward Cunningham, usa la metáfora de deuda financiera para describir consecuencias de decisiones de diseño subóptimas. Así como deuda financiera permite lograr objetivos inmediatos a costa de pagos de interés futuros, technical debt permite velocidad de desarrollo inmediata a costa de mantenibilidad reducida y velocidad disminuida futuras. El technical debt puede ser deliberado (decisión consciente de tomar atajo con plan de remediar después) o inadvertido (resultado de conocimiento insuficiente o diseño pobre).
+    </p>
+
+    <p>
+        El technical debt se manifiesta de múltiples formas: código duplicado, clases con responsabilidades poco claras o múltiples, acoplamiento excesivo entre módulos, falta de tests automatizados, documentación inexistente o desactualizada, dependencias obsoletas, o arquitectura que no alinea con necesidades actuales. Los "pagos de interés" incluyen desarrollo lento de nuevas características, bugs frecuentes, dificultad para onboarding de nuevos desarrolladores, y esfuerzo significativo para cambios que deberían ser simples. Si no se gestiona, el technical debt puede acumularse hasta hacer el sistema prácticamente inmutable.
+    </p>
+
+    <h3>8.2 Estrategias de Refactoring</h3>
+
+    <p>
+        El refactoring consiste en reestructurar código existente sin cambiar su comportamiento externo, mejorando estructura interna. Martin Fowler catalogó refactorings específicos: Extract Method (extraer código duplicado a método separado), Rename (mejorar nombres para claridad), Extract Class (dividir clase con múltiples responsabilidades), Move Method (mover método a clase más apropiada), Replace Conditional with Polymorphism (reemplazar lógica condicional compleja con polimorfismo), entre docenas de otros. El refactoring debe ejecutarse en pasos pequeños, verificables, con tests automatizados proporcionando red de seguridad.
+    </p>
+
+    <p>
+        Las estrategias para gestionar technical debt incluyen: asignar porcentaje de tiempo de desarrollo a pagar debt (por ejemplo, 20% de cada sprint), refactorizar oportunísticamente cuando se trabaja en código (dejar código mejor que como se encontró), programar sprints dedicados a pagar debt acumulado, o aplicar Boy Scout Rule (siempre dejar codebase ligeramente mejor que como se encontró). La clave consiste en balancear delivery de features con mantenimiento de health del codebase. Ignorar technical debt eventualmente paraliza desarrollo; obsesionarse con perfección impide entregar valor. El balance requiere juicio ingenieril maduro.
+    </p>
+
+    <h2>9. Ejercicios Prácticos</h2>
+
+    <h3>9.1 Ejercicio de Diseño Arquitectónico</h3>
+
+    <p>
+        <strong>Escenario:</strong> Diseñe arquitectura de alto nivel para plataforma de streaming de video similar a Netflix, que debe soportar: 100 millones de usuarios globales, catálogo de 50,000 películas y series, streaming de video en múltiples calidades adaptativas, recomendaciones personalizadas, búsqueda de contenido, perfiles de usuario múltiples, y descarga para visualización offline.
+    </p>
+
+    <p>
+        <strong>Tarea:</strong> (1) Identifique componentes arquitectónicos principales y sus responsabilidades; (2) Seleccione estilo arquitectónico apropiado, justificando elección; (3) Diseñe estrategias para atributos de calidad críticos: escalabilidad global, disponibilidad alta (99.99%), latencia baja para inicio de streaming, y personalización; (4) Proponga tecnologías específicas para componentes clave; (5) Documente decisiones arquitectónicas significativas usando Architecture Decision Records (ADRs); (6) Identifique riesgos arquitectónicos y estrategias de mitigación.
+    </p>
+
+    <h3>9.2 Ejercicio de Aplicación de Patrones</h3>
+
+    <p>
+        <strong>Tarea:</strong> Para cada escenario, identifique patrón(es) de diseño apropiado(s), justifique su selección, y dibuje diagrama de clases UML mostrando aplicación del patrón: (1) Sistema debe soportar múltiples formatos de exportación (PDF, Excel, CSV, XML) con posibilidad de agregar formatos nuevos frecuentemente; (2) Sistema de logging debe permitir enviar logs a múltiples destinos simultáneamente (archivo, base de datos, servicio remoto); (3) Operaciones costosas de construcción de objetos complejos con múltiples configuraciones opcionales; (4) Necesidad de deshacer/rehacer operaciones de usuario en aplicación de edición; (5) Gestión de diferentes estados de orden de compra (Pendiente, Pagado, Enviado, Entregado, Cancelado) con transiciones y comportamientos específicos.
+    </p>
+
+    <h3>9.3 Ejercicio de Evaluación de Trade-offs</h3>
+
+    <p>
+        <strong>Escenario:</strong> Un sistema de banca online debe procesar transacciones financieras. Dos arquitecturas se proponen: (A) Arquitectura monolítica con base de datos relacional única, garantizando transacciones ACID fuertes; (B) Arquitectura de microservicios con bases de datos distribuidas, usando eventual consistency y saga pattern para transacciones distribuidas.
+    </p>
+
+    <p>
+        <strong>Tarea:</strong> (1) Analice cada arquitectura respecto a atributos de calidad: consistencia, disponibilidad, escalabilidad, complejidad operacional, latencia, y seguridad; (2) Identifique trade-offs específicos entre las arquitecturas; (3) Para cada arquitectura, describa escenarios donde falla o tiene dificultades; (4) Proponga arquitectura híbrida que combine fortalezas de ambas aproximaciones; (5) Haga recomendación justificada considerando contexto de banca online donde consistencia de datos financieros es crítica.
+    </p>
+
     <div class="highlight-box">
         <h3>Resumen de la Clase</h3>
         <p>

@@ -6,16 +6,260 @@
     </div>
     <h2>1. Fundamentos de Usabilidad</h2>
     <p>La usabilidad, definida por ISO 9241, es el grado en que un producto puede ser usado por usuarios específicos para lograr objetivos específicos con efectividad, eficiencia y satisfacción en contexto específico de uso. Las cinco dimensiones de Nielsen incluyen learnability (facilidad de aprendizaje), efficiency (eficiencia de uso), memorability (facilidad de recordar), errors (tasa y recuperación de errores), y satisfaction (satisfacción subjetiva). La usabilidad impacta directamente adopción, productividad, y satisfacción de usuarios. Los sistemas con pobre usabilidad resultan en frustración, errores, baja adopción, y costos de soporte elevados.</p>
+
+    <h3>1.1. Dimensiones de Usabilidad según Nielsen</h3>
+    <p><strong>Learnability (Aprendizaje):</strong> Mide cuán fácil es para usuarios completar tareas básicas la primera vez que encuentran el diseño. Un sistema con alta learnability permite a usuarios nuevos volverse productivos rápidamente. Las métricas incluyen tiempo para completar primera tarea, número de errores en primeros intentos, y necesidad de consultar documentación o help. Los factores que mejoran learnability incluyen consistencia con convenciones establecidas, affordances claras (botones que parecen clickeables), feedback inmediato, y progressive disclosure (mostrar información avanzada solo cuando se necesita).</p>
+
+    <p><strong>Efficiency (Eficiencia):</strong> Una vez que usuarios aprendieron el diseño, cuán rápidamente pueden completar tareas. La eficiencia es crítica para sistemas usados frecuentemente donde segundos acumulan a horas de productividad. Las mejoras incluyen keyboard shortcuts para usuarios avanzados, batch operations, auto-completion, templates para tareas comunes, y minimización de pasos necesarios. Por ejemplo, Gmail revolucionó email con shortcuts de teclado permitiendo procesamiento rápido de inbox sin usar mouse.</p>
+
+    <p><strong>Memorability (Memorabilidad):</strong> Cuando usuarios regresan al sistema después de período sin usarlo, cuán fácilmente pueden restablecer proficiency. Importante para sistemas usados intermitentemente. Los diseños memorables usan metáforas familiares, mantienen consistencia interna, proporcionan visual landmarks para navegación, y evitan cambios innecesarios de interface. Apple's macOS mantiene ubicaciones consistentes de elementos (Apple menu top-left, time top-right) facilitando memorabilidad.</p>
+
+    <p><strong>Errors (Errores):</strong> Cuántos errores cometen usuarios, cuán severos son, y cuán fácilmente se recuperan. El diseño debe prevenir errores cuando posible (constraints, confirmations para acciones destructivas), hacer errores fácilmente reversibles (undo/redo), y proporcionar mensajes de error claros y constructivos. Por ejemplo, formularios modernos validan en tiempo real, previniendo submission con errores y guiando corrección.</p>
+
+    <p><strong>Satisfaction (Satisfacción):</strong> Cuán agradable es usar el diseño. Medido típicamente con cuestionarios como SUS (System Usability Scale). La satisfacción incluye aspectos funcionales (sistema hace lo que necesito) y hedónicos (disfruto usándolo). Un sistema puede ser técnicamente usable pero desagradable, impactando adopción y engagement. Los factores incluyen estética visual, microinteracciones delightful, copy amigable, y sensación de control.</p>
+
+    <h3>1.2. Costo de Pobre Usabilidad</h3>
+    <p>La pobre usabilidad tiene costos cuantificables. Los estudios muestran que mejorar usabilidad puede aumentar conversiones en e-commerce 35-200%, reducir errores de usuario 40-80%, y disminuir training time 25-80%. Los costos directos incluyen: soporte al cliente (usuarios confundidos generan tickets), training (tiempo dedicado a enseñar sistema complejo), desarrollo (rediseños post-lanzamiento son 100x más costosos que diseño inicial correcto), y oportunidad (usuarios abandonan sistemas difíciles de usar).</p>
+
+    <p>Casos notables incluyen: el healthcare.gov launch (2013) con usabilidad tan pobre que millones no pudieron registrarse, costando cientos de millones en rediseño; therac-25 radiation therapy machine con interface confusa contribuyendo a overdoses fatales; y innumerables e-commerce sites perdiendo millones por checkout flows complicados. Según Forrester Research, cada dólar invertido en UX retorna $100, un ROI de 9,900%. La inversión temprana en usabilidad no es lujo sino imperativo de negocio.</p>
+
+    <div class="mermaid">
+    graph TB
+        A[Usabilidad Pobre] --> B[Frustración Usuario]
+        A --> C[Errores Frecuentes]
+        A --> D[Training Extensivo]
+        A --> E[Abandono/Baja Adopción]
+
+        B --> F[Tickets de Soporte]
+        C --> G[Pérdida de Datos/Dinero]
+        D --> H[Costos de Training]
+        E --> I[Pérdida de Revenue]
+
+        F --> J[Impacto en Bottom Line]
+        G --> J
+        H --> J
+        I --> J
+
+        K[Inversión en UX] --> L[Mejor Usabilidad]
+        L --> M[Usuarios Satisfechos]
+        L --> N[Menos Errores]
+        L --> O[Adopción Rápida]
+        M --> P[ROI Positivo]
+        N --> P
+        O --> P
+    </div>
+
+    <h3>1.3. Caso de Estudio: Dropbox y Usabilidad Simplificada</h3>
+    <p>Dropbox ejemplifica poder de usabilidad simplificada. En 2008, cloud storage existía pero era complicado (FTP, rsync, servicios enterprise complejos). Dropbox revolucionó el espacio con concepto simple: una carpeta que sincroniza automáticamente. La instalación tomaba minutos, sin configuración compleja. El mental model era familiar: usuarios entendían carpetas. La sincronización ocurría invisible en background. El sharing era simple: compartir carpeta versus enviar archivos por email.</p>
+
+    <p>Las decisiones de UX incluyeron: onboarding guiado mostrando value en primeros minutos (guardar archivo, ver sincronización), gamification del referral program (espacio adicional por referir amigos visualizado con progress bar), integración OS-level (Dropbox folder aparecía en Finder/Explorer como cualquier carpeta), y feedback visual (iconos mostrando estado de sincronización). El copy era conversacional y amigable ("Your stuff, anywhere"), contrastando con marketing enterprise típico.</p>
+
+    <p>Los resultados: Dropbox creció de 0 a 100 millones usuarios en 6 años, mayormente orgánicamente. El referral program generó 35% de signups diarios. El NPS (Net Promoter Score) consistentemente superaba 60 (clase mundial). La simplicidad de Dropbox estableció estándar que competidores (Google Drive, OneDrive) tuvieron que igualar. La lección: tecnología superior no gana; experiencia superior sí. Dropbox no tenía mejor tecnología que competidores enterprise, pero tenía UX dramáticamente mejor, democratizando cloud storage.</p>
     <h2>2. Principios de Diseño de Interacción</h2>
     <p>Los principios de diseño guían creación de interfaces usables. Visibility (visibilidad de estado del sistema mediante feedback apropiado). Affordance (objetos sugieren cómo usarse). Mapping (relación entre controles y efectos). Consistency (consistencia interna y con convenciones de plataforma). Feedback (respuesta inmediata a acciones). Constraints (restricciones que previenen errores). Error Prevention y Recovery (prevenir errores cuando posible, facilitar recuperación). Recognition over Recall (minimizar carga de memoria). Flexibility (permitir personalización y shortcuts). Aesthetic and Minimalist Design (eliminar información irrelevante). Estos principios, formulados por Nielsen, Norman y otros, derivan de décadas de investigación en HCI.</p>
+
+    <h3>2.1. Las 10 Heurísticas de Usabilidad de Nielsen</h3>
+    <p><strong>1. Visibility of System Status:</strong> El sistema debe mantener a usuarios informados sobre qué está ocurriendo mediante feedback apropiado en tiempo razonable. Ejemplos incluyen progress bars durante carga, confirmaciones después de acciones ("Tu mensaje se envió"), indicadores de estado ("Online", "Typing..."), y highlighting de ítem seleccionado. Google Maps muestra ruta calculando en tiempo real con animación, no solo resultado final.</p>
+
+    <p><strong>2. Match Between System and Real World:</strong> El sistema debe hablar lenguaje de usuarios, con palabras, frases y conceptos familiares, siguiendo convenciones del mundo real. Evitar jerga técnica. El ícono de guardar (floppy disk) es ejemplo problemático: generaciones jóvenes nunca vieron floppy disk. Shopping carts en e-commerce usan metáfora familiar del mundo físico.</p>
+
+    <p><strong>3. User Control and Freedom:</strong> Usuarios frecuentemente eligen funciones por error y necesitan "salida de emergencia" clara. Soportar undo/redo, permitir cancelar operaciones long-running, proporcionar navigation back. Gmail's undo send (recien enviado puede deshacerse en 5-30 segundos) ejemplifica bien este principio.</p>
+
+    <p><strong>4. Consistency and Standards:</strong> Usuarios no deberían preguntarse si palabras, situaciones o acciones diferentes significan lo mismo. Seguir convenciones de plataforma (links azul subrayado, logo top-left lleva a home) y mantener consistencia interna. Inconsistencia causa confusión: si "Remove" a veces elimina y a veces oculta, usuarios no sabrán qué esperar.</p>
+
+    <p><strong>5. Error Prevention:</strong> Mejor que buenos mensajes de error es diseño cuidadoso previniendo problemas. Confirmations para acciones destructivas ("¿Seguro quieres eliminar?"), constraints (date picker versus texto libre para fechas), y validación proactiva. Grammarly previene errores spelling/grammar en tiempo real versus corregir post-submission.</p>
+
+    <p><strong>6. Recognition Rather Than Recall:</strong> Minimizar carga de memoria usuario haciendo objetos, acciones y opciones visibles. Instrucciones deben ser visibles o fácilmente retrievable. Menus muestran opciones disponibles (recognition) versus commandline donde usuario debe recordar comandos (recall). Auto-complete aprovecha recognition.</p>
+
+    <p><strong>7. Flexibility and Efficiency of Use:</strong> Accelerators invisibles a novices pero aceleran interacción para expertos. Keyboard shortcuts, gestures, templates, y customization. Photoshop ofrece múltiples formas de realizar acciones: menu, keyboard shortcut, right-click context menu, satisfaciendo novices y expertos.</p>
+
+    <p><strong>8. Aesthetic and Minimalist Design:</strong> Diálogos no deben contener información irrelevante o raramente necesaria. Cada unidad extra de información compite con unidades relevantes, disminuyendo su visibilidad relativa. Google search ejemplifica minimalismo: página inicial con logo y search box, eliminando distracciones.</p>
+
+    <p><strong>9. Help Users Recognize, Diagnose, and Recover from Errors:</strong> Mensajes de error deben expresarse en lenguaje simple (no códigos), indicar problema precisamente, y sugerir solución constructivamente. Mal: "Error 403". Bien: "No tienes permiso para acceder a este archivo. Solicita acceso al propietario o contacta a admin@example.com".</p>
+
+    <p><strong>10. Help and Documentation:</strong> Aunque mejor si sistema puede usarse sin documentación, puede ser necesario proporcionar help. Debe ser fácil de buscar, focalized en tareas de usuario, listar pasos concretos, y no ser demasiado grande. Contextual help (tooltips, inline hints) es preferible a documentation separada.</p>
+
+    <h3>2.2. Affordances y Signifiers</h3>
+    <p>Don Norman distingue affordances (posibilidades de acción) de signifiers (perceptible signals de esas posibilidades). Una puerta tiene affordance de abrirse, pero sin signifier (handle visible, placa "Push/Pull"), usuarios no sabrán cómo. El diseño exitoso proporciona signifiers claros. Los botones deben parecer clickeables (bordes, sombreado, cambio en hover). Los links deben ser distinguibles (color, underline). Los elementos draggable deben comunicar movability (cursor cambia, visual hint).</p>
+
+    <p>Los affordances percibidos pueden diferir de reales, causando problemas. Una puerta de vidrio sin handle visible tiene affordance de abrirse pero no signifier, resultando en personas caminando hacia ella. Los sitios web a veces usan elementos clickeables sin signifiers claros (texto negro sin underline que es link), confundiendo usuarios. Los buenos diseños alinean affordances con signifiers, comunicando claramente qué acciones son posibles.</p>
+
+    <div class="mermaid">
+    graph LR
+        A[Principios de Diseño] --> B[Visibilidad]
+        A --> C[Feedback]
+        A --> D[Consistencia]
+        A --> E[Prevención de Errores]
+        A --> F[Flexibilidad]
+
+        B --> B1[Status visible<br/>Progress indicators<br/>Selection highlighting]
+        C --> C1[Respuesta inmediata<br/>Confirmaciones<br/>Loading states]
+        D --> D1[Patterns familiares<br/>Convenciones de plataforma<br/>Coherencia interna]
+        E --> E1[Constraints<br/>Confirmations<br/>Validación proactiva]
+        F --> F1[Shortcuts<br/>Customization<br/>Múltiples paths]
+    </div>
+
+    <h3>2.3. Antipatrón: Dark Patterns</h3>
+    <p>Los dark patterns son prácticas de diseño que manipulan usuarios a tomar acciones no intendidas, beneficiando empresa a expensas de usuario. Ejemplos incluyen: <strong>Roach Motel</strong> (fácil entrar, difícil salir - subscribirse simple, cancelar requiere llamada telefónica), <strong>Confirmshaming</strong> (hacer usuarios sentir mal por rechazar - "No gracias, no me importa ahorrar dinero"), <strong>Bait and Switch</strong> (usuario intenta hacer una cosa, ocurre otra), <strong>Disguised Ads</strong> (ads disfrazados como content o navigation), y <strong>Forced Continuity</strong> (trial gratis termina, tarjeta se cobra sin warning claro).</p>
+
+    <p>Los dark patterns generan revenue/engagement corto plazo pero erosionan confianza y pueden resultar en backlash legal. GDPR y CCPA requieren consent claro para tracking, prohibiendo checkboxes pre-checked. Las class action lawsuits contra companies usando dark patterns están aumentando. LinkedIn enfrentó demanda por dark pattern en invitaciones automáticas. La ética profesional en UX requiere abogar por usuarios incluso cuando presionado por business para aumentar métricas mediante manipulación.</p>
     <h2>3. Proceso de Diseño Centrado en el Usuario</h2>
     <p>El User-Centered Design (UCD) coloca usuarios en centro del proceso de diseño. Las fases incluyen: investigación de usuarios (entrevistas, observación, surveys para comprender necesidades, contexto, y comportamientos), definición de personas y escenarios (arquetipos de usuarios y contextos de uso típicos), ideación (generación de conceptos de solución), prototipado (mockups y prototipos interactivos), evaluación de usabilidad (testing con usuarios reales), e iteración (refinar basado en feedback). El proceso es iterativo: diseño inicial raramente resulta óptimo, requiriendo ciclos de prueba y refinamiento. Las técnicas como design thinking estructuran procesos creativos de UCD.</p>
+
+    <h3>3.1. Investigación de Usuarios</h3>
+    <p>La investigación cualitativa revela motivaciones, necesidades y pain points. Las entrevistas contextuales observan usuarios en su entorno natural ejecutando tareas, revelando workflow, workarounds, y frustraciones que usuarios pueden no articular explícitamente. Por ejemplo, observar doctor usando EMR (Electronic Medical Record) puede revelar que constantemente alterna entre sistemas porque información necesaria está fragmentada. Los focus groups reúnen 6-10 participantes discutiendo tópico moderado por facilitador, generando insights sobre percepciones y preferencias. Las diary studies piden a usuarios documentar experiencias durante período extendido, capturando contexto de uso real.</p>
+
+    <p>La investigación cuantitativa mide comportamientos y actitudes a escala. Los surveys pueden alcanzar cientos o miles de usuarios, proporcionando data estadísticamente significativa sobre demographics, uso patterns, y satisfacción. Los analytics web (Google Analytics, Mixpanel) rastrean comportamiento agregado: qué páginas visitan, cuánto tiempo permanecen, dónde abandonan funnel de conversión. El card sorting pide a usuarios organizar conceptos en categorías que tienen sentido para ellos, informando information architecture. Los tree testing validan navegación mostrando estructura y pidiendo usuarios encontrar información específica.</p>
+
+    <h3>3.2. Personas y Scenarios</h3>
+    <p>Las personas son archetypal users representando segmentos de usuarios reales, basados en investigación. Una persona típicamente incluye: nombre y foto (humanizar), demographics (edad, ocupación, tech savvy), goals y motivaciones, frustrations y pain points, y narrative describiendo día típico. Por ejemplo, "María, 34, gerente de marketing en startup, tech-savvy, goal de generar leads eficientemente, frustrated por herramientas dispares requiriendo data entry duplicado". Las personas guían decisiones de diseño: "¿Esta feature ayuda a María lograr su goal?"</p>
+
+    <p>Los escenarios narran contextos de uso específicos: "María llega a oficina con 30 emails sin leer. Necesita identificar rápidamente leads calificados y asignarlos a sales team antes de meeting a las 10am". Los scenarios ayudan equipo empatizar con usuarios y diseñar para contextos reales. Los journey maps visualizan experiencia de persona através del tiempo, identificando touchpoints, pensamientos, emociones, y oportunidades de mejora. Típicamente incluyen fases (awareness, consideration, purchase, uso, loyalty), touchpoints en cada fase (ads, website, email, product), y emotional curve mostrando satisfacción.</p>
+
+    <div class="mermaid">
+    graph TD
+        A[User-Centered Design Process] --> B[Investigación]
+        B --> C[Análisis & Síntesis]
+        C --> D[Personas & Scenarios]
+        D --> E[Ideación]
+        E --> F[Prototipado]
+        F --> G[Evaluación]
+        G --> H{¿Meets User Needs?}
+        H -->|No| E
+        H -->|Parcialmente| F
+        H -->|Sí| I[Implementación]
+        I --> J[Monitoreo]
+        J --> K{¿Feedback/Data?}
+        K -->|Issues identificados| B
+        K -->|Performing well| L[Mantener & Mejorar]
+    </div>
+
+    <h3>3.3. Prototipado Iterativo</h3>
+    <p>El prototipado permite explorar ideas rápidamente sin commitment de implementación completa. Los sketches en papel son rápidos y baratos para exploración inicial. Los wireframes definen estructura y layout sin detalles visuales. Los mockups añaden visual design (colores, typography, imagery). Los prototipos interactivos simulan interacción (clicks, transitions) sin backend funcional. Las herramientas incluyen Figma, Sketch, Adobe XD para high-fidelity mockups, y Balsamiq, Whimsical para low-fidelity wireframes.</p>
+
+    <p>La fidelidad apropiada depende de fase: early exploration beneficia de low-fidelity (rápido, no intimida feedback, cambios fáciles), mientras validation de diseño final requiere high-fidelity (realista, prueba interactions detalladas). El principio clave es "fail fast, fail cheap": descubrir problemas en prototipo papel que toma 2 horas es infinitamente mejor que después de 2 meses de desarrollo. El testing iterativo con usuarios durante prototipado refina diseño incrementalmente antes de escribir código.</p>
+
     <h2>4. Evaluación de Usabilidad</h2>
     <p>La evaluación de usabilidad identifica problemas mediante métodos empíricos o analíticos. El usability testing involucra observar usuarios representativos ejecutando tareas con el sistema, identificando dificultades, confusiones, y errores. Las métricas incluyen tasa de éxito, tiempo de tarea, número de errores, y satisfacción (SUS - System Usability Scale). Los think-aloud protocols piden a usuarios verbalizar pensamiento durante uso. Las heuristic evaluations usan expertos evaluando interfaces contra heurísticas de usabilidad, identificando violaciones. Los cognitive walkthroughs simulan usuarios nuevos aprendiendo tareas. Los A/B testing comparan variantes midiendo métricas comportamentales. Los analytics web rastrean comportamiento agregado identificando patrones y problemas.</p>
+
+    <h3>4.1. Usability Testing Moderado</h3>
+    <p>El usability testing moderado involucra facilitador guiando participantes através de tareas mientras observa y toma notas. El proceso típico: reclutar 5-8 participantes representando usuarios target (Jakob Nielsen demostró que 5 usuarios identifican ~85% de problemas de usabilidad), preparar scenarios y tareas realistas, conducir sesiones individualmente (típicamente 60-90 minutos), observar sin intervenir (evitar leading questions), y analizar resultados identificando patterns.</p>
+
+    <p>El think-aloud protocol pide a participantes verbalizar pensamientos durante tareas: "Estoy buscando el botón submit... no lo veo aquí... maybe está abajo... oh, ahí está pero es difícil de ver". Esto revela confusiones que métricas cuantitativas no capturan. Las preguntas post-task sondean experiencia: "¿Qué fue más confuso?", "¿Qué te gustó?", "¿Cómo compara con [competidor]?". El facilitador debe ser neutral, evitando bias ("¿Por qué no clickeaste el botón obviamente visible?" → "¿Cómo decidiste qué hacer aquí?").</p>
+
+    <h3>4.2. Heuristic Evaluation y Expert Review</h3>
+    <p>La heuristic evaluation involucra 3-5 evaluadores expertos inspeccionando interface independientemente contra heurísticas establecidas (típicamente las 10 de Nielsen). Cada evaluador genera lista de problemas con severidad rating: 0 (no problema), 1 (cosmético), 2 (minor), 3 (major), 4 (catastrófico). Los evaluadores luego consolidan findings, discutiendo discrepancias. La ventaja es rapidez (días versus semanas para usability testing) y cost (expertos versus reclutar participantes). La desventaja es no revelar problemas que solo usuarios reales encuentran.</p>
+
+    <p>El severity rating considera tres factores: frequency (cuántos usuarios afectados), impact (cuán difícil trabajar alrededor del problema), y persistence (one-time o repeated problem). Un problema afectando todos usuarios, bloqueando tarea crítica, y ocurriendo repetidamente es severidad 4. Un visual inconsistency minor afectando pocos usuarios es severidad 1. El severity guía priorización: arreglar issues severidad 4 antes de launch, considerar severidad 3, address severidad 1-2 si tiempo permite.</p>
+
+    <h3>4.3. A/B Testing y Experimentación</h3>
+    <p>El A/B testing compara dos variantes (A control, B treatment) midiendo métricas objetivas. Los usuarios se asignan aleatoriamente a variante, sus comportamientos se rastrean, y análisis estadístico determina si diferencias son significativas. Por ejemplo, testar color de botón CTA (Call-To-Action): 50% usuarios ven verde, 50% ven rojo, medir cuál genera más clicks. Los A/B tests responden preguntas específicas con data cuantitativa, complementando insights cualitativos de usability testing.</p>
+
+    <p>Las mejores prácticas incluyen: testear una variable a la vez (multiple changes confunden causación), definir métrica primary (e.g., conversion rate) y métricas secondary (e.g., bounce rate, time on page), calcular sample size necesario para significance estadística (típicamente miles de usuarios), ejecutar test suficiente tiempo (account para variabilidad día/semana), y evitar peeking (mirar resultados mid-test incrementa false positives). Las herramientas como Optimizely, VWO, y Google Optimize facilitan setup y análisis.</p>
+
+    <p>Los multivariate tests testean múltiples variables simultáneamente (e.g., color de botón, texto, ubicación), identificando combinación óptima. Sin embargo, requieren traffic significativamente mayor: testar 3 variables con 2 opciones cada una = 8 variantes, necesitando 8x el sample size de A/B test simple. Los MVTs son apropiados para sites high-traffic; startups típicamente benefician más de A/B tests secuenciales.</p>
     <h2>5. Experiencia de Usuario (UX)</h2>
     <p>La UX abarca percepción y respuesta completa de usuario resultante de uso o anticipación de uso de producto. UX trasciende usabilidad funcional, incluyendo aspectos emocionales, estéticos, y hedónicos. El modelo de honeycomb de Peter Morville identifica facetas: useful (proporciona valor), usable (fácil de usar), desirable (evoca emoción y apreciación), findable (contenido navegable y localizable), accessible (accesible para usuarios con discapacidades), credible (usuarios confían en contenido y company), valuable (entrega valor a sponsor y usuario). Las journey maps visualizan experiencia de usuario a través del tiempo, identificando touchpoints, emociones, y oportunidades de mejora.</p>
+
+    <h3>5.1. Aspectos Emocionales de UX</h3>
+    <p>La UX exitosa genera respuestas emocionales positivas. Don Norman distingue tres niveles de procesamiento emocional: visceral (apariencia, primera impresión), behavioral (placer y efectividad de uso), y reflective (racionalization, recuerdos, significado cultural). Apple excels en los tres: productos son visualmente hermosos (visceral), intuitivos de usar (behavioral), y representan status/identidad (reflective). El diseño emocional considera estos niveles holísticamente.</p>
+
+    <p>Las microinteracciones - detalles pequeños como animaciones, sounds, transiciones - impactan significativamente percepción. Facebook's "like" con animación sutil proporciona feedback delightful. Slack's loading messages humorísticos ("Please enjoy this lovely loading screen") humanizan experiencia durante esperas inevitables. Twitter's "pull to refresh" con animación de bird proporciona feedback visual natural. Estas microinteracciones, aunque pequeñas individualmente, acumulan a experiencia memorable y agradable.</p>
+
+    <h3>5.2. UX Metrics y Medición</h3>
+    <p>Medir UX cuantitativamente permite tracking de mejoras y justificación de inversión. El System Usability Scale (SUS) usa 10 preguntas alternando tonalidad positiva/negativa, scoring 0-100, con promedio ~68 y >80 considerado excelente. El Net Promoter Score (NPS) pregunta "¿Cuán probable recomendarías este producto?" 0-10, clasificando respondentes como Detractors (0-6), Passives (7-8), Promoters (9-10), con score NPS = %Promoters - %Detractors, rango -100 a +100.</p>
+
+    <p>Las métricas comportamentales incluyen: task success rate (porcentaje de usuarios completando tarea exitosamente), time on task (más rápido generalmente mejor, pero context matters), error rate (frecuencia de errores), bounce rate (porcentaje abandonando después de ver una página), y engagement metrics (session duration, pages per session, return frequency). Google's HEART framework organiza métricas en: Happiness (satisfaction, NPS), Engagement (usage frequency, intensity), Adoption (nuevos usuarios), Retention (churn rate), Task Success (efficiency, effectiveness, error rate).</p>
+
+    <h3>5.3. Caso de Estudio: Redesign de GOV.UK</h3>
+    <p>GOV.UK, lanzado en 2012, consolidó cientos de sitios gubernamentales UK en plataforma única con UX consistente. El problema: sitios gubernamentales fragmentados, inconsistentes, difíciles de navegar, con información crítica enterrada en PDFs. Los ciudadanos no podían encontrar información sobre taxes, benefits, licencias. El Government Digital Service adoptó principios UX: "Start with user needs", "Do less", "Design with data".</p>
+
+    <p>La investigación incluía: analytics mostrando top searches y tareas, usability testing con ciudadanos reales, identificando pain points. El diseño priorizaba simplicidad: información en plain English evitando legalese, structure según user needs no estructura gubernamental, progressive disclosure (mostrar mínimo necesario first), y responsive design (40% de tráfico era mobile). El sistema de diseño estableció patterns reutilizables asegurando consistencia.</p>
+
+    <p>Los resultados: satisfacción usuario aumentó significativamente (81% encuentran lo que necesitan), tiempo para completar tareas redujo 50-80%, savings de £300+ millones cerrando sitios legacy, y UK ganó premios internacionales, influyendo gobiernos mundialmente. El éxito demostró que incluso organizaciones grandes y complejas pueden transformar UX con compromiso, investigación usuario, e iteración continua.</p>
+
+    <div class="mermaid">
+    graph TB
+        A[Experiencia de Usuario Holística] --> B[Funcional]
+        A --> C[Emocional]
+        A --> D[Estético]
+        A --> E[Social]
+
+        B --> B1[Eficacia<br/>Eficiencia<br/>Error-free]
+        C --> C1[Satisfacción<br/>Delight<br/>Trust]
+        D --> D1[Visual appeal<br/>Brand alignment<br/>Consistency]
+        E --> E1[Status<br/>Comunidad<br/>Sharing]
+
+        B1 --> F[UX Excepcional]
+        C1 --> F
+        D1 --> F
+        E1 --> F
+
+        F --> G[Adoption]
+        F --> H[Engagement]
+        F --> I[Loyalty]
+        F --> J[Advocacy]
+    </div>
+
     <h2>6. Diseño Responsive y Accesibilidad</h2>
     <p>El diseño responsive adapta interfaces a diferentes tamaños de pantalla y dispositivos mediante layouts flexibles, media queries, y progressive enhancement. Los principios mobile-first diseñan primero para pantallas pequeñas, añadiendo complejidad para pantallas mayores. La accesibilidad asegura que sistemas sean usables por personas con discapacidades. WCAG (Web Content Accessibility Guidelines) define criterios de accesibilidad en niveles A, AA, AAA. Las prácticas incluyen alt text para imágenes, estructura semántica HTML, navegación por teclado, suficiente contraste de color, y compatibilidad con screen readers. La accesibilidad beneficia todos: diseños accesibles típicamente resultan más usables universalmente. Las legislaciones en diversos países exigen accesibilidad para sitios gubernamentales y servicios públicos.</p>
+
+    <h3>6.1. Responsive Web Design</h3>
+    <p>Ethan Marcotte acuñó "Responsive Web Design" en 2010, definiendo tres componentes técnicos: fluid grids (layouts usando proporciones relativas % vs. píxeles fijos), flexible images (escalan con container), y media queries (aplican CSS según características de device). El approach permite una codebase sirviendo todos devices versus m.sitio.com separado. Bootstrap, Foundation, y Tailwind proporcionan grids responsive y componentes out-of-the-box.</p>
+
+    <p>Mobile-first invierte enfoque tradicional: diseñar primero para móvil (constraints fuerzan priorización), luego progressive enhancement para pantallas mayores. Las ventajas: performance (mobile default es lightweight), usabilidad (diseño simple funciona everywhere), y crecimiento de mobile traffic (>50% globalmente). Los breakpoints típicos: mobile (<768px), tablet (768-1024px), desktop (>1024px), pero deben basarse en contenido no devices específicos.</p>
+
+    <h3>6.2. Web Content Accessibility Guidelines (WCAG)</h3>
+    <p>WCAG 2.1 organiza criterios en cuatro principios: <strong>Perceivable</strong> (información presentable a usuarios en formas perceptibles), <strong>Operable</strong> (componentes UI y navegación operables), <strong>Understandable</strong> (información y operación de UI comprensibles), <strong>Robust</strong> (contenido robusto interpretable por variety de user agents incluyendo assistive technologies).</p>
+
+    <p>Los niveles de conformance: Level A (basic accessibility, fallas causan imposibilidad de acceso), Level AA (aborda barriers mayores, típicamente required por legislaciones), Level AAA (enhancements adicionales). Los criterios específicos incluyen: 1.1.1 Non-text Content (proporcionar alt text), 1.4.3 Contrast (ratio mínimo 4.5:1 para texto normal, 3:1 para texto grande), 2.1.1 Keyboard (funcionalidad disponible via teclado), 2.4.7 Focus Visible (indicador visible de focus), 3.3.1 Error Identification (errores identificados y descritos), 4.1.2 Name, Role, Value (componentes tienen names/roles programmatically determinable).</p>
+
+    <h3>6.3. Assistive Technologies y Testing</h3>
+    <p>Las assistive technologies incluyen: screen readers (JAWS, NVDA, VoiceOver) leyendo contenido en voz alta, screen magnifiers para visión reducida, speech recognition para input hands-free, y switch devices para usuarios con movilidad limitada. El diseño accesible considera estas technologies: semántico HTML (headings h1-h6 estructuran documento, labels asocian con inputs, roles ARIA para widgets custom), keyboard navigation (todos controles accesibles via Tab, Enter, Arrow keys), y live regions (anuncian cambios dinámicos).</p>
+
+    <p>El testing de accesibilidad combina automated y manual: herramientas como axe, WAVE, Lighthouse identifican problemas comunes (missing alt text, contraste insuficiente), pero ~30-40% de issues requieren testing manual. El testing con screen reader revela problemas que automated tools no detectan: orden de navegación confuso, labels ambiguos, dynamic content no anunciado. El testing con usuarios con discapacidades proporciona insights invaluables que ningún testing expert captura completamente.</p>
+
+    <h2>7. Ejercicios Prácticos</h2>
+
+    <h3>Ejercicio 1: Heuristic Evaluation</h3>
+    <p><strong>Objetivo:</strong> Realizar evaluación heurística de aplicación web identificando problemas de usabilidad.</p>
+    <p><strong>Sitio a evaluar:</strong> Seleccionar un sitio de e-commerce conocido (Amazon, MercadoLibre, o similar) o aplicación de su elección.</p>
+    <p><strong>Tareas:</strong></p>
+    <ol>
+        <li>Revisar las 10 heurísticas de usabilidad de Nielsen.</li>
+        <li>Inspeccionar el sitio sistemáticamente, evaluando contra cada heurística.</li>
+        <li>Documentar problemas encontrados con: screenshot, heurística violada, descripción del problema, severidad rating (0-4), y recomendación de solución.</li>
+        <li>Identificar mínimo 10 problemas, priorizados por severidad.</li>
+        <li>Para 3 problemas de mayor severidad, crear mockups mostrando solución propuesta.</li>
+    </ol>
+    <p><strong>Entregable:</strong> Reporte de evaluación heurística (3-4 páginas) con tabla de problemas, severities, screenshots, y mockups de soluciones prioritarias.</p>
+
+    <h3>Ejercicio 2: Usability Testing Plan</h3>
+    <p><strong>Contexto:</strong> Una startup lanzará aplicación móvil para gestión de finanzas personales (tracking gastos, budgets, metas de ahorro).</p>
+    <p><strong>Tareas:</strong></p>
+    <ol>
+        <li>Definir objetivos de usability testing (¿Qué aspectos testear? ¿Qué preguntas responder?).</li>
+        <li>Definir perfil de participantes (demographics, nivel de tech savviness, experiencia con apps similares) y plan de reclutamiento.</li>
+        <li>Crear 5 scenarios y tareas representando casos de uso críticos (e.g., "Acabas de comprar café por $5. Registra este gasto en la app").</li>
+        <li>Definir métricas a recopilar: cuantitativas (task success rate, time, errors) y cualitativas (quotes, observaciones).</li>
+        <li>Crear script para moderador incluyendo introducción, tareas, preguntas follow-up.</li>
+        <li>Diseñar template para documentar findings durante sesiones.</li>
+    </ol>
+    <p><strong>Entregable:</strong> Plan completo de usability testing (4-5 páginas) listo para ejecutar, incluyendo todos los elementos listados.</p>
+
+    <h3>Ejercicio 3: Accessibility Audit y Remediation</h3>
+    <p><strong>Objetivo:</strong> Auditar accesibilidad de página web y proponer remediaciones.</p>
+    <p><strong>Tareas:</strong></p>
+    <ol>
+        <li>Seleccionar página web (puede ser sitio público o crear página HTML simple de ejemplo).</li>
+        <li>Ejecutar automated audit con herramientas: Lighthouse (Chrome DevTools), axe DevTools, y WAVE.</li>
+        <li>Documentar issues identificados organizados por categoría WCAG (Perceivable, Operable, Understandable, Robust).</li>
+        <li>Realizar manual testing: navegar sitio solo con teclado, usar screen reader (VoiceOver en Mac, NVDA en Windows), verificar contraste de colores.</li>
+        <li>Priorizar issues por severidad y impact en usuarios.</li>
+        <li>Para top 5 issues, proponer solución técnica específica (código HTML/CSS/JS o description detallada).</li>
+        <li>Crear antes/después mostrando mejoras propuestas.</li>
+    </ol>
+    <p><strong>Entregable:</strong> Reporte de accessibility audit (4-5 páginas) con findings, severities, soluciones propuestas con código/mockups, y plan de implementación priorizado.</p>
     <div class="highlight-box">
         <h3>Resumen</h3>
         <p>Esta clase ha explorado usabilidad y experiencia de usuario, cubriendo fundamentos de usabilidad, principios de diseño de interacción, proceso de diseño centrado en usuario, evaluación de usabilidad, conceptos de UX, y diseño responsive/accesibilidad. La UX de calidad impacta directamente éxito de productos de software.</p>

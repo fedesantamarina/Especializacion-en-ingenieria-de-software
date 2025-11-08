@@ -6,19 +6,263 @@
     </div>
     <h2>1. Manifiesto Ágil y Principios</h2>
     <p>El Manifiesto Ágil, formulado en 2001 por 17 practicantes, establece cuatro valores fundamentales: individuos e interacciones sobre procesos y herramientas, software funcionando sobre documentación exhaustiva, colaboración con el cliente sobre negociación contractual, y responder al cambio sobre seguir un plan. Los 12 principios guían implementación: satisfacción del cliente mediante entrega temprana y continua, bienvenida a cambios incluso tardíos, entrega frecuente de software funcionando, colaboración diaria entre negocio y desarrolladores, equipos motivados con confianza y soporte, conversación cara a cara, software funcionando como medida principal de progreso, desarrollo sostenible, excelencia técnica, simplicidad, equipos auto-organizados, y reflexión y ajuste regular.</p>
+
+    <h3>1.1. Contexto Histórico: De Waterfall a Agilidad</h3>
+    <p>El desarrollo de software tradicional, basado en el modelo Waterfall documentado por Winston Royce en 1970, asumía que los requisitos podían ser completamente especificados al inicio y que cambios posteriores eran costosos de acomodar. Este enfoque funcionaba razonablemente en proyectos de ingeniería tradicional (construcción, manufactura) donde el cambio físico es genuinamente costoso. Sin embargo, en software, donde el cambio es principalmente intelectual en lugar de físico, este modelo resultaba inadecuado.</p>
+
+    <p>Durante los años 90, emergieron múltiples metodologías que cuestionaban Waterfall: Scrum (Schwaber y Sutherland, 1995), Extreme Programming (Kent Beck, 1996), Crystal Methods (Alistair Cockburn), Feature-Driven Development, Dynamic Systems Development Method (DSDM). Estas metodologías compartían valores comunes pero diferían en prácticas específicas. En febrero 2001, 17 practicantes se reunieron en Snowbird, Utah, buscando articular principios comunes. El resultado fue el Manifiesto Ágil, un documento conciso que capturó la esencia compartida sin prescribir prácticas específicas.</p>
+
+    <h3>1.2. Los Cuatro Valores: Interpretación Profunda</h3>
+    <p>El primer valor, "Individuos e interacciones sobre procesos y herramientas", no rechaza procesos ni herramientas, sino que prioriza la comunicación humana. Los procesos deben servir al equipo, no al contrario. Herramientas sofisticadas no compensan comunicación deficiente. Como observa Alistair Cockburn, el medio más eficiente de comunicación es conversación cara a cara frente a un whiteboard. Sin embargo, en equipos distribuidos, las herramientas de colaboración (video conferencing, boards compartidos) resultan críticas, demostrando que el valor no es absoluto sino contextual.</p>
+
+    <p>El segundo valor, "Software funcionando sobre documentación exhaustiva", reconoce que documentación tiene valor pero no sustituye software que funciona. Los modelos y documentos son abstracciones que inevitablemente divergen de la realidad del código. Software funcionando proporciona feedback concreto imposible de obtener de documentos. Esto no implica cero documentación; documentación apropiada (README, arquitectura de alto nivel, APIs públicas) tiene valor. La clave es documentar lo esencial y evitar documentación que se desactualiza rápidamente.</p>
+
+    <p>El tercer valor, "Colaboración con el cliente sobre negociación contractual", aborda la naturaleza de la relación cliente-proveedor. Los contratos tradicionales de fixed-scope/fixed-price crean relaciones adversarias donde cambios generan disputes contractuales. La filosofía ágil propone contratos colaborativos donde cliente y equipo trabajan juntos para maximizar valor. En la práctica, esto puede implementarse mediante contratos time-and-materials con governance apropiada, o contratos de múltiples releases donde scope puede ajustarse entre releases.</p>
+
+    <p>El cuarto valor, "Responder al cambio sobre seguir un plan", reconoce que en dominios complejos e inciertos, los planes detallados se invalidan rápidamente. Invertir extensivamente en planeamiento up-front genera costos hundidos cuando la realidad difiere. La agilidad propone planeamiento adaptativo: planear suficiente para el horizonte cercano, mantener opciones abiertas para el futuro. Esto requiere arquitecturas que faciliten cambio (bajo acoplamiento, alta cohesión) y prácticas técnicas que reduzcan el costo del cambio (tests automatizados, refactoring continuo).</p>
+
+    <h3>1.3. Los 12 Principios: Guías para la Implementación</h3>
+    <p>Los 12 principios del Manifiesto Ágil proporcionan guías más concretas que los valores abstractos. El primero, "Nuestra mayor prioridad es satisfacer al cliente mediante la entrega temprana y continua de software con valor", establece que el objetivo no es seguir un plan sino entregar valor. Entrega temprana permite feedback rápido; entrega continua mantiene el momentum y trust del cliente. Esto requiere capacidad de despliegue frecuente, implicando automatización extensiva.</p>
+
+    <p>El principio "Aceptamos que los requisitos cambien, incluso en etapas tardías del desarrollo", invierte la sabiduría convencional que veía cambios tardíos como fallas del proceso. La agilidad reconoce que en dominios complejos, el entendimiento emerge mediante experimentación. Los requisitos iniciales son hipótesis que se validan o refutan mediante implementación. Acomodar cambios requiere arquitectura flexible y prácticas que minimicen el costo del cambio.</p>
+
+    <p>El principio "La atención continua a la excelencia técnica y al buen diseño mejora la agilidad" resulta frecuentemente malinterpretado. Algunos equipos entienden "ágil" como "rápido y sucio", sacrificando calidad por velocidad. Sin embargo, el manifiesto explícitamente establece que excelencia técnica habilita agilidad: código limpio, bien diseñado, con tests comprehensivos permite cambios rápidos y seguros. Deuda técnica reduce agilidad incrementando el costo del cambio. Kent Beck enfatiza que "agilidad no es excusa para falta de disciplina; agilidad requiere disciplina extraordinaria".</p>
+
+    <div class="mermaid">
+    graph TB
+        subgraph "Valores Ágiles"
+            V1[Individuos e Interacciones<br/>sobre<br/>Procesos y Herramientas]
+            V2[Software Funcionando<br/>sobre<br/>Documentación Exhaustiva]
+            V3[Colaboración con Cliente<br/>sobre<br/>Negociación Contractual]
+            V4[Responder al Cambio<br/>sobre<br/>Seguir un Plan]
+        end
+
+        subgraph "Prácticas Habilitadoras"
+            P1[Comunicación<br/>Cara a Cara]
+            P2[Tests Automatizados<br/>CI/CD]
+            P3[Entregas Frecuentes<br/>Feedback Temprano]
+            P4[Arquitectura<br/>Evolutiva]
+        end
+
+        V1 --> P1
+        V2 --> P2
+        V3 --> P3
+        V4 --> P4
+
+        style V1 fill:#e1f5ff
+        style V2 fill:#e1f5ff
+        style V3 fill:#e1f5ff
+        style V4 fill:#e1f5ff
+    </div>
     <h2>2. Scrum Framework</h2>
     <p>Scrum estructura desarrollo en sprints de tiempo fijo (típicamente 2-4 semanas). Los roles incluyen Product Owner (maximiza valor del producto, gestiona backlog), Scrum Master (facilita proceso, remueve impedimentos), y Development Team (auto-organizado, cross-functional). Los artefactos incluyen Product Backlog (lista priorizada de trabajo), Sprint Backlog (trabajo seleccionado para sprint), e Increment (versión funcional del producto). Los eventos incluyen Sprint Planning (planificar sprint), Daily Scrum (sincronización diaria de 15min), Sprint Review (demostrar increment), y Sprint Retrospective (mejorar proceso). Scrum enfatiza inspección y adaptación continuas, transparencia, y entrega incremental de valor.</p>
+
+    <h3>2.1. Los Tres Roles de Scrum: Responsabilidades y Dinámica</h3>
+    <p>El Product Owner (PO) es responsable de maximizar el valor del producto y del trabajo del Development Team. Sus responsabilidades incluyen definir y comunicar la visión del producto, gestionar el Product Backlog (priorizar items, refinarlos, asegurar que están listos), y tomar decisiones sobre qué funcionalidad se construye y cuándo se libera. El PO debe estar disponible para el equipo, clarificando requisitos y aceptando o rechazando trabajo completado. Un antipatrón común es el PO que actúa como proxy del cliente real en lugar de tener autoridad para tomar decisiones, creando cuellos de botella.</p>
+
+    <p>El Scrum Master (SM) es un líder servicial responsable de asegurar que Scrum se entiende y ejecuta apropiadamente. El SM facilita eventos Scrum, remueve impedimentos que bloquean al equipo, protege al equipo de distracciones externas, y coaching al equipo y organización en prácticas ágiles. El SM no es un project manager tradicional que asigna tareas; en cambio, facilita auto-organización del equipo. Un error común es que el SM actúe como manager jerárquico, erosionando la auto-organización que Scrum busca fomentar.</p>
+
+    <p>El Development Team, de 3-9 personas, es auto-organizado y cross-functional, poseyendo todas las habilidades necesarias para entregar un Increment funcional sin dependencias externas. No existen sub-roles o títulos dentro del equipo; todos son "developers" independientemente de su especialización. El equipo colectivamente decide cómo organizar el trabajo y es responsable de la calidad. Esta estructura promueve flexibilidad: si un miembro está bloqueado, otros pueden ayudar. Sin embargo, requiere T-shaped professionals: personas con profundidad en un área y amplitud para contribuir en otras.</p>
+
+    <h3>2.2. El Flujo del Sprint: De Planning a Retrospective</h3>
+    <p>El Sprint Planning inicia cada sprint con dos preguntas: "¿Qué se puede entregar en este sprint?" y "¿Cómo se logrará el trabajo necesario?". El Product Owner presenta backlog items priorizados, el equipo estima y selecciona cuánto puede comprometerse basándose en velocidad histórica. El equipo descompone items seleccionados en tareas técnicas. El resultado es un Sprint Goal (objetivo conciso del sprint) y Sprint Backlog (items y tareas). Un error común es planning excesivamente detallado; suficiente detalle para comenzar es apropiado, el detalle emerge durante el sprint.</p>
+
+    <p>El Daily Scrum, reunión de 15 minutos al mismo tiempo y lugar cada día, permite sincronización. Cada miembro responde tres preguntas: qué hice ayer, qué haré hoy, qué obstáculos enfrento. El objetivo no es reportar status a un manager sino coordinar entre pares. Los impedimentos identificados se resuelven fuera del Daily Scrum, típicamente por el Scrum Master. Un antipatrón es transformar el Daily en reunión de reporte donde el Scrum Master interroga individuos; esto mina auto-organización y ownership.</p>
+
+    <p>El Sprint Review, al final del sprint, es una sesión colaborativa donde el equipo demuestra el Increment a stakeholders. Los asistentes inspeccionan lo construido y adaptan el Product Backlog basándose en feedback. El Review no es mera demostración pasiva; es una working session donde se discute qué funcionó, qué problemas surgieron, y qué hacer a continuación. La conversación sobre Product Backlog ajustado al contexto emergente es crítica. Organizaciones que omiten o degradan el Review pierden feedback valioso.</p>
+
+    <p>La Sprint Retrospective, después del Review, permite al equipo inspeccionar cómo trabajó y crear un plan de mejoras. El equipo discute qué salió bien, qué podría mejorarse, y qué mejoras implementar en el próximo sprint. La Retrospective operacionaliza la mejora continua. Técnicas como "Start-Stop-Continue", "Mad-Sad-Glad", y "Sailboat" estructuran la conversación. Un error es retrospectivas ritualizadas sin seguimiento: identificar mejoras sin implementarlas genera cinismo. El Scrum Master debe asegurar que mejoras acordadas se rastrean e implementan.</p>
+
+    <div class="mermaid">
+    graph LR
+        PB[Product Backlog<br/>Priorizado por PO]
+        SP[Sprint Planning<br/>Seleccionar Items]
+        SB[Sprint Backlog<br/>Tareas del Sprint]
+        DS[Daily Scrum<br/>Sincronización 15min]
+        Dev[Desarrollo<br/>2-4 semanas]
+        Inc[Increment<br/>Potencialmente Liberable]
+        SR[Sprint Review<br/>Demo y Feedback]
+        Ret[Retrospective<br/>Mejora del Proceso]
+
+        PB --> SP
+        SP --> SB
+        SB --> Dev
+        Dev --> DS
+        DS --> Dev
+        Dev --> Inc
+        Inc --> SR
+        SR --> Ret
+        Ret --> PB
+
+        style Inc fill:#e1ffe1
+        style Ret fill:#ffe1e1
+    </div>
+
+    <h3>2.3. Métricas Scrum: Velocity, Burndown, y Más</h3>
+    <p>La Velocity mide cuántos story points (o items de backlog) el equipo completa por sprint. Tracking velocity a través de múltiples sprints permite forecasting: si la velocity promedio es 40 points y quedan 200 points en el backlog, se estiman 5 sprints restantes. Sin embargo, velocity no debe usarse para comparar equipos (puntos no son absolutos ni transferibles), ni para presionar equipos a aumentar números (esto incentiva inflación de estimaciones). Velocity es herramienta de planeamiento, no KPI de performance.</p>
+
+    <p>El Burndown Chart visualiza trabajo restante versus tiempo. Un Sprint Burndown muestra story points restantes día a día en el sprint; idealmente, la línea desciende hasta cero al final. Un Release Burndown muestra trabajo restante sprint a sprint hacia un release. Los burndowns revelan tendencias: si la línea no desciende, el equipo está agregando scope o subestimando. Burndowns son transparencia visual valiosa. Sin embargo, algunos equipos prefieren Burnup Charts que muestran trabajo completado y scope total, haciendo visibles los cambios de scope.</p>
+
+    <p>Otras métricas útiles incluyen Lead Time (tiempo desde que un item entra al backlog hasta que se completa) y Cycle Time (tiempo desde que se comienza a trabajar en un item hasta que se completa). Estas métricas de flujo, popularizadas por Kanban, aplican también a Scrum. Cumulative Flow Diagrams visualizan cuánto trabajo está en cada estado (To Do, In Progress, Done) a través del tiempo, revelando cuellos de botella. La clave es usar métricas para inspeccionar y adaptar, no para culpar o micromanagear.</p>
+
+    <h3>2.4. Caso de Estudio: Implementación de Scrum en Spotify</h3>
+    <p>Spotify implementó Scrum pero lo adaptó a su contexto, creando el "Modelo Spotify" que ha influenciado ampliamente. Spotify organizó equipos como "Squads" (equivalente a Scrum Teams) de 6-12 personas, cada uno con misión de largo plazo, autonomía completa, y ownership end-to-end de una funcionalidad. Múltiples Squads trabajando en áreas relacionadas forman "Tribes" (hasta 100 personas). Los "Chapters" agrupan personas con skills similares a través de Squads (ej: todos los DBAs) para compartir conocimiento. Los "Guilds" son comunidades de interés a través de toda la organización.</p>
+
+    <p>Los Squads no todos usan Scrum estrictamente; algunos emplean Kanban, otros híbridos. La filosofía es autonomía sobre uniformidad: cada Squad elige sus prácticas apropiadas para su contexto. Sin embargo, todos comparten principios comunes: equipos autónomos, entrega continua, mejora continua, alineación mediante objetivos (OKRs) en lugar de backlogs centralizados. Spotify también enfatiza "fail-friendly culture": experimentar es valorado, fallos son oportunidades de aprendizaje, no razones para castigo.</p>
+
+    <p>Sin embargo, Henrik Kniberg, uno de los arquitectos del modelo, advierte contra adoptar "Spotify Model" como framework prescriptivo. Lo que funciona para Spotify en su contexto no necesariamente funciona para otras organizaciones. El mensaje clave no es copiar la estructura específica, sino adoptar los principios: autonomía de equipos, alineación mediante propósito, cultura de experimentación, y evolución continua. Como dice Kniberg: "El Modelo Spotify es un ejemplo de cómo una organización adaptó Scrum a su contexto, no un framework para copiar".</p>
     <h2>3. Extreme Programming (XP)</h2>
     <p>XP enfatiza excelencia técnica mediante prácticas como Test-Driven Development (escribir tests antes que código), Pair Programming (dos desarrolladores en una máquina), Continuous Integration (integrar cambios frecuentemente), Refactoring continuo (mejorar diseño incrementalmente), Simple Design (implementar solo lo necesario), Coding Standards (consistencia en estilo), Collective Code Ownership (cualquiera puede modificar cualquier código), Sustainable Pace (evitar overtime), Customer On-Site (acceso directo a cliente), Small Releases (entregas frecuentes). XP reconoce que excelencia técnica habilita agilidad: diseño limpio, tests comprehensivos, y refactoring continuo permiten responder rápidamente a cambios.</p>
+
+    <h3>3.1. Test-Driven Development: Red-Green-Refactor</h3>
+    <p>Test-Driven Development (TDD), popularizado por Kent Beck, invierte el flujo tradicional de escribir código y luego tests. En TDD, primero se escribe un test que falla (Red), luego se escribe el código mínimo para hacer pasar el test (Green), y finalmente se refactoriza el código manteniendo los tests pasando (Refactor). Este ciclo Red-Green-Refactor se repite continuamente. Los beneficios incluyen: diseño emergente guiado por casos de uso reales, cobertura de tests comprehensiva como efecto secundario natural, confianza para refactorizar sin miedo a romper funcionalidad, y especificación ejecutable del comportamiento esperado.</p>
+
+    <p>TDD resulta contraintuitivo inicialmente: parece más lento escribir tests primero. Sin embargo, estudios empíricos muestran que después de la curva de aprendizaje inicial, TDD no reduce significativamente velocidad y mejora calidad medida por defectos en producción. Microsoft Research reportó que equipos usando TDD produjeron código con 40-90% menos defectos que equipos control, con overhead de tiempo de 15-35%. El retorno sobre inversión es claro cuando se considera el costo de defectos en producción versus el costo de escribir tests.</p>
+
+    <p>Sin embargo, TDD presenta desafíos. Tests frágiles que rompen con cambios menores en implementación generan overhead de mantenimiento. Esto típicamente indica que tests están acoplados a implementación en lugar de comportamiento. El principio es testear el "qué" (comportamiento visible), no el "cómo" (detalles de implementación). Mocking extensivo puede indicar diseño sub-óptimo; si una clase requiere muchos mocks para testearse, probablemente tiene demasiadas dependencias. TDD funciona mejor con diseño de bajo acoplamiento y alta cohesión.</p>
+
+    <h3>3.2. Pair Programming y Collective Code Ownership</h3>
+    <p>Pair Programming involucra dos desarrolladores trabajando en una computadora: el "driver" escribe código mientras el "navigator" revisa, sugiere, y piensa estratégicamente. Los roles se intercambian frecuentemente. Los beneficios incluyen: revisión de código continua en tiempo real, transferencia de conocimiento inmediata, menos distracciones (dos personas mantienen enfoque), mejor diseño mediante conversación, y reducción de bloqueadores (si uno está atascado, el otro puede ayudar). Estudios muestran que pair programming produce código de mayor calidad con overhead de tiempo menor al anticipado (típicamente 15% más tiempo, no el 100% que se esperaría).</p>
+
+    <p>Sin embargo, pair programming requiere habilidades interpersonales. Personalidades dominantes pueden suprimir aportes del compañero. Disparidad de habilidades puede crear frustración: el expert puede impacientarse, el novice puede intimidarse. Las mejores prácticas incluyen rotar pares frecuentemente para distribuir conocimiento, establecer normas de comunicación respetuosa, y reconocer que no todo trabajo requiere pairing (research spikes, tareas administrativas pueden hacerse solo). Algunas organizaciones emplean pairing selectivo: pair en código crítico o complejo, no en todo.</p>
+
+    <p>Collective Code Ownership complementa pair programming: cualquier desarrollador puede modificar cualquier código. No existen silos donde solo ciertos developers pueden tocar cierto código. Esto previene cuellos de botella cuando el "dueño" del código está ausente, distribuye conocimiento del sistema, y permite que el mejor-posicionado para hacer un cambio lo haga independientemente de quién originalmente escribió el código. Sin embargo, requiere disciplina: standards de código consistentes, tests comprehensivos para detectar regresiones, y code reviews (explícitos o via pairing) para mantener calidad.</p>
+
+    <h3>3.3. Simple Design y Refactoring Continuo</h3>
+    <p>XP enfatiza Simple Design: implementar la solución más simple que funciona, sin complejidad especulativa. Los cuatro criterios de Simple Design según Kent Beck: (1) Pasa todos los tests; (2) Revela intención (código auto-explicativo); (3) No duplicación (DRY); (4) Elementos mínimos (no código muerto, abstracciones innecesarias). Este enfoque contrasta con Big Design Up Front donde se diseña extensivamente anticipando requisitos futuros. Simple Design asume que los requisitos evolucionarán impredeciblemente; invertir en diseño para requisitos que pueden no materializarse es desperdicio.</p>
+
+    <p>Refactoring continuo complementa Simple Design: mejorar el diseño del código existente sin cambiar su comportamiento observable. Refactoring combate la degradación inevitable del diseño a medida que se agregan features. Martin Fowler catalogó refactorings comunes: Extract Method, Move Method, Rename Variable, Introduce Parameter Object. Los IDEs modernos automatizan muchos refactorings, reduciendo riesgo. Sin embargo, tests comprehensivos son prerrequisito: sin tests, refactoring es arriesgado ya que no hay forma automática de verificar que comportamiento se preservó.</p>
+
+    <p>El debate entre Simple Design y Arquitectura Anticipatoria refleja diferentes contextos. Para startups explorando product-market fit donde pivots son comunes, Simple Design maximiza adaptabilidad. Para sistemas embedded o de seguridad crítica donde cambios post-deployment son costosos, más planeamiento arquitectónico up-front se justifica. La sabiduría es reconocer el contexto y adaptar las prácticas apropiadamente, evitando dogmatismo.</p>
     <h2>4. Kanban y Lean Software Development</h2>
     <p>Kanban visualiza flujo de trabajo mediante tableros con columnas representando estados (To Do, In Progress, Done). Los límites WIP (Work In Progress) restringen cuántos ítems pueden estar en cada estado simultáneamente, revelando cuellos de botella y promoviendo flujo continuo. Kanban enfatiza flujo continuo en lugar de iteraciones fijas. Lean Software Development adapta principios Lean manufacturing: eliminar desperdicio, amplificar aprendizaje, decidir lo más tarde posible, entregar lo más rápido posible, empoderar al equipo, construir integridad, ver el todo. Las herramientas Lean incluyen Value Stream Mapping para identificar desperdicios y optimizar flujo.</p>
+
+    <h3>4.1. Principios de Kanban: Visualización y Límites WIP</h3>
+    <p>Kanban, adaptado de manufactura Lean Toyota por David Anderson para desarrollo de software, se basa en principios simples pero poderosos. Primero, visualizar el flujo de trabajo mediante un board con columnas representando estados (Backlog, Analysis, Development, Testing, Done). Cada item de trabajo se representa como tarjeta que fluye de izquierda a derecha. Esta visualización hace explícito el trabajo en progreso, revelando cuellos de botella (columnas con acumulación) y blockers (tarjetas que no avanzan).</p>
+
+    <p>Segundo, limitar Work In Progress (WIP): cada columna tiene límite máximo de items simultáneos. Si Testing tiene límite WIP de 3 y hay 3 items en testing, Development no puede mover más items a Testing hasta que Testing complete algo. Esto fuerza a que el equipo complete trabajo antes de comenzar nuevo, promoviendo flujo continuo sobre throughput aparente. Limitar WIP también revela cuellos de botella: si Testing siempre está al límite mientras Development está idle, Testing es el bottleneck. La respuesta no es aumentar el límite WIP, sino agregar capacidad a Testing o que Development ayude con testing.</p>
+
+    <p>Tercero, medir y gestionar flujo mediante métricas como Lead Time, Cycle Time, y Throughput. Lead Time mide desde que un item entra al sistema hasta que se entrega; Cycle Time mide desde que se comienza a trabajar hasta que se completa. Analizar estas métricas históricamente permite forecasting probabilístico: basado en datos históricos, podemos predecir con cierta confianza cuándo se completarán items futuros. Cumulative Flow Diagrams visualizan trabajo en cada estado a través del tiempo, revelando patrones y problemas.</p>
+
+    <h3>4.2. Kanban vs Scrum: Complementarios, No Competidores</h3>
+    <p>Kanban y Scrum frecuentemente se presentan como alternativas, pero son complementarios. Scrum proporciona estructura con roles, eventos, y artefactos específicos; Kanban proporciona principios de flujo visualización y optimización. Scrum trabaja en iteraciones de tiempo fijo (sprints); Kanban enfatiza flujo continuo sin iteraciones. Scrum requiere equipos cross-functional; Kanban puede aplicarse a equipos especializados. Scrum prescribe roles; Kanban no prescribe roles ni cambia la organización existente.</p>
+
+    <p>Muchos equipos combinan prácticas: "Scrumban" aplica tableros Kanban y límites WIP dentro de sprints Scrum, obteniendo estructura de Scrum y visualización de flujo de Kanban. La selección depende del contexto: Scrum funciona bien para desarrollo de producto con equipos dedicados; Kanban funciona bien para mantenimiento y soporte donde trabajo fluye continuamente sin iteraciones claras. Lo importante no es pureza metodológica sino efectividad pragmática.</p>
+
+    <div class="mermaid">
+    graph LR
+        subgraph "Kanban Board"
+            Backlog[Backlog<br/>∞ items]
+            Ana[Analysis<br/>WIP: 3]
+            Dev[Development<br/>WIP: 5]
+            Test[Testing<br/>WIP: 3]
+            Done[Done<br/>∞ items]
+        end
+
+        Backlog --> Ana
+        Ana --> Dev
+        Dev --> Test
+        Test --> Done
+
+        Note1[Límite WIP = 3:<br/>Max 3 items simultáneos]
+        Note2[Bottleneck visible:<br/>Testing siempre lleno]
+
+        style Test fill:#ffe1e1
+        style Done fill:#e1ffe1
+    </div>
+
+    <h3>4.3. Los Siete Desperdicios de Lean Software</h3>
+    <p>Mary y Tom Poppendieck adaptaron principios Lean manufacturing a software, identificando siete tipos de desperdicio. Partially Done Work (trabajo parcialmente completo) no entrega valor y está en riesgo de perder relevancia o requerir retrabajo. Code y documentos no integrados, features no desplegadas son ejemplos. La solución es reducir batch size y aumentar frecuencia de integración y deployment. Extra Features (características no solicitadas) son desperdicio puro: esfuerzo invertido en funcionalidad que nadie usa. El principio YAGNI (You Aren't Gonna Need It) combate esto.</p>
+
+    <p>Relearning (reaprender) ocurre cuando conocimiento se pierde y debe ser redescubierto: documentación desactualizada que debe ser reverificada, bugs recurrentes que debían haberse prevenido con tests. Task Switching (cambio de contexto) entre múltiples trabajos simultáneos reduce productividad dramáticamente; investigaciones muestran que multitasking puede reducir productividad 40%. Limitar WIP reduce task switching. Waiting (esperas) por aprobaciones, por otros equipos, por deployments crea idle time desperdiciado.</p>
+
+    <p>Handoffs entre equipos especializados (análisis a desarrollo, desarrollo a QA) crean fricción y pérdida de conocimiento. Cross-functional teams que poseen features end-to-end minimizan handoffs. Defects (defectos) son desperdicio obvio: tiempo invertido en bug fixing en lugar de nuevas features. Prácticas como TDD, continuous integration, y code review previenen defectos. Value Stream Mapping visualiza todo el proceso desde solicitud hasta entrega, identificando dónde ocurren estos desperdicios y cuánto tiempo se pierde en cada etapa, priorizando mejoras donde el impacto será mayor.</p>
     <h2>5. Scaling Agile: SAFe, LeSS, Nexus</h2>
     <p>El agilismo surgió para equipos pequeños; escalarlo a organizaciones grandes presenta desafíos. SAFe (Scaled Agile Framework) proporciona estructura prescriptiva con múltiples niveles: Team, Program (Agile Release Train coordinando múltiples equipos), Large Solution, Portfolio. LeSS (Large-Scale Scrum) mantiene simplicidad de Scrum con mínimas adiciones: múltiples equipos trabajando en un único Product Backlog, Sprint Planning de dos partes, Sprint Review común. Nexus extiende Scrum con Nexus Integration Team responsable de integración. Cada framework hace trade-offs entre prescripción/flexibilidad y estructura/agilidad. La selección depende de contexto organizacional y cultura.</p>
+
+    <h3>5.1. SAFe: Estructura Comprehensiva para Empresas</h3>
+    <p>SAFe (Scaled Agile Framework), desarrollado por Dean Leffingwell, proporciona el framework de scaling más detallado y prescriptivo. SAFe estructura la organización en cuatro niveles. El nivel Team ejecuta Scrum o Kanban estándar. El nivel Program coordina 5-12 equipos mediante Agile Release Trains (ARTs): conjuntos de equipos que trabajan sincronizados en cadencias comunes (típicamente 10 semanas), planean juntos (PI Planning), integran continuamente, y liberan juntos. El nivel Large Solution coordina múltiples ARTs para sistemas muy grandes. El nivel Portfolio alinea inversiones con estrategia mediante Lean Portfolio Management.</p>
+
+    <p>SAFe proporciona roles específicos: Release Train Engineer (facilita ART), Product Management (define visión y roadmap), System Architect (guía arquitectura técnica), Business Owners (stakeholders clave). Los eventos incluyen PI (Program Increment) Planning presencial de dos días donde todos los equipos del ART planean el próximo incremento, System Demos donde se integra y demuestra trabajo de todos los equipos, e Inspect & Adapt workshops para mejora continua. SAFe también especifica prácticas técnicas: DevOps, integración continua, arquitectura emergente con runway intencional.</p>
+
+    <p>Sin embargo, SAFe enfrenta críticas. Algunos practitioners ágiles argumentan que SAFe es "Waterfall disfrazado de Agile", demasiado prescriptivo y pesado, perdiendo la simplicidad y agilidad originales. SAFe trabaja mejor en organizaciones grandes y conservadoras que requieren estructura detallada para cambiar. Para organizaciones más innovadoras, enfoques menos prescriptivos como LeSS o modelos personalizados pueden ser más apropiados. La implementación exitosa de SAFe requiere compromiso ejecutivo, inversión significativa en training y coaching, y múltiples trimestres para ver beneficios.</p>
+
+    <h3>5.2. LeSS y Nexus: Mantener Simplicidad a Escala</h3>
+    <p>LeSS (Large-Scale Scrum), creado por Craig Larman y Bas Vodde, adopta filosofía opuesta a SAFe: agregar lo mínimo indispensable a Scrum para escalar, manteniendo simplicidad. LeSS Basic (2-8 equipos) tiene un único Product Owner con un único Product Backlog, todos los equipos trabajan en el mismo sprint, Sprint Planning tiene dos partes (qué y cómo), Sprint Review es común con todos los equipos demostrando, Overall Retrospective además de retrospectivas por equipo. LeSS Huge (más de 8 equipos) agrega Requirement Areas: divisiones del producto con Area Product Owners coordinados por un Product Owner general.</p>
+
+    <p>Nexus, framework oficial de Scrum.org, es aún más ligero que LeSS. Nexus coordina 3-9 equipos mediante un Nexus Integration Team responsable de integración continua, resolución de dependencias, y coaching técnico. Los eventos Scrum se refinan: Nexus Sprint Planning coordina planeamiento de equipos individuales, Nexus Daily Scrum sincroniza equipos, Nexus Sprint Review integra increments de todos los equipos, Nexus Retrospective identifica mejoras multi-equipo. Nexus enfatiza que problemas de scaling frecuentemente son problemas técnicos (acoplamiento, falta de CI) disfrazados de problemas de proceso.</p>
+
+    <h3>5.3. Principios de Scaling: Más Allá de Frameworks</h3>
+    <p>Independientemente del framework, ciertos principios aplican al scaling ágil. Primero, minimizar dependencias entre equipos mediante arquitectura modular, APIs estables, y bounded contexts claros. Las dependencias entre equipos requieren coordinación costosa; la mejor coordinación es la que no se necesita. Segundo, priorizar comunicación informal sobre ceremonias formales. Los mejores equipos coordinan mediante conversaciones ad-hoc, code reviews, y pair programming cross-team, no solo mediante meetings.</p>
+
+    <p>Tercero, invertir fuertemente en automatización: CI/CD, testing automatizado, infraestructura as code. Sin automatización, integrar trabajo de múltiples equipos frecuentemente es insostenible. Cuarto, mantener equipos estables con ownership de largo plazo. Constantemente reorganizar equipos destruye cohesión y conocimiento. Quinto, escalar cultura y principios, no solo prácticas. Frameworks proporcionan estructura, pero sin cultura de colaboración, transparencia, y mejora continua, las prácticas se vuelven rituales vacíos. Como dice Ron Jeffries, co-creador de XP: "No hacer Agile; ser Agile".</p>
+
     <h2>6. DevOps y Continuous Delivery</h2>
     <p>DevOps extiende agilismo más allá de desarrollo hacia operaciones, enfatizando colaboración entre development y operations. Continuous Integration compila, testea y integra cambios automáticamente. Continuous Delivery automatiza despliegue a entornos de staging. Continuous Deployment despliega automáticamente a producción. Los pipelines CI/CD automatizan build, test, y deployment. Infrastructure as Code (IaC) gestiona infraestructura mediante código versionado (Terraform, Ansible). El monitoreo y observabilidad proporcionan feedback sobre comportamiento en producción. DevOps busca acortar ciclo desde commit hasta valor en producción, mediante automatización, cultura de colaboración, y feedback rápido.</p>
+
+    <h3>6.1. Los Tres Ways de DevOps</h3>
+    <p>Gene Kim, en "The Phoenix Project", articula DevOps mediante tres principios fundamentales. The First Way es Flow: optimizar el flujo de trabajo desde desarrollo hasta producción. Esto requiere automatización de build, test, deployment; reducir batch sizes mediante entregas frecuentes; minimizar handoffs entre silos; y hacer visible el trabajo mediante value stream mapping. El objetivo es reducir lead time desde commit hasta producción de semanas a horas o minutos.</p>
+
+    <p>The Second Way es Feedback: crear loops de feedback rápidos desde producción hacia desarrollo. Esto incluye monitoreo y alerting comprehensivos, logging centralizado y searchable, distributed tracing para sistemas de microservicios, análisis de métricas de negocio, y experimentación mediante A/B testing. El feedback rápido permite detectar problemas inmediatamente y aprender del comportamiento real de usuarios. Sin feedback, los equipos operan con información desactualizada y asunciones no validadas.</p>
+
+    <p>The Third Way es Continuous Learning: crear cultura de experimentación y aprendizaje. Esto involucra time allocation para mejora técnica, blameless postmortems que tratan fallos como oportunidades de aprendizaje, gamificación de mejoras, y compartir conocimiento mediante internal tech talks y documentación. Las organizaciones DevOps exitosas ven fallos como inevitables en sistemas complejos; el objetivo no es prevenir todos los fallos sino aprender rápidamente y mejorar resiliencia.</p>
+
+    <h3>6.2. Continuous Delivery: Principios y Prácticas</h3>
+    <p>Continuous Delivery, articulado por Jez Humble y David Farley, establece que cada commit debería ser potencialmente deployable a producción. Esto requiere múltiples prácticas. Build automation mediante herramientas como Jenkins, GitLab CI, CircleCI, GitHub Actions ejecuta builds automáticamente en cada commit. Test automation con pirámide de testing: muchos tests unitarios rápidos, algunos tests de integración, pocos tests end-to-end. Los tests deben ejecutarse en menos de 10 minutos para feedback rápido.</p>
+
+    <p>Deployment automation mediante scripts, containers (Docker), y orchestrators (Kubernetes) permite deployments consistentes y reproducibles. Blue-Green deployments mantienen dos ambientes idénticos; se despliega a uno mientras el otro sirve tráfico, luego se cambia el tráfico. Canary deployments liberan cambios gradualmente a porcentaje pequeño de usuarios, monitoreando métricas, antes de rollout completo. Feature flags permiten desplegar código inactivo, activando features selectivamente post-deployment, separando deployment de release.</p>
+
+    <p>Database migrations automatizadas mediante herramientas como Flyway o Liquibase versionan esquemas. Los cambios de BD deben ser backward-compatible durante períodos de transición: agregar columnas nuevas antes de eliminar antiguas, permitiendo rollback sin data loss. Infrastructure as Code mediante Terraform, CloudFormation, o Pulumi permite provisionar infraestructura mediante código versionado, aplicable automáticamente, destruible y recreable. Esto elimina "snowflake servers" únicos y frágiles, creando infraestructura cattle no pets.</p>
+
+    <h3>6.3. Ejercicios Prácticos</h3>
+    <div class="highlight-box">
+        <h4>Ejercicio 1: Simulación de Sprint Scrum</h4>
+        <p><strong>Escenario:</strong> Ejecute un sprint completo simulado con su equipo desarrollando una funcionalidad real o de práctica.</p>
+        <p><strong>Tareas:</strong></p>
+        <ul>
+            <li>Asignen roles: Product Owner, Scrum Master, Development Team (3-5 personas).</li>
+            <li>El PO crea Product Backlog con 10-15 user stories priorizadas y estimadas (story points).</li>
+            <li>Ejecuten Sprint Planning (time-boxed 1 hora): seleccionen stories para sprint de una semana, descompongan en tareas.</li>
+            <li>Ejecuten el sprint con Daily Scrums diarios (15 min), actualizando Sprint Backlog.</li>
+            <li>Al finalizar: Sprint Review (demostración a stakeholders simulados), Sprint Retrospective (identificar mejoras).</li>
+            <li>Midan velocity lograda y comparen con commitment inicial.</li>
+        </ul>
+        <p><strong>Entregables:</strong> Sprint Backlog, Burndown Chart, Increment funcionando, documentación de Retrospective.</p>
+    </div>
+
+    <div class="highlight-box">
+        <h4>Ejercicio 2: Implementación de Pipeline CI/CD</h4>
+        <p><strong>Escenario:</strong> Configure un pipeline completo de Continuous Integration y Continuous Delivery.</p>
+        <p><strong>Tareas:</strong></p>
+        <ul>
+            <li>Seleccione proyecto existente o cree aplicación web simple (Node.js, Python Flask, Spring Boot).</li>
+            <li>Configure CI usando GitHub Actions, GitLab CI, o Jenkins: build automático, tests unitarios, linting.</li>
+            <li>Agregue tests de integración y analysis de cobertura de código.</li>
+            <li>Configure deployment automático a staging en cada commit a branch main.</li>
+            <li>Implemente deployment a producción mediante aprobación manual o automático en merge a branch production.</li>
+            <li>Agregue notifications (Slack, email) para builds fallidos y deployments exitosos.</li>
+        </ul>
+        <p><strong>Entregables:</strong> Pipeline configuration files, documentación del flujo, evidencia de deployments automáticos.</p>
+    </div>
+
+    <div class="highlight-box">
+        <h4>Ejercicio 3: Value Stream Mapping y Optimización</h4>
+        <p><strong>Escenario:</strong> Analice y optimice el proceso de desarrollo de su organización usando Value Stream Mapping.</p>
+        <p><strong>Tareas:</strong></p>
+        <ul>
+            <li>Mapee el proceso completo desde idea hasta producción: identifique todos los pasos, handoffs, aprobaciones.</li>
+            <li>Para cada paso, mida: tiempo de proceso (work time) y tiempo de espera (wait time).</li>
+            <li>Calcule Process Efficiency = Work Time / Total Lead Time. Típicamente es 10-20% en organizaciones tradicionales.</li>
+            <li>Identifique los siete desperdicios de Lean en su proceso: partially done work, extra features, relearning, handoffs, delays, task switching, defects.</li>
+            <li>Priorice mejoras por impacto potencial: eliminar mayores fuentes de wait time y waste.</li>
+            <li>Diseñe estado futuro optimizado y plan de transición incremental.</li>
+        </ul>
+        <p><strong>Entregables:</strong> Value Stream Map actual, análisis de desperdicios, Value Stream Map futuro, roadmap de mejoras.</p>
+    </div>
+
     <div class="highlight-box">
         <h3>Resumen</h3>
-        <p>Esta clase ha explorado metodologías ágiles incluyendo principios fundamentales, Scrum, XP, Kanban, frameworks de scaling, y DevOps. Las metodologías ágiles han transformado la industria del software mediante entrega iterativa, adaptación continua, y enfoque en valor del cliente.</p>
+        <p>Esta clase ha explorado metodologías ágiles incluyendo principios fundamentales del Manifiesto Ágil, Scrum con sus roles y eventos, Extreme Programming con prácticas técnicas como TDD y pair programming, Kanban y Lean con enfoque en flujo y eliminación de desperdicios, frameworks de scaling para organizaciones grandes (SAFe, LeSS, Nexus), y DevOps con Continuous Delivery para acortar ciclo desde código hasta producción. Las metodologías ágiles han transformado la industria del software mediante entrega iterativa, adaptación continua a cambio, enfoque en valor del cliente, y énfasis en excelencia técnica. Los ejercicios prácticos permiten experimentar con simulación de sprints, implementación de pipelines CI/CD, y análisis de value streams, desarrollando competencias prácticas en metodologías ágiles modernas.</p>
     </div>
     <div class="nav-buttons">
         <a href="#" class="btn btn-prev" data-clase="clase10">← Anterior</a>

@@ -5,17 +5,331 @@
         <div class="meta-item"><strong>Duración:</strong> 4 horas</div>
     </div>
     <h2>1. Ecosistemas Móviles: iOS y Android</h2>
-    <p>Los ecosistemas móviles dominantes, iOS y Android, presentan características distintivas. iOS, desarrollado por Apple, ejecuta en iPhones e iPads, enfatiza consistencia de experiencia, seguridad rigurosa, y revisión estricta de apps en App Store. El desarrollo iOS tradicionalmente usa Objective-C o Swift con Xcode en macOS. Android, desarrollado por Google, ejecuta en dispositivos de múltiples fabricantes, enfatiza apertura y customización. El desarrollo Android usa Java o Kotlin con Android Studio. Cada plataforma tiene guidelines de diseño (Human Interface Guidelines para iOS, Material Design para Android), APIs específicas, y consideraciones de fragmentación (especialmente Android con múltiples versiones de OS y tamaños de pantalla).</p>
+    <p>Los ecosistemas móviles dominantes, iOS y Android, presentan características distintivas que afectan decisiones arquitectónicas, de diseño y de negocio. iOS, desarrollado por Apple, ejecuta en iPhones e iPads, enfatiza consistencia de experiencia, seguridad rigurosa, y revisión estricta de apps en App Store. El desarrollo iOS tradicionalmente usa Objective-C o Swift con Xcode en macOS. Android, desarrollado por Google, ejecuta en dispositivos de múltiples fabricantes, enfatiza apertura y customización. El desarrollo Android usa Java o Kotlin con Android Studio. Cada plataforma tiene guidelines de diseño (Human Interface Guidelines para iOS, Material Design para Android), APIs específicas, y consideraciones de fragmentación (especialmente Android con múltiples versiones de OS y tamaños de pantalla).</p>
+
+    <h3>1.1. Comparativa de Plataformas Móviles</h3>
+    <p>La elección entre iOS y Android impacta múltiples dimensiones del desarrollo. Desde la perspectiva de market share, Android domina globalmente con aproximadamente 72% del mercado mundial, mientras iOS mantiene alrededor del 27%. Sin embargo, estos números varían significativamente por región: iOS domina en Estados Unidos, Japón y otros mercados desarrollados, mientras Android predomina en mercados emergentes. Desde una perspectiva de monetización, iOS históricamente ha generado mayores ingresos por usuario, con usuarios dispuestos a pagar más por aplicaciones y realizar más compras in-app. El ARPU (Average Revenue Per User) en iOS típicamente duplica o triplica el de Android.</p>
+
+    <p>Las diferencias técnicas entre plataformas son sustanciales. iOS ejecuta exclusivamente en hardware Apple, permitiendo optimizaciones específicas y experiencia consistente. La fragmentación de versiones es menor: según datos de Apple, típicamente el 60-70% de usuarios adoptan la última versión de iOS dentro de los primeros meses. Android, ejecutando en miles de modelos diferentes de docenas de fabricantes, enfrenta mayor fragmentación. La diversidad de tamaños de pantalla, resoluciones, capacidades de hardware y versiones de Android (con nombres como Nougat, Oreo, Pie, Android 10, 11, 12, 13) complica el testing y requiere interfaces adaptativas más robustas.</p>
+
+    <div class="mermaid">
+    graph TB
+        A[Decisión de Plataforma] --> B{Criterios de Evaluación}
+        B --> C[Market Share]
+        B --> D[Monetización]
+        B --> E[Capacidades Técnicas]
+        B --> F[Recursos del Equipo]
+
+        C --> C1[iOS: 27% global<br/>Dominante en US]
+        C --> C2[Android: 72% global<br/>Dominante en emergentes]
+
+        D --> D1[iOS: Mayor ARPU<br/>Mejor conversión]
+        D --> D2[Android: Mayor volumen<br/>Publicidad efectiva]
+
+        E --> E1[iOS: Menos fragmentación<br/>Hardware controlado]
+        E --> E2[Android: Mayor diversidad<br/>Flexibilidad]
+
+        F --> F1[Swift/Objective-C<br/>macOS requerido]
+        F --> F2[Kotlin/Java<br/>Multiplataforma]
+    </div>
+
+    <h3>1.2. Ciclo de Vida de Aplicaciones</h3>
+    <p>El ciclo de vida de una aplicación móvil difiere entre plataformas pero sigue patrones fundamentales comunes. En iOS, el ciclo comienza con application:didFinishLaunchingWithOptions: donde la app inicializa recursos. Los estados incluyen Not Running (terminada), Inactive (transición), Active (foreground ejecutando), Background (background limitado), y Suspended (background sin ejecución). Las transiciones entre estados son manejadas por métodos del App Delegate: applicationDidBecomeActive:, applicationWillResignActive:, applicationDidEnterBackground:, applicationWillEnterForeground:.</p>
+
+    <p>En Android, el ciclo de vida es manejado por Activities y Fragments con callbacks onCreate(), onStart(), onResume(), onPause(), onStop(), onDestroy(). El sistema Android puede terminar procesos background para liberar memoria, requiriendo apps que persistan estado correctamente. El método onSaveInstanceState() permite guardar estado antes de terminación potencial, mientras onRestoreInstanceState() restaura estado. Las mejores prácticas incluyen no realizar operaciones pesadas en onCreate() para evitar ANRs (Application Not Responding), manejar correctamente rotaciones de pantalla (que por defecto destruyen y recrean la Activity), y limpiar recursos en onDestroy().</p>
+
+    <div class="mermaid">
+    stateDiagram-v2
+        [*] --> NotRunning: App Launch
+        NotRunning --> Inactive: applicationWillEnterForeground
+        Inactive --> Active: applicationDidBecomeActive
+        Active --> Inactive: applicationWillResignActive
+        Inactive --> Background: applicationDidEnterBackground
+        Background --> Inactive: applicationWillEnterForeground
+        Background --> Suspended: System suspends
+        Suspended --> Background: System resumes
+        Suspended --> NotRunning: System terminates
+        Active --> [*]: User terminates
+    </div>
+
+    <h3>1.3. Caso de Estudio: Spotify Multi-Plataforma</h3>
+    <p>Spotify representa un caso ejemplar de estrategia multi-plataforma exitosa. Con más de 500 millones de usuarios, Spotify mantiene aplicaciones nativas para iOS y Android, cada una optimizada para su plataforma mientras compartiendo lógica de negocio. La arquitectura de Spotify usa un backend robusto proporcionando APIs RESTful y WebSocket para streaming en tiempo real. Las apps nativas consumen estas APIs, manejando caching sofisticado para permitir modo offline y reducir latencia.</p>
+
+    <p>Spotify adoptó una estrategia híbrida: las vistas principales (Now Playing, Browse, Search) son nativas para performance óptima y experiencia fluida, mientras ciertas secciones (como páginas promocionales y algunos menús) usan webviews con contenido HTML/CSS/JavaScript servido dinámicamente, permitiendo actualizaciones sin esperar aprobación de app store. El equipo implementó sistema de feature flags permitiendo habilitar/deshabilitar características remotamente y realizar A/B testing extensivo. Aproximadamente el 70% de usuarios participan en experimentos continuos, permitiendo decisiones basadas en datos sobre diseño, features, y UX.</p>
+
+    <p>Los desafíos incluían sincronización de estado entre dispositivos (playlists, preferencias, historial), manejo de conectividad intermitente, y optimización de battery life durante streaming prolongado. Spotify desarrolló SDKs internos compartidos entre plataformas para lógica de autenticación, cache management, y analytics, reduciendo duplicación y mejorando consistencia. Las lecciones aprendidas incluyen: invertir en infraestructura compartida reduce time-to-market para nuevas features, mantener paridad de features entre plataformas es crítico para experiencia consistente, y el testing automatizado extensivo (más de 10,000 pruebas) es esencial dado la complejidad de múltiples versiones y dispositivos.</p>
     <h2>2. Desarrollo Nativo vs. Cross-Platform</h2>
     <p>El desarrollo nativo usa lenguajes y herramientas específicos de plataforma (Swift/Objective-C para iOS, Kotlin/Java para Android), proporcionando máximo rendimiento, acceso completo a APIs de plataforma, y UX nativa. Sin embargo, requiere equipos y codebases separados. El desarrollo cross-platform usa frameworks como React Native, Flutter, o Xamarin para escribir código una vez y desplegar en múltiples plataformas. React Native usa JavaScript/React, compilando a componentes nativos. Flutter usa Dart, renderizando UI propia con alto rendimiento. Xamarin usa C# compartiendo lógica mientras permite UI específica de plataforma. Los frameworks cross-platform reducen costo pero presentan trade-offs en rendimiento, acceso a APIs, y experiencia nativa.</p>
+
+    <h3>2.1. Análisis Comparativo de Frameworks Cross-Platform</h3>
+    <p>React Native, lanzado por Facebook en 2015, revolucionó el desarrollo móvil permitiendo a desarrolladores web usar React y JavaScript para construir apps móviles. La arquitectura incluye un JavaScript runtime (JavaScriptCore en iOS, V8 en Android) ejecutando código de aplicación, un bridge comunicando entre JavaScript y código nativo, y componentes nativos renderizando UI. React Native compila componentes React a sus equivalentes nativos: un &lt;View&gt; se convierte en UIView en iOS o android.view.View en Android. Las ventajas incluyen hot reload para desarrollo rápido, vasto ecosistema npm, y familiaridad para desarrolladores React. Las desventajas incluyen overhead del bridge afectando performance en operaciones intensivas, dependencia de módulos nativos para APIs nuevas de plataforma, y complejidad de debugging atravesando JavaScript y nativo.</p>
+
+    <p>Flutter, lanzado por Google en 2017, adopta enfoque diferente. En lugar de usar componentes nativos, Flutter renderiza toda la UI usando su propio motor gráfico (Skia) compilado a código nativo. El framework usa Dart, un lenguaje optimizado para UI con compilación AOT (Ahead-of-Time) para performance nativa. Flutter incluye conjunto rico de widgets implementando Material Design (Android) y Cupertino (iOS), permitiendo apps visualmente consistentes o específicas de plataforma. Las ventajas incluyen performance cercana a nativa sin bridge, hot reload extremadamente rápido, UI consistente entre plataformas, y control completo sobre cada pixel. Las desventajas incluyen binarios más grandes (típicamente 4-8 MB base), ecosistema de packages menor que npm, y curva de aprendizaje de Dart.</p>
+
+    <p>Xamarin, adquirido por Microsoft en 2016, permite desarrollo en C# compartiendo lógica de negocio mientras usando Xamarin.iOS y Xamarin.Android para UIs específicas de plataforma, o Xamarin.Forms para UI compartida. La arquitectura compila C# a código nativo usando compilación AOT en iOS y runtime Mono en Android. Las ventajas incluyen leverage del ecosistema .NET, type safety de C#, y integración con Visual Studio. Las desventajas incluyen tamaño de app (runtime Mono añade varios MB), menor comunidad comparado con React Native/Flutter, y complejidad de algunas integraciones de plataforma.</p>
+
+    <div class="mermaid">
+    graph LR
+        A[Criterios de Selección] --> B[Performance]
+        A --> C[Developer Experience]
+        A --> D[Ecosistema]
+        A --> E[Team Skills]
+
+        B --> B1[Nativo: Máximo]
+        B --> B2[Flutter: Muy Alto]
+        B --> B3[React Native: Alto]
+        B --> B4[Xamarin: Alto]
+
+        C --> C1[Flutter: Hot Reload<br/>Widgets ricos]
+        C --> C2[React Native: Hot Reload<br/>Familiar para web]
+        C --> C3[Nativo: Xcode/Android Studio<br/>Debugging robusto]
+
+        D --> D1[React Native: npm<br/>Vastísimo]
+        D --> D2[Flutter: pub.dev<br/>Creciente]
+        D --> D3[Xamarin: NuGet<br/>.NET ecosystem]
+
+        E --> E1[Web team: React Native]
+        E --> E2[Mobile team: Nativo o Flutter]
+        E --> E3[.NET team: Xamarin]
+    </div>
+
+    <h3>2.2. Antipatrones en Desarrollo Cross-Platform</h3>
+    <p><strong>Antipatrón 1: "Write Once, Run Everywhere" Ingenuo.</strong> Asumir que código cross-platform funcionará idénticamente en todas plataformas sin ajustes es receta para problemas. Las plataformas tienen diferencias fundamentales en navegación (botón back en Android vs. swipe en iOS), guidelines de diseño, y comportamientos esperados. Las apps exitosas adaptan UX a convenciones de plataforma mientras manteniendo identidad de marca. Por ejemplo, WhatsApp usa bottom tabs en iOS siguiendo HIG, pero navegación diferente en Android siguiendo Material Design.</p>
+
+    <p><strong>Antipatrón 2: Sobre-dependencia de Plugins de Terceros.</strong> Los frameworks cross-platform frecuentemente requieren plugins nativos para acceder a funcionalidad de plataforma (cámara, geolocalización, notificaciones push). Depender excesivamente de plugins de terceros introduce riesgos: abandono de mantenimiento, bugs sin resolver, incompatibilidades con nuevas versiones de plataforma. Las mejores prácticas incluyen evaluar actividad de mantenimiento de plugin (issues, PRs, releases recientes), tener contingencia para escribir módulos nativos propios si necesario, y minimizar número de dependencias.</p>
+
+    <p><strong>Antipatrón 3: Ignorar Performance Profiling.</strong> Asumir que el framework maneja performance automáticamente lleva a apps lentas. React Native requiere optimizaciones como evitar reconciliaciones innecesarias con React.memo, FlatList virtualization, y minimizar comunicación bridge. Flutter requiere evitar rebuilds innecesarios con const constructors, uso apropiado de Keys, y ListView.builder para listas largas. El profiling temprano y continuo con herramientas como React DevTools, Flutter DevTools, o platform profilers identifica problemas antes que impacten usuarios.</p>
+
+    <h3>2.3. Caso de Estudio: Airbnb's React Native Journey</h3>
+    <p>Airbnb representa caso fascinante de adopción y eventual abandono de React Native. En 2016, Airbnb adoptó React Native buscando acelerar desarrollo móvil y compartir código entre iOS y Android. Durante dos años, construyeron características significativas con React Native, logrando compartir aproximadamente 95% de código entre plataformas en algunas features. Los beneficios realizados incluyeron desarrollo más rápido (features que tomarían semanas en nativo tomaban días en React Native), mejor colaboración entre equipos de plataforma, y herramientas developer como hot reload mejorando productividad.</p>
+
+    <p>Sin embargo, encontraron desafíos significativos. La inicialización de runtime JavaScript añadía latencia al startup. El bridge de comunicación creaba complejidad de debugging cuando bugs atravesaban JavaScript y nativo. La fragmentación de Android causaba crashes difíciles de reproducir. La dependencia de módulos nativos para nuevas APIs requería aún escribir código nativo, reduciendo beneficio de compartir código. Las animaciones complejas sufrían performance. El mantenimiento de infraestructura React Native (upgrading, integraciones, tooling) requería ingenieros dedicados.</p>
+
+    <p>En 2018, Airbnb anunció que "sunsetting React Native" y volviendo a desarrollo nativo. Las razones incluyeron dificultad de lograr experience consistente con nativo, overhead de mantener bridge, complejidad para nuevos ingenieros aprendiendo stack, y decisión estratégica de invertir en profundidad de expertise nativo. Las lecciones aprendidas incluyen: React Native funciona mejor para equipos pequeños o startups priorizando velocidad sobre performance absoluta, apps con interacciones UI complejas se benefician de nativo, y decisiones de tecnología deben evaluar no solo beneficios iniciales sino costo total de propiedad a largo plazo. Notablemente, otros como Facebook, Instagram, Discord, Microsoft y Shopify continúan usando React Native exitosamente, demostrando que contexto organizacional determina apropiación de tecnología.</p>
     <h2>3. Arquitecturas Móviles</h2>
     <p>Las arquitecturas móviles deben considerar constrains de dispositivos: memoria limitada, batería, conectividad intermitente, pantallas pequeñas. MVC, MVP, y MVVM separan concerns: Model (datos/lógica), View (UI), Controller/Presenter/ViewModel (median entre Model y View). MVVM, especialmente popular en Android (con Architecture Components) e iOS (con SwiftUI/Combine), usa data binding para sincronizar View y ViewModel. Clean Architecture aplica principios SOLID organizando código en capas con dependencias hacia adentro. El patrón Repository abstrae fuentes de datos (red, BD local, cache). Los patrones de networking gestionan llamadas API asíncronas, manejo de errores, y retry logic.</p>
+
+    <h3>3.1. MVVM y Architecture Components en Android</h3>
+    <p>MVVM (Model-View-ViewModel) ha emergido como arquitectura dominante en Android, especialmente con Android Architecture Components introducidos en 2017. La arquitectura separa concerns claramente: View (Activities/Fragments) observa ViewModel usando LiveData o StateFlow, ViewModel contiene lógica de presentación y expone estado observable, Model representa datos y lógica de negocio. La separación facilita testing (ViewModels son POJOs testables sin dependencias Android), maneja configuration changes gracefully (ViewModels sobreviven rotaciones), y promueve código más mantenible.</p>
+
+    <p>Los Architecture Components incluyen ViewModel (scope a lifecycle de UI, sobrevive configuration changes), LiveData (observable lifecycle-aware que solo actualiza observers activos), Room (ORM type-safe sobre SQLite), WorkManager (background jobs confiables), Navigation (navegación declarativa), y Paging (carga incremental de datasets grandes). La integración entre componentes es fluida: un Repository puede usar Room para persistencia local, Retrofit para networking, y exponer LiveData que ViewModel transforma y View observa. El patrón típico incluye: Repository obtiene datos de fuente (red o BD) → ViewModel procesa y expone como LiveData → Fragment/Activity observa y actualiza UI.</p>
+
+    <p>Las mejores prácticas incluyen: ViewModels nunca deben tener referencia a Views/Activities/Fragments para evitar leaks, usar SingleLiveEvent para eventos one-time como navigation o toasts, inyectar dependencias (Repository, UseCases) en ViewModel para testability, usar coroutines Kotlin con viewModelScope para operaciones asíncronas con cancelación automática, y combinar múltiples LiveData/Flow con combinadores como MediatorLiveData o combine operator.</p>
+
+    <div class="mermaid">
+    graph TB
+        subgraph "View Layer"
+            A[Activity/Fragment]
+        end
+
+        subgraph "ViewModel Layer"
+            B[ViewModel]
+            B1[LiveData/StateFlow]
+        end
+
+        subgraph "Model Layer"
+            C[Repository]
+            D[Remote Data Source<br/>Retrofit API]
+            E[Local Data Source<br/>Room Database]
+            F[Cache Manager]
+        end
+
+        A -->|Observa| B1
+        B -->|Expone| B1
+        B -->|Obtiene datos| C
+        C -->|Network| D
+        C -->|Database| E
+        C -->|Memory| F
+        D -->|Actualiza| F
+        F -->|Sirve| C
+        E -->|Persiste| F
+    </div>
+
+    <h3>3.2. Clean Architecture en Móviles</h3>
+    <p>Clean Architecture, propuesta por Robert C. Martin (Uncle Bob), organiza código en capas concéntricas con regla fundamental: dependencias apuntan hacia adentro, nunca hacia afuera. Las capas incluyen: Entities (objetos de negocio sin dependencias de framework), Use Cases/Interactors (lógica de aplicación específica), Interface Adapters (ViewModels, Presenters, Controllers que convierten datos entre use cases y frameworks), y Frameworks/Drivers (UI, BD, Web, frameworks externos).</p>
+
+    <p>En contexto móvil, Clean Architecture típicamente se implementa con: Domain Layer (centro) conteniendo Entities y Use Cases sin dependencias Android, Data Layer conteniendo Repositories implementando interfaces definidas en Domain y fuentes de datos (API clients, DAOs), y Presentation Layer conteniendo ViewModels/Presenters y Views. La inversión de dependencias permite Domain ser totalmente independiente: Data y Presentation dependen de Domain, nunca al revés. Esto facilita testing (Domain se prueba sin mocks de Android), portability (Domain reutilizable entre apps), y flexibilidad (cambiar frameworks sin afectar lógica de negocio).</p>
+
+    <p>Los trade-offs incluyen mayor cantidad de clases y abstracciones (UseCases con una sola función pueden parecer overkill para apps simples), curva de aprendizaje para equipos, y potencial over-engineering para aplicaciones pequeñas. Clean Architecture brilla en apps grandes con lógica de negocio compleja, equipos grandes requiriendo separación clara, o apps donde modularidad y testability son críticas. Para apps simples, MVVM directo puede ser suficiente.</p>
+
+    <h3>3.3. Mejores Prácticas Arquitectónicas</h3>
+    <p><strong>Single Source of Truth:</strong> Cada dato debe tener una fuente autoritativa única. Por ejemplo, la BD local es SSOT, con red actualizándola pero UI siempre leyendo de BD. Esto simplifica sincronización y garantiza consistencia. El patrón típico: cuando usuario solicita datos, mostrar cached data inmediatamente, fetch datos frescos de red en background, actualizar BD, y UI se actualiza automáticamente observando BD.</p>
+
+    <p><strong>Unidirectional Data Flow:</strong> Los datos fluyen en una dirección: Actions/Events → ViewModel/State Manager → State → View. Esto hace state mutations predecibles y debugging más fácil. Arquitecturas como MVI (Model-View-Intent) y Redux formalizan este patrón. En MVI, Intent (intención de usuario) → Reducer (procesa intent y produce nuevo State) → State → View (renderiza state) → Intent.</p>
+
+    <p><strong>Dependency Injection:</strong> Inyectar dependencias en lugar de crearlas directamente promueve testability, reusability, y desacoplamiento. Frameworks como Dagger/Hilt (Android) o Swinject (iOS) automatizan DI, gestionando ciclos de vida y scopes de dependencias. Por ejemplo, inyectar Repository en ViewModel permite substituir con mock repository en tests sin cambiar código ViewModel.</p>
     <h2>4. Persistencia y Gestión de Estado</h2>
     <p>Las apps móviles requieren persistencia local para offline functionality y cache. Las opciones incluyen SharedPreferences/UserDefaults (key-value simple), SQLite (BD relacional), Room/CoreData (ORMs), Realm (BD móvil orientada a objetos), y almacenamiento de archivos. La gestión de estado resulta crítica para UI reactiva: Redux/MobX en React Native, Provider/BLoC en Flutter, ObservableObject/Combine en iOS. El offline-first design asume conectividad intermitente, almacenando datos localmente y sincronizando cuando hay conexión. Los conflict resolution strategies manejan sincronización bidireccional entre dispositivo y backend.</p>
+
+    <h3>4.1. Estrategias de Persistencia Local</h3>
+    <p>La selección de tecnología de persistencia depende de requisitos específicos. SharedPreferences (Android) y UserDefaults (iOS) son apropiados para preferencias simples, settings, y flags booleanos - almacenan pares key-value en XML/plist. SQLite, incluido nativamente en ambas plataformas, proporciona BD relacional completa con transacciones ACID, queries SQL complejos, y performance adecuada para datasets medianos. Sin embargo, escribir SQL directo es tedioso y propenso a errores.</p>
+
+    <p>Los ORMs abstraen SQLite proporcionando APIs type-safe. Room (Android) usa anotaciones declarando Entities, DAOs (Data Access Objects con queries), y Database. Room valida queries en compile-time, genera implementaciones de DAOs, y integra con LiveData/Flow para observabilidad. CoreData (iOS) proporciona object graph management con persistencia, undo management, y change tracking. CoreData usa modelo visual definiendo entidades y relaciones, con NSManagedObject representando objetos persistentes y NSFetchRequest para queries. La complejidad de CoreData es mayor que Room pero proporciona features sofisticadas como faulting (lazy loading de relaciones) y batching.</p>
+
+    <p>Realm, BD móvil orientada a objetos, ofrece alternativa moderna. Realm usa objetos Realm nativos observables directamente, eliminando mapeo entre objetos y tablas. Las ventajas incluyen performance superior (claims de ser 10x más rápido que SQLite en algunas operaciones), API más simple que CoreData, sincronización cloud con Realm Sync, y queries Fluent intuitivos. Las desventajas incluyen ser tecnología propietaria (ahora propiedad de MongoDB), tamaño mayor del binario, y limitaciones en threading (objetos Realm no son thread-safe y deben usarse en thread donde fueron creados).</p>
+
+    <h3>4.2. Gestión de Estado Reactiva</h3>
+    <p>La gestión de estado coordina datos entre componentes y mantiene UI sincronizada con estado de aplicación. Las arquitecturas reactivas como Redux centralizan estado en store único, con actions describiendo cambios y reducers calculando nuevo estado inmutablemente. Redux garantiza predictability: dado mismo estado y action, reducer siempre produce mismo resultado. El debugging se simplifica con time-travel debugging y logging de actions. Sin embargo, Redux añade boilerplate significativo y puede ser overkill para apps simples.</p>
+
+    <p>BLoC (Business Logic Component) pattern, popular en Flutter, separa lógica de negocio de UI usando streams. BLoC recibe events (inputs) vía Sink, procesa usando lógica de negocio, y emite states (outputs) vía Stream que UI observa. La separación facilita testing y reutilización de lógica. Provider package simplifica manejo de dependencias de BLoCs. Riverpod, evolución de Provider, proporciona compile-time safety y flexibilidad mayor.</p>
+
+    <p>En iOS moderno con SwiftUI, Combine framework proporciona primitivas reactivas. ObservableObject con @Published properties emite cambios que SwiftUI observa automáticamente, re-renderizando vistas afectadas. StateObject y ObservedObject gestionan lifecycle de observable objects. Los publishers y operators de Combine (map, filter, combineLatest) permiten transformar y combinar streams de datos declarativamente. La integración tight con SwiftUI elimina necesidad de frameworks de gestión de estado externos para muchos casos de uso.</p>
+
+    <div class="mermaid">
+    sequenceDiagram
+        participant User
+        participant View
+        participant ViewModel
+        participant Repository
+        participant LocalDB
+        participant RemoteAPI
+
+        User->>View: Solicita datos
+        View->>ViewModel: Load data
+        ViewModel->>Repository: Fetch data
+
+        alt Datos cached disponibles
+            Repository->>LocalDB: Query
+            LocalDB-->>Repository: Cached data
+            Repository-->>ViewModel: Data (cached)
+            ViewModel-->>View: Update UI (cached)
+            View-->>User: Muestra datos cached
+        end
+
+        Repository->>RemoteAPI: Fetch fresh data
+        RemoteAPI-->>Repository: Fresh data
+        Repository->>LocalDB: Update cache
+        LocalDB-->>Repository: Success
+        Repository-->>ViewModel: Data (fresh)
+        ViewModel-->>View: Update UI (fresh)
+        View-->>User: Muestra datos actualizados
+    </div>
+
+    <h3>4.3. Offline-First y Sincronización</h3>
+    <p>El diseño offline-first prioriza funcionamiento sin conexión, asumiendo que conectividad es lujo no garantía. La arquitectura típica mantiene BD local como SSOT, con sincronización bidireccional con backend cuando conectividad está disponible. Los beneficios incluyen mejor UX (app funciona siempre), mejor performance (datos locales responden instantáneamente), y resiliencia (degradación graceful ante problemas de red).</p>
+
+    <p>Los desafíos incluyen conflictos cuando mismo dato se modifica en múltiples dispositivos o backend. Las estrategias de resolución incluyen: Last Write Wins (cambio más reciente gana - simple pero puede perder datos), Operational Transformation (transforma operaciones concurrentes para converger - usado en Google Docs), CRDTs (Conflict-free Replicated Data Types - estructuras de datos que garantizan convergencia eventual sin coordinación), y Manual Resolution (presentar conflicto a usuario para resolver). La elección depende del dominio: para documentos colaborativos, OT o CRDTs; para settings de usuario, LWW puede ser suficiente.</p>
+
+    <p>La implementación requiere tracking de cambios locales pendientes de sincronizar, detección de conectividad (NetworkReachability en iOS, ConnectivityManager en Android), retry logic con exponential backoff para requests fallidos, y resolución de conflictos consistente. Firebase Firestore, AWS Amplify DataStore, y WatermelonDB son frameworks que proporcionan sincronización offline-first out-of-the-box, reduciendo complejidad de implementación.</p>
+
     <h2>5. Performance y Optimización</h2>
-    <p>El rendimiento impacta críticamenteexperiencia móvil. Las técnicas incluyen lazy loading (cargar datos bajo demanda), pagination (cargar datos en páginas), image optimization (comprimir, cache), lista virtualization (renderizar solo ítems visibles), background threading (operaciones pesadas fuera del UI thread), y memory management (prevenir leaks). Los profiling tools (Xcode Instruments, Android Profiler) identifican cuellos de botella. El startup time debe minimizarse: lazy initialization, splash screens, pre-caching. El battery consumption debe optimizarse: minimizar network calls, usar efficient algorithms, defer non-critical work.</p>
+    <p>El rendimiento impacta críticamente experiencia móvil. Las técnicas incluyen lazy loading (cargar datos bajo demanda), pagination (cargar datos en páginas), image optimization (comprimir, cache), lista virtualization (renderizar solo ítems visibles), background threading (operaciones pesadas fuera del UI thread), y memory management (prevenir leaks). Los profiling tools (Xcode Instruments, Android Profiler) identifican cuellos de botella. El startup time debe minimizarse: lazy initialization, splash screens, pre-caching. El battery consumption debe optimizarse: minimizar network calls, usar efficient algorithms, defer non-critical work.</p>
+
+    <h3>5.1. Optimización de Listas y Scroll Performance</h3>
+    <p>Las listas largas presentan desafío de performance: renderizar miles de ítems consume memoria excesiva y causa jank (frame drops durante scroll). La virtualización renderiza solo ítems visibles en viewport, reciclando views fuera de pantalla. RecyclerView (Android) y UITableView/UICollectionView (iOS) implementan view recycling: cuando ítem sale de pantalla, su view se recicla y reutiliza para ítem entrando. FlatList (React Native) y ListView.builder (Flutter) proporcionan virtualización en frameworks cross-platform.</p>
+
+    <p>Las mejores prácticas incluyen: usar viewType en RecyclerView para diferentes tipos de ítems (headers, content, footers) evitando casting incorrecto, implementar getItemId() para stable IDs permitiendo animaciones smooth, evitar trabajo costoso en onBindViewHolder/cellForRowAt (computar en background y cache), usar ViewHolder pattern cacheando references a subviews evitando findViewById repetidos, y mantener view hierarchy flat (nested layouts causan measure passes costosos).</p>
+
+    <p>La paginación carga datos incrementalmente: cargar página inicial pequeña (20-50 ítems), detectar cuando usuario se acerca a final (usando scroll listeners), cargar siguiente página en background. Infinite scroll proporciona UX fluida sin botones "Load More". Sin embargo, debe manejarse correctamente: mostrar loading indicator durante fetch, manejar errores gracefully con retry, prevenir carga duplicada con flags de "loading in progress", y considerar memoria limitada (descargar páginas antiguas si dataset es vastísimo).</p>
+
+    <h3>5.2. Gestión de Imágenes y Multimedia</h3>
+    <p>Las imágenes frecuentemente consumen mayoría del bandwidth y memoria en apps móviles. Las optimizaciones incluyen: cargar tamaño apropiado (usar thumbnails para previews, full resolution solo cuando necesario), comprimir con formato eficiente (WebP proporciona mejor compresión que JPEG con calidad similar), cache agresivamente (memory cache para acceso inmediato, disk cache para persistencia), lazy load (cargar solo imágenes visibles), y usar placeholders (mostrar placeholder o progressive loading durante carga).</p>
+
+    <p>Las librerías como Glide/Picasso (Android), SDWebImage/Kingfisher (iOS), y Fast Image (React Native) manejan complejidades: cache multi-nivel, downsampling, decoding en background threads, transformaciones (crop, resize, blur), y lifecycle management (cancelar loads cuando view se recicla). La configuración típica incluye memory cache tamaño ~1/8 de heap, disk cache 50-250 MB dependiendo de tipo de app, y downsampling agresivo (no cargar imagen 4000x3000 para mostrar en 100x100 view).</p>
+
+    <p>Para video, consideraciones adicionales incluyen: usar streaming (HLS/DASH) en lugar de descargar completo para content largo, implementar adaptive bitrate ajustando calidad según bandwidth disponible, pre-buffer próximos segundos para playback smooth, liberar resources cuando player no está visible, y usar hardware acceleration (MediaCodec en Android, AVPlayer con hardware decoding en iOS) para decoding eficiente. El video drena batería significativamente: apps como YouTube implementan optimizaciones como pausar decoding cuando app está background, reducir quality en low battery mode, y usar efficient codecs (H.265 vs. H.264).</p>
+
+    <h3>5.3. Profiling y Debugging de Performance</h3>
+    <p>El profiling sistemático identifica bottlenecks antes que impacten usuarios. Android Profiler en Android Studio visualiza CPU usage (method tracing identificando hot paths), memory allocation (identificando leaks y excessive allocations), network activity (requests, payload sizes, timing), y energy consumption. El CPU profiler ofrece sample-based recording (bajo overhead) y instrumented recording (overhead mayor pero data precisa). El memory profiler muestra heap allocations, identifica memory leaks con reference chains, y permite forzar GC para ver objetos retenidos incorrectamente.</p>
+
+    <p>Xcode Instruments proporciona herramientas especializadas: Time Profiler (CPU profiling con flame graphs), Allocations (memory allocations y leaks), Leaks (detecta retain cycles), Energy Log (battery impact de diferentes operations), Network (traffic analysis), y System Trace (holistic view de CPU, threads, system calls). Los Signposts personalizados marcan secciones de código para instrumentación específica. La integración con MetricKit proporciona analytics agregados de performance en producción.</p>
+
+    <p>Las métricas clave incluyen: App Startup Time (cold start <2s, warm start <1s idealmente), Frame Rate (mantener 60fps o 120fps en displays modernos significa <16ms o <8ms por frame), Memory Usage (permanecer significativamente bajo límites de memoria por device tier), Battery Drain (minimizar energy impact especialmente durante operaciones prolongadas), y Network Efficiency (minimizar request count, batch cuando posible, compress payloads). Las herramientas como Firebase Performance Monitoring y New Relic Mobile monitorizan estas métricas en producción, permitiendo identificar regresiones de performance en releases nuevos.</p>
     <h2>6. Seguridad y Distribución</h2>
     <p>La seguridad móvil aborda amenazas como man-in-the-middle, almacenamiento inseguro, reverse engineering. Las prácticas incluyen certificate pinning, encriptación de datos sensibles, obfuscación de código, jailbreak/root detection, y autenticación biométrica. La distribución involucra publicar en App Store (iOS) y Google Play (Android), cada uno con procesos de revisión, políticas, y consideraciones técnicas (signing, provisioning profiles en iOS; signing con keystore en Android). Los servicios como TestFlight (iOS) y Google Play Beta facilitan testing beta. Los analytics y crash reporting (Firebase, Crashlytics) proporcionan insights sobre comportamiento y estabilidad.</p>
+
+    <h3>6.1. Amenazas de Seguridad Móvil y Mitigaciones</h3>
+    <p>El OWASP Mobile Top 10 identifica las vulnerabilidades más críticas en apps móviles. M1: Improper Platform Usage incluye mal uso de features de plataforma o fallar en usar security controls de plataforma (como TouchID, Keychain). M2: Insecure Data Storage ocurre cuando datos sensibles (credenciales, tokens, PII) se almacenan sin encriptación en SharedPreferences, SQLite, o filesystem. M3: Insecure Communication transmite datos sensibles sin encryption o usa SSL/TLS incorrectamente. M4: Insecure Authentication implementa autenticación débil o session management inseguro. M5: Insufficient Cryptography usa algoritmos débiles o implementa crypto incorrectamente.</p>
+
+    <p>Las mitigaciones incluyen usar Keychain (iOS) o KeyStore (Android) para almacenar credenciales y claves encryption - estos sistemas protegen datos con hardware-backed security en dispositivos modernos. Implementar certificate pinning previene man-in-the-middle attacks verificando que certificado del servidor coincide con certificado esperado hard-coded en app. Sin embargo, pinning complica certificate rotation y puede romper app si certificado cambia. La alternativa es usar Certificate Transparency y validación estricta de certificados.</p>
+
+    <p>La encriptación de BD usa SQLCipher (extensión de SQLite con encriptación) o características nativas como Encrypted Shared Preferences (Android) y Core Data con encryption (iOS). Para comunicación, usar TLS 1.2+ con cipher suites fuertes, evitar mixed content (HTTP y HTTPS), y considerar end-to-end encryption para datos ultra-sensibles. La autenticación biométrica (TouchID, FaceID, fingerprint) proporciona UX conveniente y seguridad mejorada versus PINs, pero debe tener fallback (contraseña) para cuando biometrics falla.</p>
+
+    <h3>6.2. Proceso de Publicación en App Stores</h3>
+    <p>La publicación en App Store (iOS) requiere cuenta de Apple Developer ($99/año), app ID, provisioning profiles, y certificados de distribución. El proceso incluye: crear app en App Store Connect, configurar metadata (nombre, descripción, screenshots, categoría), subir build vía Xcode o Application Loader, enviar para review. Apple revisa apps manualmente verificando cumplimiento de App Store Review Guidelines (restricciones en content, funcionalidad, privacidad, seguridad). La revisión típicamente toma 24-48 horas. Las causas comunes de rechazo incluyen crashes, broken links, incomplete features, violaciones de privacidad, y contenido inapropiado.</p>
+
+    <p>Google Play requiere cuenta de Google Play Developer ($25 one-time fee), app signing key, y metadata. El proceso es más automatizado: crear app en Google Play Console, configurar store listing, subir APK/AAB (Android App Bundle, formato preferido), completar content rating questionnaire, y publicar. Google usa automated scanning detectando malware y violaciones de políticas, con revisiones manuales para casos flagged. La publicación es típicamente más rápida que iOS (horas versus días), pero políticas son igualmente estrictas respecto a malware, privacy, y content.</p>
+
+    <p>Las consideraciones incluyen localización (metadata y screenshots en múltiples idiomas mejoran discoverability), ASO (App Store Optimization con keywords estratégicos, descripciones atractivas), screenshots persuasivos mostrando value proposition, ratings y reviews (críticos para conversión - solicitar reviews en momentos apropiados mejora ratings), y staged rollouts (Google Play permite publicar a porcentaje de usuarios, monitorizando crashes antes de rollout completo).</p>
+
+    <div class="mermaid">
+    graph TB
+        A[Desarrollo Completado] --> B{Plataforma}
+
+        B -->|iOS| C[Build con Xcode]
+        B -->|Android| D[Build con Android Studio]
+
+        C --> E[Archive & Export]
+        E --> F[Upload a App Store Connect]
+        F --> G[Configurar Metadata]
+        G --> H[Submit for Review]
+        H --> I{Review Passed?}
+        I -->|No| J[Fix Issues]
+        J --> H
+        I -->|Yes| K[App Live en App Store]
+
+        D --> L[Generate Signed APK/AAB]
+        L --> M[Upload a Google Play Console]
+        M --> N[Configurar Store Listing]
+        N --> O[Submit for Review]
+        O --> P{Review Passed?}
+        P -->|No| Q[Fix Issues]
+        Q --> O
+        P -->|Yes| R[App Live en Google Play]
+    </div>
+
+    <h3>6.3. Testing Beta y Analytics</h3>
+    <p>TestFlight (iOS) facilita beta testing permitiendo distribuir builds a hasta 10,000 external testers y unlimited internal testers (team members). Los testers instalan TestFlight app, reciben invitación, y pueden instalar builds beta. El feedback se recopila vía TestFlight, incluyendo crashes y screenshots. Las builds beta expiran después de 90 días. Google Play Beta ofrece funcionalidad similar con tracks de testing (internal, closed, open) permitiendo staged rollouts y recopilación de feedback antes de production release.</p>
+
+    <p>Firebase Analytics proporciona analytics gratuito tracking eventos de usuario, user properties, y audiences. Los eventos predefined (screen_view, purchase) y custom events permiten tracking específico de dominio. La integración con Crashlytics proporciona crash reporting detallado con stack traces symbolicated, device info, y logs. Firebase Remote Config permite cambiar comportamiento de app sin deployment (feature flags, A/B testing). La combinación permite development data-driven: lanzar features gradualmente, A/B test variantes, y medir impact con analytics.</p>
+
+    <p>Las alternativas incluyen Amplitude (analytics avanzado con behavioral cohorts), Mixpanel (funnel analysis y user engagement), Sentry (error tracking excelente), y Instabug (bug reporting con screenshots y screen recordings). Las consideraciones incluyen privacy (compliance con GDPR, CCPA requiere consent y anonimización), performance overhead (tracking excesivo impacta performance), y data retention (costos de almacenamiento para high-traffic apps).</p>
+
+    <h2>7. Ejercicios Prácticos</h2>
+
+    <h3>Ejercicio 1: Diseño de Arquitectura Multi-Plataforma</h3>
+    <p><strong>Objetivo:</strong> Diseñar arquitectura para aplicación de comercio electrónico que funcione en iOS y Android.</p>
+    <p><strong>Requisitos:</strong></p>
+    <ul>
+        <li>La aplicación debe mostrar catálogo de productos, permitir búsqueda y filtrado, gestionar carrito de compras, y procesar checkout</li>
+        <li>Debe funcionar offline (navegar productos cached, gestionar carrito localmente)</li>
+        <li>Sincronizar con backend cuando conectividad esté disponible</li>
+        <li>Soportar autenticación (email/password y biométrica)</li>
+    </ul>
+    <p><strong>Tareas:</strong></p>
+    <ol>
+        <li>Decidir entre desarrollo nativo, cross-platform (React Native, Flutter), o híbrido. Justificar elección considerando team skills, timeline, performance requirements, y budget.</li>
+        <li>Diseñar arquitectura de capas (Presentation, Domain, Data) siguiendo Clean Architecture principles.</li>
+        <li>Definir estrategia de persistencia (qué datos almacenar localmente, qué tecnología usar).</li>
+        <li>Diseñar sincronización offline-first (cómo detectar conflictos, estrategia de resolución).</li>
+        <li>Crear diagrama de arquitectura mostrando componentes principales y flujo de datos.</li>
+    </ol>
+    <p><strong>Entregable:</strong> Documento de diseño arquitectónico (2-3 páginas) con diagramas, justificaciones de decisiones técnicas, y consideraciones de trade-offs.</p>
+
+    <h3>Ejercicio 2: Optimización de Performance</h3>
+    <p><strong>Contexto:</strong> Una app de social media muestra feed de posts (texto, imágenes, videos cortos). Users reportan scroll lag, consumo excesivo de memoria, y battery drain.</p>
+    <p><strong>Tareas:</strong></p>
+    <ol>
+        <li>Identificar posibles causas de problemas de performance (lazy loading inadecuado, falta de virtualización, image loading ineficiente, video decoding en main thread).</li>
+        <li>Proponer soluciones específicas para cada problema identificado.</li>
+        <li>Diseñar estrategia de image caching (memory vs disk cache sizes, eviction policies).</li>
+        <li>Definir métricas de performance a monitorear (frame rate, memory usage, startup time) y herramientas para profiling (Android Profiler, Xcode Instruments).</li>
+        <li>Crear plan de testing de performance (devices de diferentes tiers, scenarios de testing).</li>
+    </ol>
+    <p><strong>Entregable:</strong> Plan de optimización detallado con problemas identificados, soluciones propuestas, métricas de success, y timeline de implementación.</p>
+
+    <h3>Ejercicio 3: Implementación de Seguridad</h3>
+    <p><strong>Contexto:</strong> Una app bancaria móvil maneja información financiera sensible y requiere compliance con estándares de seguridad.</p>
+    <p><strong>Tareas:</strong></p>
+    <ol>
+        <li>Realizar threat modeling identificando assets (datos de usuario, transacciones), amenazas (MITM, storage inseguro, reverse engineering), y vulnerabilities.</li>
+        <li>Diseñar flujo de autenticación seguro (login, session management, biometrics, timeout).</li>
+        <li>Especificar cómo almacenar datos sensibles (usar Keychain/KeyStore para tokens, encriptar BD con SQLCipher).</li>
+        <li>Definir estrategia de network security (certificate pinning, TLS configuration, endpoint security).</li>
+        <li>Proponer mecanismos de detección de jailbreak/root y respuesta apropiada.</li>
+        <li>Crear checklist de security testing (penetration testing, code review focus areas).</li>
+    </ol>
+    <p><strong>Entregable:</strong> Documento de diseño de seguridad con threat model, architecture diagrams, implementación de security controls, y plan de testing.</p>
     <div class="highlight-box">
         <h3>Resumen</h3>
         <p>Esta clase ha cubierto desarrollo móvil incluyendo ecosistemas iOS/Android, desarrollo nativo vs. cross-platform, arquitecturas, persistencia, performance, y seguridad. El desarrollo móvil requiere considerar constrains únicos de dispositivos y proporcionar experiencias optimizadas.</p>

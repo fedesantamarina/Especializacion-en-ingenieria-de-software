@@ -233,6 +233,178 @@
         La selección de tecnología debe evaluarse rigurosamente contra requisitos específicos: volumen de datos, patrones de acceso (lectura-pesado vs escritura-pesado), requisitos de consistencia, latencia, throughput, y complejidad operacional aceptable. La observabilidad mediante métricas comprehensivas (latencia de consultas, throughput, tasa de errores, utilización de recursos) resulta crítica para operación confiable. Los planes de disaster recovery deben probarse regularmente: backups no verificados no ofrecen garantías. La seguridad requiere defensa en profundidad: encriptación en reposo y en tránsito, autenticación fuerte, principio de privilegio mínimo, y auditoría de accesos.
     </p>
 
+    <div class="mermaid">
+    graph TB
+        A[Consideraciones de Diseño de BD] --> B[Modelado de Datos]
+        A --> C[Rendimiento]
+        A --> D[Escalabilidad]
+        A --> E[Disponibilidad]
+        A --> F[Seguridad]
+
+        B --> B1[Normalización]
+        B --> B2[Desnormalización]
+        B --> B3[Patrones de Acceso]
+
+        C --> C1[Indexación]
+        C --> C2[Particionamiento]
+        C --> C3[Caching]
+        C --> C4[Optimización de Consultas]
+
+        D --> D1[Sharding]
+        D --> D2[Escalamiento Vertical]
+        D --> D3[Escalamiento Horizontal]
+
+        E --> E1[Replicación]
+        E --> E2[Failover Automático]
+        E --> E3[Backup y Recuperación]
+
+        F --> F1[Encriptación]
+        F --> F2[Control de Acceso]
+        F --> F3[Auditoría]
+
+        style A fill:#9b59b6
+        style B fill:#3498db
+        style C fill:#e74c3c
+        style D fill:#2ecc71
+    </div>
+
+    <h2>7. Caso de Estudio: Migración a Arquitectura de Bases de Datos Distribuida</h2>
+
+    <p>
+        Este caso de estudio examina la migración de una aplicación de red social de base de datos relacional monolítica a arquitectura distribuida heterogénea, ilustrando desafíos técnicos, decisiones de diseño, y lecciones aprendidas.
+    </p>
+
+    <h3>7.1 Contexto Inicial y Desafíos</h3>
+
+    <p>
+        La red social "SocialConnect" operaba con base de datos PostgreSQL única manejando todos los datos: perfiles de usuario, publicaciones, comentarios, relaciones de amistad, mensajes, notificaciones, y actividad de usuario. Con 50 millones de usuarios registrados y 10 millones de usuarios activos diarios, el sistema enfrentaba cuellos de botella críticos. Las consultas de feeds personalizados (que requieren joins complejos sobre grafos de relaciones sociales) experimentaban latencias de 5-10 segundos durante horas pico. Las escrituras de publicaciones y comentarios causaban contención de locks. Los backups nocturnos requerían 6 horas, impactando disponibilidad.
+    </p>
+
+    <p>
+        El análisis reveló patrones de acceso heterogéneos: lecturas dominaban masivamente sobre escrituras (ratio 100:1), ciertos datos (perfiles de usuario) se accedían extremadamente frecuentemente pero raramente cambiaban, las relaciones de amistad formaban grafo complejo consultado frecuentemente, y mensajes requerían acceso rápido pero solo entre usuarios específicos. La tabla de publicaciones contenía 10 billones de registros y crecía 100 millones diarios. Escalar verticalmente el servidor PostgreSQL resultaba prohibitivamente costoso y no sostenible. Se requería estrategia fundamental diferente.
+    </p>
+
+    <h3>7.2 Arquitectura Distribuida Diseñada</h3>
+
+    <p>
+        El diseño adoptó persistencia políglota con múltiples tecnologías especializadas. Los perfiles de usuario migraron a MongoDB por flexibilidad de esquema (diferentes usuarios tienen atributos variables) y excelente rendimiento de lectura con sharding. Las relaciones de amistad (grafo social) migraron a Neo4j, optimizando consultas de grafos como "amigos de amigos" o "camino más corto entre usuarios". Las publicaciones y comentarios migraron a Cassandra, aprovechando escrituras ultra-rápidas, particionamiento automático, y replicación multi-datacenter.
+    </p>
+
+    <p>
+        Los mensajes directos migraron a base de datos clave-valor (Redis) para latencias submilisegundo y expiración automática de mensajes antiguos. Las imágenes y videos se almacenaron en Amazon S3 con referencias en bases de datos respectivas. El feed de actividad en tiempo real se implementó mediante Kafka, permitiendo múltiples consumidores procesar stream de eventos independientemente. Esta arquitectura heterogénea permitió optimizar cada tipo de dato según sus características y patrones de acceso específicos.
+    </p>
+
+    <div class="mermaid">
+    flowchart TB
+        App[Aplicación SocialConnect]
+
+        App --> ProfileService[Profile Service]
+        App --> SocialService[Social Graph Service]
+        App --> FeedService[Feed Service]
+        App --> MessageService[Message Service]
+        App --> MediaService[Media Service]
+
+        ProfileService --> MongoDB[(MongoDB\nPerfiles Usuario)]
+        SocialService --> Neo4j[(Neo4j\nGrafo Social)]
+        FeedService --> Cassandra[(Cassandra\nPublicaciones)]
+        MessageService --> Redis[(Redis\nMensajes)]
+        MediaService --> S3[(S3\nImágenes/Videos)]
+
+        FeedService -.->|Eventos| Kafka[Kafka Stream]
+        SocialService -.->|Consume| Kafka
+
+        Cache[Redis Cache] -.->|Acelera| ProfileService
+        Cache -.->|Acelera| SocialService
+
+        style App fill:#9b59b6
+        style Kafka fill:#e74c3c
+        style Cache fill:#f39c12
+    </div>
+
+    <h3>7.3 Gestión de Consistencia Distribuida</h3>
+
+    <p>
+        El desafío mayor fue gestionar consistencia sin transacciones ACID distribuidas. Se adoptó consistencia eventual con estrategias específicas por caso de uso. Cuando usuario publica contenido, la escritura se confirma en Cassandra y evento se publica a Kafka; consumidores eventualmente actualizan índices de búsqueda y caches. Si usuario actualiza perfil en MongoDB, eventos actualizan copia desnormalizada en feeds. Para operaciones críticas como pagos de suscripciones premium, se implementó Saga Pattern: secuencia coordinada de transacciones locales con compensaciones en caso de fallo.
+    </p>
+
+    <p>
+        Los conflictos de escrituras concurrentes se resolvieron mediante timestamps y resolución tipo "last-write-wins" para casos no críticos, y mediante conflict-free replicated data types (CRDTs) para contadores (likes, shares). El sistema acepta inconsistencias temporales (feed de usuario puede mostrar contenido eliminado por 1-2 segundos hasta propagación de evento de eliminación) a cambio de disponibilidad y rendimiento. Esta decisión arquitectónica fundamental refleja priorización de disponibilidad sobre consistencia fuerte, apropiada para red social.
+    </p>
+
+    <h3>7.4 Resultados y Lecciones Aprendidas</h3>
+
+    <p>
+        Post-migración, el sistema logró mejoras dramáticas: latencia de generación de feeds redujo de 5-10 segundos a 200-300 milisegundos, throughput de escrituras incrementó 10x permitiendo soportar 50 millones de publicaciones diarias, disponibilidad mejoró de 99.5% a 99.95% mediante eliminación de punto único de falla, y costos de infraestructura se redujeron 40% mediante uso de hardware commodity horizontal versus servidores especializados costosos verticales.
+    </p>
+
+    <p>
+        Sin embargo, la complejidad operacional incrementó significativamente: múltiples bases de datos requieren expertise diverso, debugging de problemas cross-system resulta complejo, y testing de consistencia eventual requiere estrategias sofisticadas. Las lecciones clave incluyen: migrar incrementalmente (big-bang migration resulta riesgosa), invertir fuertemente en observabilidad desde inicio, documentar detalladamente decisiones de consistencia, y establecer runbooks para escenarios de inconsistencia. La migración validó que para sistemas de escala masiva con patrones de acceso heterogéneos, arquitecturas distribuidas especializadas resultan superiores a bases de datos monolíticas generalistas.
+    </p>
+
+    <h2>8. Técnicas Avanzadas de Optimización</h2>
+
+    <h3>8.1 Particionamiento y Sharding</h3>
+
+    <p>
+        El particionamiento horizontal (sharding) divide datos en subconjuntos independientes distribuidos en múltiples servidores, permitiendo escalamiento horizontal. Las estrategias de sharding incluyen range-based sharding (datos particionados por rangos de clave, apropiado cuando consultas frecuentemente filtran por rango pero puede causar hotspots), hash-based sharding (hash de clave determina shard, proporciona distribución uniforme pero dificulta consultas por rango), y directory-based sharding (mapping table indica ubicación de cada registro, flexible pero introduce punto centralizado de consulta).
+    </p>
+
+    <p>
+        El diseño efectivo de estrategia de sharding requiere comprender patrones de acceso: la clave de sharding debe distribuir carga uniformemente, minimizar consultas cross-shard (que requieren coordinación costosa), y alinear con patrones de consulta comunes. Por ejemplo, para aplicación de e-commerce, sharding por customer_id alinea bien con patrón donde cada usuario accede primariamente sus propios datos. El re-sharding (redistribución de datos cuando se agregan shards) representa operación compleja que debe planificarse cuidadosamente; algunas bases de datos como Cassandra lo manejan automáticamente, otras requieren intervención manual.
+    </p>
+
+    <h3>8.2 Estrategias de Caching Multinivel</h3>
+
+    <p>
+        El caching reduce latencia y carga en bases de datos almacenando datos frecuentemente accedidos en almacenamiento más rápido. Las arquitecturas típicamente implementan caching multinivel: cache en aplicación (datos en memoria del proceso de aplicación, latencia mínima pero no compartido entre instancias), cache distribuido como Redis o Memcached (compartido entre instancias de aplicación, latencia baja, soporta invalidación coordinada), y cache de resultado de consultas en base de datos misma.
+    </p>
+
+    <p>
+        Las políticas de invalidación de cache incluyen time-to-live (TTL) donde entradas expiran después de tiempo predeterminado, invalidación explícita donde aplicación invalida cache cuando actualiza datos subyacentes, y write-through donde escrituras actualizan cache y base de datos simultáneamente. El cache stampede (múltiples instancias intentan regenerar mismo cache entry simultáneamente después de expiración) se mitiga mediante locking o probabilistic early expiration. El ratio de cache hit apropiado depende del contexto: para datos altamente accedidos como configuración, 99% resulta deseable; para búsquedas variadas, 60-70% puede resultar aceptable.
+    </p>
+
+    <h3>8.3 Replicación para Lectura y Disponibilidad</h3>
+
+    <p>
+        La replicación mantiene copias de datos en múltiples nodos, proporcionando alta disponibilidad (si primario falla, réplica puede promover), disaster recovery (réplicas en diferentes regiones geográficas), y escalamiento de lecturas (consultas de solo-lectura se distribuyen entre réplicas). La replicación síncrona confirma escritura solo después que réplicas reconocen, garantizando consistencia fuerte pero incrementando latencia. La replicación asíncrona confirma escritura sin esperar réplicas, minimizando latencia pero arriesgando pérdida de datos si primario falla antes de replicar.
+    </p>
+
+    <p>
+        La topología de replicación puede ser primario-réplica (arquitectura más común donde primario maneja escrituras y réplicas lecturas), multi-primario (múltiples nodos aceptan escrituras, requiere resolución de conflictos), o peer-to-peer (todos los nodos son iguales). La configuración apropiada depende de requisitos: sistemas financieros priorizan replicación síncrona para consistencia; aplicaciones de consumo masivo frecuentemente aceptan replicación asíncrona para mejor rendimiento. El lag de replicación (retraso entre primario y réplicas) debe monitorearse: lag excesivo puede causar lecturas de datos obsoletos significativamente.
+    </p>
+
+    <h2>9. Ejercicios Prácticos</h2>
+
+    <h3>9.1 Ejercicio de Diseño de Base de Datos</h3>
+
+    <p>
+        <strong>Escenario:</strong> Diseñe esquema de base de datos para plataforma de comercio electrónico que debe manejar: catálogo de 10 millones de productos con atributos variables por categoría, 100 millones de usuarios, órdenes de compra con múltiples items y diferentes estados, inventario en 500 almacenes con sincronización en tiempo real, reviews de productos con votos de utilidad, y sistema de recomendaciones basado en historial de compras.
+    </p>
+
+    <p>
+        <strong>Tarea:</strong> (1) Diseñe modelo relacional normalizado para datos transaccionales críticos (usuarios, órdenes, pagos); (2) Justifique dónde aplicar desnormalización para optimizar lecturas; (3) Proponga uso de base de datos NoSQL para componentes específicos, justificando selección de tipo (documental, clave-valor, grafo, columnar); (4) Diseñe estrategia de sharding para tabla de órdenes proyectando 500 millones de órdenes anuales; (5) Proponga índices específicos justificando cada uno con consultas que acelera; (6) Diseñe estrategia de caching multinivel para componentes de alta demanda.
+    </p>
+
+    <h3>9.2 Ejercicio de Optimización de Consultas</h3>
+
+    <p>
+        <strong>Escenario:</strong> Una consulta SQL crítica para dashboard analítico ejecuta en 45 segundos, inaceptable para uso interactivo. La consulta involucra joins de 5 tablas grandes (millones de registros), múltiples agregaciones, y filtros complejos. Plan de ejecución muestra table scans completos en tablas grandes y sorts costosos.
+    </p>
+
+    <p>
+        <strong>Tarea:</strong> (1) Analice plan de ejecución identificando operaciones más costosas; (2) Proponga índices específicos que mejorarían performance, justificando cada uno; (3) Considere reescritura de consulta para facilitar uso de índices; (4) Evalúe si materializar vista sería apropiado, considerando trade-offs; (5) Proponga estrategia de particionamiento de tablas grandes si aplicable; (6) Diseñe prueba de carga para validar mejoras bajo condiciones realistas; (7) Estime mejora de performance esperada para cada optimización propuesta.
+    </p>
+
+    <h3>9.3 Ejercicio de Selección de Tecnología</h3>
+
+    <p>
+        <strong>Escenario:</strong> Su equipo debe seleccionar tecnología de base de datos para nuevo proyecto. Considere tres casos de uso distintos: (A) Sistema bancario procesando transacciones financieras donde consistencia es absoluta; (B) Aplicación de analytics procesando billones de eventos de telemetría de IoT con consultas ad-hoc complejas; (C) Plataforma de gaming en tiempo real con 10 millones de usuarios concurrentes requiriendo latencias sub-10ms.
+    </p>
+
+    <p>
+        <strong>Tarea:</strong> Para cada caso de uso: (1) Identifique requisitos críticos de base de datos (consistencia, disponibilidad, latencia, throughput, escalabilidad); (2) Evalúe tres tecnologías candidatas contra requisitos, considerando SQL vs NoSQL, tipo de NoSQL si aplicable, y opciones específicas; (3) Analice trade-offs de cada opción usando framework CAP y consideraciones de performance; (4) Haga recomendación justificada con criterios claros; (5) Identifique riesgos de su selección y estrategias de mitigación; (6) Proponga plan de validación mediante prueba de concepto o benchmark.
+    </p>
+
     <div class="highlight-box">
         <h3>Resumen de la Clase</h3>
         <p>

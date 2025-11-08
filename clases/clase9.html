@@ -6,17 +6,289 @@
     </div>
     <h2>1. Arquitecturas Empresariales</h2>
     <p>Las aplicaciones empresariales gestionan procesos de negocio complejos, datos críticos, y múltiples usuarios concurrentes. Características distintivas incluyen lógica de negocio compleja, persistencia de datos extensiva, integración con múltiples sistemas, requisitos de transaccionalidad y consistencia, seguridad rigurosa, y escalabilidad. Las arquitecturas típicas incluyen arquitectura en capas (presentación, lógica de negocio, acceso a datos), arquitectura hexagonal que aísla core de negocio de infraestructura, y microservicios que descomponen sistema en servicios independientes. La selección arquitectónica impacta profundamente mantenibilidad, testabilidad, escalabilidad y evolucionabilidad del sistema.</p>
+
+    <h3>1.1. Arquitectura en Capas: Fundamentos y Evolución</h3>
+    <p>La arquitectura en capas constituye el patrón arquitectónico más tradicional y ampliamente adoptado en sistemas empresariales. Según Fowler (2002), la separación en capas permite que cada una tenga responsabilidades bien definidas y cohesivas. La arquitectura típica de tres capas incluye: (1) Capa de Presentación, responsable de la interfaz de usuario y la interacción con el usuario final; (2) Capa de Lógica de Negocio, que encapsula las reglas de negocio, validaciones y orquestación de procesos; y (3) Capa de Acceso a Datos, que maneja la persistencia y recuperación de información desde bases de datos y otros sistemas de almacenamiento.</p>
+
+    <p>Sin embargo, arquitecturas empresariales modernas frecuentemente emplean modelos de cinco capas que proporcionan mayor granularidad: Presentación, Aplicación (coordinación de casos de uso), Dominio (lógica de negocio central), Persistencia (acceso a datos), e Infraestructura (servicios transversales). Esta separación más fina facilita el testing unitario, permite equipos especializados por capa, y mejora la reutilización de componentes. Eric Evans, en su obra seminal "Domain-Driven Design" (2003), argumenta que aislar el dominio de preocupaciones técnicas resulta fundamental para mantener la integridad conceptual del modelo de negocio.</p>
+
+    <div class="mermaid">
+    graph TB
+        subgraph "Arquitectura en Capas Empresarial"
+            A[Capa de Presentación<br/>UI/Controllers/Views]
+            B[Capa de Aplicación<br/>Use Cases/Application Services]
+            C[Capa de Dominio<br/>Entities/Value Objects/Domain Services]
+            D[Capa de Persistencia<br/>Repositories/DAO/ORM]
+            E[Capa de Infraestructura<br/>Security/Logging/Messaging]
+        end
+
+        A --> B
+        B --> C
+        C --> D
+        D --> E
+
+        style C fill:#e1f5ff
+        style A fill:#fff4e1
+        style E fill:#ffe1e1
+    </div>
+
+    <h3>1.2. Arquitectura Hexagonal: Aislamiento del Dominio</h3>
+    <p>La arquitectura hexagonal, también conocida como "Ports and Adapters" y propuesta por Alistair Cockburn en 2005, representa un avance significativo sobre la arquitectura en capas tradicional. El principio fundamental es que la lógica de negocio debe ser completamente independiente de mecanismos de entrega (UI, API REST, mensajería) y de mecanismos de infraestructura (bases de datos, sistemas externos, frameworks).</p>
+
+    <p>En esta arquitectura, el núcleo de la aplicación (el hexágono) define interfaces (ports) que representan las necesidades de la aplicación. Los adaptadores implementan estas interfaces para conectar con tecnologías específicas. Por ejemplo, un puerto de salida "UserRepository" puede tener adaptadores que implementen persistencia en PostgreSQL, MongoDB, o incluso en memoria para testing. Esta inversión de dependencias (el patrón de Dependency Inversion Principle de SOLID) permite que el dominio permanezca puro y testeable sin dependencias en frameworks o infraestructura.</p>
+
+    <div class="mermaid">
+    graph LR
+        subgraph "Adaptadores de Entrada"
+            A1[REST Controller]
+            A2[GraphQL Resolver]
+            A3[Message Listener]
+        end
+
+        subgraph "Núcleo Hexagonal"
+            P1[Input Port<br/>Use Case Interface]
+            D[Domain Logic<br/>Business Rules]
+            P2[Output Port<br/>Repository Interface]
+        end
+
+        subgraph "Adaptadores de Salida"
+            A4[SQL Repository]
+            A5[NoSQL Repository]
+            A6[External API Client]
+        end
+
+        A1 --> P1
+        A2 --> P1
+        A3 --> P1
+        P1 --> D
+        D --> P2
+        P2 --> A4
+        P2 --> A5
+        P2 --> A6
+
+        style D fill:#e1f5ff
+        style P1 fill:#fff4e1
+        style P2 fill:#fff4e1
+    </div>
+
+    <h3>1.3. Arquitectura de Microservicios: Descomposición y Autonomía</h3>
+    <p>La arquitectura de microservicios, popularizada por empresas como Netflix, Amazon y Spotify, descompone aplicaciones monolíticas en servicios pequeños, autónomos y desplegables independientemente. Sam Newman, en "Building Microservices" (2015), define un microservicio como un servicio modelado alrededor de un dominio de negocio específico, que puede ser desplegado independientemente y que posee su propia base de datos.</p>
+
+    <p>Los principios fundamentales incluyen: (1) Single Responsibility por servicio; (2) Autonomía operacional con deploys independientes; (3) Descentralización de datos donde cada servicio posee su propio datastore; (4) Comunicación mediante APIs bien definidas (REST, gRPC, mensajería asíncrona); (5) Resiliencia mediante circuit breakers y fallbacks; (6) Observabilidad comprehensiva con logging centralizado, métricas y tracing distribuido.</p>
+
+    <p>Sin embargo, los microservicios introducen complejidad significativa: consistencia eventual en lugar de transacciones ACID, necesidad de orquestación/coreografía de servicios, complejidad operacional en despliegue y monitoreo, y desafíos en testing de integración. Martin Fowler advierte que las organizaciones deben poseer suficiente madurez en DevOps y automatización antes de adoptar microservicios, ya que la complejidad operacional puede superar los beneficios.</p>
+
+    <h3>1.4. Caso de Estudio: Migración de Monolito a Microservicios en Amazon</h3>
+    <p>Amazon realizó una de las transformaciones arquitectónicas más documentadas de la industria. En 2001, Amazon operaba una aplicación monolítica de gran escala que presentaba serios problemas de escalabilidad y velocidad de desarrollo. Equipos diferentes no podían trabajar independientemente, los deploys requerían coordinación masiva, y escalar componentes individuales resultaba imposible.</p>
+
+    <p>La transformación siguió el patrón "Strangler Fig" propuesto por Fowler: en lugar de reescribir todo el sistema, Amazon extrajo servicios incrementalmente. Comenzaron identificando bounded contexts del dominio (inventario, pedidos, pagos, envío) y creando servicios independientes para cada uno. Cada servicio poseía su propia base de datos, forzando comunicación mediante APIs.</p>
+
+    <p>Los resultados fueron dramáticos: el tiempo de deploy se redujo de semanas a minutos, equipos pequeños podían poseer servicios completos end-to-end, y la escalabilidad mejoró significativamente al poder escalar servicios individuales independientemente. Sin embargo, Amazon también enfrentó desafíos: la complejidad de debugging aumentó, surgieron problemas de consistencia de datos, y fue necesario invertir fuertemente en automatización y herramientas de observabilidad. Esta experiencia estableció muchas de las prácticas que hoy se consideran estándar en microservicios.</p>
     <h2>2. Patrones Empresariales</h2>
     <p>Martin Fowler catalogó patrones específicos para aplicaciones empresariales. Para acceso a datos: Active Record (objeto encapsula fila de BD y lógica de acceso), Data Mapper (capa que transfiere datos entre objetos y BD), Repository (media entre dominio y data mapping). Para lógica: Transaction Script (procedimientos por casos de uso), Domain Model (modelo rico de objetos), Table Module (lógica para filas de tabla). Para presentación: MVC, MVP, MVVM. Para distribución: Remote Facade, Data Transfer Object. Estos patrones abordan problemas recurrentes en desarrollo empresarial, proporcionando soluciones probadas que mejoran mantenibilidad y extensibilidad.</p>
+
+    <h3>2.1. Patrones de Acceso a Datos: Comparación Detallada</h3>
+    <p>En "Patterns of Enterprise Application Architecture" (2002), Fowler identifica tres patrones principales para acceso a datos, cada uno con trade-offs específicos. El patrón Active Record combina datos y comportamiento en un único objeto que corresponde a una fila de base de datos. Este patrón resulta apropiado para lógica de dominio simple donde existe mapeo directo entre tablas y objetos. Rails y Laravel implementan este patrón exitosamente. Sin embargo, Active Record viola el Single Responsibility Principle al combinar persistencia y lógica de negocio, dificultando testing y acoplando el dominio a la estructura de base de datos.</p>
+
+    <p>El patrón Data Mapper separa completamente el modelo de dominio de la persistencia mediante una capa de mapeo que transfiere datos entre objetos y base de datos. Hibernate y Doctrine implementan este patrón. Data Mapper permite que objetos de dominio permanezcan ignorantes de persistencia (POJO/POCO), facilita testing mediante objetos en memoria, y permite esquemas de base de datos que difieren del modelo de objetos. Sin embargo, introduce complejidad adicional y requiere configuración explícita de mapeos.</p>
+
+    <p>El patrón Repository, popularizado por Domain-Driven Design, proporciona una abstracción de colección sobre el acceso a datos. Los clientes trabajan con repositorios como si fueran colecciones en memoria, usando métodos como add(), remove(), findById(). El repositorio encapsula la lógica de consultas y persistencia. Este patrón resulta particularmente valioso en arquitecturas hexagonales y DDD, donde el dominio define interfaces de repositorio (ports) y la infraestructura proporciona implementaciones (adapters). Repository facilita testing mediante implementaciones en memoria y permite optimizaciones de persistencia sin impactar el dominio.</p>
+
+    <h3>2.2. Patrones de Lógica de Negocio: Transaction Script vs Domain Model</h3>
+    <p>La organización de lógica de negocio constituye una decisión arquitectónica fundamental. El patrón Transaction Script organiza lógica como procedimientos, uno por transacción de negocio. Cada procedimiento maneja una solicitud completa del cliente, coordinando llamadas a base de datos y otros recursos. Este patrón resulta simple y apropiado para lógica de negocio sencilla. Sin embargo, para dominios complejos, Transaction Scripts tienden a duplicar código y dificultan la comprensión de reglas de negocio dispersas en múltiples procedimientos.</p>
+
+    <p>El patrón Domain Model construye un modelo de objetos que captura tanto datos como comportamiento del dominio. Las reglas de negocio residen en métodos de objetos de dominio (entities, value objects, domain services). Este enfoque, central en Domain-Driven Design, proporciona varios beneficios para dominios complejos: encapsulación de lógica relacionada, reutilización mediante herencia y composición, expresividad mediante un lenguaje ubicuo del dominio, y testabilidad mediante objetos aislados. Eric Evans argumenta que un modelo de dominio rico resulta esencial para mantener la integridad conceptual en sistemas complejos.</p>
+
+    <p>La selección entre estos patrones depende de la complejidad del dominio. Fowler sugiere que para lógica simple, Transaction Script proporciona simplicidad; para lógica compleja con reglas intrincadas, Domain Model justifica la inversión inicial. Muchos sistemas híbridos emplean Transaction Scripts para casos de uso simples (CRUD) y Domain Model para áreas de complejidad.</p>
+
+    <div class="mermaid">
+    sequenceDiagram
+        participant C as Client
+        participant AS as Application Service
+        participant E as Entity (Domain Model)
+        participant R as Repository
+        participant DB as Database
+
+        C->>AS: execute(command)
+        AS->>R: findById(id)
+        R->>DB: SELECT query
+        DB-->>R: raw data
+        R-->>AS: entity instance
+        AS->>E: businessOperation()
+        E->>E: validate business rules
+        E-->>AS: updated entity
+        AS->>R: save(entity)
+        R->>DB: UPDATE query
+        DB-->>R: success
+        R-->>AS: success
+        AS-->>C: result
+
+        Note over E: Domain Model Pattern:<br/>Business logic in entities
+    </div>
+
+    <h3>2.3. Patrones de Presentación: MVC, MVP, MVVM</h3>
+    <p>Los patrones de presentación separan lógica de interfaz de usuario de lógica de negocio. Model-View-Controller (MVC), introducido en Smalltalk-80, separa modelo (datos y lógica), vista (presentación), y controlador (manejo de entrada). En aplicaciones web, frameworks como Spring MVC y ASP.NET MVC adaptan este patrón donde controladores manejan requests HTTP, interactúan con modelo, y renderizan vistas.</p>
+
+    <p>Model-View-Presenter (MVP) modifica MVC haciendo el Presenter responsable de actualizar la vista. La vista se vuelve más pasiva, delegando toda lógica al Presenter. Este patrón facilita testing del Presenter sin instanciar vistas. MVP resulta popular en aplicaciones desktop (Windows Forms) y móviles.</p>
+
+    <p>Model-View-ViewModel (MVVM), introducido por Microsoft para WPF, emplea data binding bidireccional entre vista y ViewModel. El ViewModel expone propiedades y comandos que la vista consume mediante binding. Cambios en el ViewModel se reflejan automáticamente en la vista y viceversa. Angular, Vue, y WPF implementan este patrón. MVVM resulta poderoso para interfaces ricas pero requiere frameworks con soporte de binding.</p>
+
+    <h3>2.4. Antipatrones en Arquitectura Empresarial</h3>
+    <p>Los antipatrones representan soluciones comunes pero problemáticas. El "God Object" o "Blob" concentra demasiada funcionalidad en una única clase, violando Single Responsibility y dificultando mantenimiento. Este antipatrón surge frecuentemente en aplicaciones que evolucionan sin refactoring disciplinado. La solución involucra descomponer responsabilidades en clases cohesivas.</p>
+
+    <p>El antipatrón "Anemic Domain Model", identificado por Fowler, ocurre cuando objetos de dominio contienen solo datos sin comportamiento, con toda lógica residiendo en servicios. Esto niega los beneficios de orientación a objetos y resulta en lógica procedural disfrazada de objetos. La corrección involucra mover lógica relacionada a las entidades apropiadas.</p>
+
+    <p>El "Golden Hammer" aplica una solución favorita a todos los problemas sin considerar alternativas. Ejemplos incluyen usar microservicios para aplicaciones pequeñas, o emplear ORM para todos los accesos a datos incluyendo consultas complejas donde SQL directo sería más apropiado. La mitigación requiere evaluación objetiva de trade-offs para cada contexto.</p>
+
+    <p>El antipatrón "Accidental Complexity" introduce complejidad innecesaria mediante abstracciones prematuras, frameworks excesivos, o arquitecturas sobre-diseñadas. Yagni (You Aren't Gonna Need It) advierte contra construir funcionalidad especulativa. La complejidad debería emerger cuando se justifica por requisitos reales, no anticipados.</p>
     <h2>3. Frameworks Empresariales</h2>
     <p>Los frameworks empresariales proporcionan infraestructura reutilizable. Spring Framework domina el ecosistema Java mediante inyección de dependencias, AOP, integración con múltiples tecnologías, y modelo consistente. Spring Boot simplifica configuración. Java EE/Jakarta EE proporciona especificaciones estándar (JPA, JAX-RS, JMS). Los frameworks .NET (ASP.NET Core, Entity Framework) proporcionan capacidades equivalentes. La selección de framework impacta productividad, curva de aprendizaje, y ecosistema disponible. Los frameworks modernos enfatizan convención sobre configuración, reduciendo boilerplate.</p>
+
+    <h3>3.1. Spring Framework: Ecosistema y Principios de Diseño</h3>
+    <p>Spring Framework, creado por Rod Johnson en 2002 como alternativa a la complejidad de Java EE, se ha convertido en el framework empresarial dominante del ecosistema Java. Su filosofía central se basa en varios principios: (1) No intrusividad: las clases de negocio no dependen de APIs de Spring (POJO-based); (2) Inyección de Dependencias como mecanismo fundamental de configuración; (3) Programación Orientada a Aspectos para preocupaciones transversales; (4) Abstracciones consistentes sobre tecnologías diversas; (5) Testing como ciudadano de primera clase.</p>
+
+    <p>El contenedor de IoC (Inversion of Control) de Spring gestiona el ciclo de vida de objetos y sus dependencias. Los desarrolladores declaran beans y sus dependencias mediante anotaciones (@Component, @Service, @Repository) o configuración XML, y Spring resuelve e inyecta dependencias automáticamente. Este enfoque reduce acoplamiento y facilita testing mediante inyección de mocks.</p>
+
+    <p>Spring proporciona módulos especializados: Spring Data simplifica acceso a datos con repositories automáticos, Spring Security maneja autenticación y autorización, Spring Batch procesa grandes volúmenes de datos, Spring Integration implementa patrones de integración empresarial, Spring Cloud facilita microservicios distribuidos. Spring Boot, introducido en 2014, revolucionó la experiencia de desarrollo mediante auto-configuración inteligente, servidores embebidos, y producción de aplicaciones standalone. Esto redujo dramáticamente la configuración necesaria, permitiendo crear aplicaciones empresariales con configuración mínima.</p>
+
+    <h3>3.2. Comparación de Frameworks: Spring vs Jakarta EE vs .NET Core</h3>
+    <p>Jakarta EE (anteriormente Java EE), ahora bajo Eclipse Foundation, proporciona especificaciones estándar implementadas por múltiples servidores de aplicaciones (WildFly, Payara, OpenLiberty). Las especificaciones incluyen JPA para persistencia, JAX-RS para REST APIs, JMS para mensajería, CDI para inyección de dependencias. La ventaja de Jakarta EE radica en la estandarización: las aplicaciones pueden ejecutarse en diferentes servidores compatibles. Sin embargo, históricamente Jakarta EE ha evolucionado más lentamente que Spring, y los servidores de aplicaciones resultan más pesados que aplicaciones Spring Boot standalone.</p>
+
+    <p>En el ecosistema .NET, ASP.NET Core representa el framework moderno para aplicaciones web y APIs. Diseñado desde cero como cross-platform (Windows, Linux, macOS), ASP.NET Core incorpora lecciones de frameworks previos. Proporciona inyección de dependencias nativa, middleware pipeline configurable, hosting flexible, y rendimiento excepcional. Entity Framework Core sirve como ORM oficial. La integración profunda con Visual Studio y Azure proporciona experiencia de desarrollo cohesiva. Sin embargo, el ecosistema .NET resulta más limitado comparado con Java/Spring.</p>
+
+    <p>La selección de framework debe considerar: expertise del equipo, ecosistema de librerías, requisitos de desempeño, integración con infraestructura existente, soporte de la comunidad, y madurez de herramientas. Para aplicaciones Java empresariales nuevas, Spring Boot representa la opción más popular por su productividad y ecosistema vibrante. Jakarta EE resulta apropiado cuando se requiere portabilidad entre servidores o cuando se mantienen aplicaciones legacy. ASP.NET Core resulta excelente para equipos con expertise .NET y especialmente cuando se integra con Azure.</p>
+
+    <h3>3.3. Mejores Prácticas en Uso de Frameworks</h3>
+    <p>El uso efectivo de frameworks requiere disciplina arquitectónica. Primero, evitar el acoplamiento excesivo al framework manteniendo lógica de negocio independiente de infraestructura. La arquitectura hexagonal proporciona un modelo: el dominio define interfaces (ports), y los adaptadores usan el framework para implementarlas. Esto permite cambiar frameworks o testear sin instanciarlos.</p>
+
+    <p>Segundo, comprender las abstracciones del framework profundamente antes de extenderlas o modificarlas. Los frameworks empresariales son complejos; las customizaciones que luchan contra sus convenciones causan problemas. Por ejemplo, entender el modelo de transacciones de Spring resulta crítico antes de configurar comportamiento transaccional custom.</p>
+
+    <p>Tercero, no usar todas las características del framework indiscriminadamente. Los frameworks empresariales ofrecen vastas capacidades; usar apropiadamente solo las necesarias evita complejidad innecesaria. Por ejemplo, Spring ofrece múltiples formas de configurar beans; seleccionar una convención y mantenerla consistentemente mejora mantenibilidad.</p>
+
+    <p>Cuarto, mantenerse actualizado con evoluciones del framework. Los frameworks empresariales evolucionan continuamente, introduciendo mejores prácticas y deprecando enfoques antiguos. Revisar release notes y adoptar mejoras incrementalmente previene deuda técnica. Sin embargo, no actualizar prematuramente a versiones sin estabilidad probada; esperar a versiones .1 o .2 para producción.</p>
     <h2>4. Transacciones y Persistencia</h2>
-    <p>Las transacciones garantizan ACID en operaciones de negocio que involucran múltiples operaciones de base de datos. Las transacciones distribuidas coordinan múltiples recursos usando protocolos como two-phase commit. Los ORM (Object-Relational Mapping) como Hibernate, Entity Framework mapean objetos a tablas relacionales, abstrayen SQL, y gestionan ciclo de vida de objetos persistentes. Los patterns como Unit of Work rastrean cambios y los persisten atómicamente. El diseño apropiado de boundaries transaccionales resulta crítico: transacciones grandes incrementan contención; transacciones pequeñas pueden violar consistencia de negocio.</p>
+    <p>Las transacciones garantizan ACID en operaciones de negocio que involucran múltiples operaciones de base de datos. Las transacciones distribuidas coordinan múltiples recursos usando protocolos como two-phase commit. Los ORM (Object-Relational Mapping) como Hibernate, Entity Framework mapean objetos a tablas relacionales, abstraen SQL, y gestionan ciclo de vida de objetos persistentes. Los patterns como Unit of Work rastrean cambios y los persisten atómicamente. El diseño apropiado de boundaries transaccionales resulta crítico: transacciones grandes incrementan contención; transacciones pequeñas pueden violar consistencia de negocio.</p>
+
+    <h3>4.1. Propiedades ACID y Niveles de Aislamiento</h3>
+    <p>Las transacciones garantizan cuatro propiedades fundamentales conocidas como ACID, definidas por Jim Gray en 1981. Atomicidad asegura que todas las operaciones de una transacción se completan o ninguna se aplica; no existen estados parciales. Consistencia garantiza que la transacción lleva la base de datos de un estado válido a otro estado válido, respetando todas las restricciones definidas. Aislamiento asegura que transacciones concurrentes no interfieren entre sí; los efectos intermedios de una transacción no son visibles a otras. Durabilidad garantiza que una vez que una transacción se confirma, sus cambios persisten incluso ante fallos del sistema.</p>
+
+    <p>El estándar SQL define cuatro niveles de aislamiento que representan trade-offs entre consistencia y concurrencia. Read Uncommitted permite leer cambios no confirmados de otras transacciones (dirty reads), maximizando concurrencia pero comprometiendo consistencia. Read Committed, el nivel predeterminado en muchos sistemas, previene dirty reads pero permite non-repeatable reads (la misma consulta puede retornar resultados diferentes si otra transacción modifica datos entre lecturas). Repeatable Read previene non-repeatable reads bloqueando filas leídas, pero permite phantom reads (nuevas filas que satisfacen condiciones pueden aparecer). Serializable, el nivel más estricto, previene todos los fenómenos anteriores mediante bloqueos extensivos, pero reduce significativamente concurrencia.</p>
+
+    <p>La selección del nivel de aislamiento requiere evaluar requisitos de consistencia versus throughput. Aplicaciones financieras típicamente requieren Serializable para operaciones críticas. Aplicaciones de reporting pueden usar Read Committed o Read Uncommitted para maximizar concurrencia. Pat Helland, en su influyente artículo "Life beyond Distributed Transactions: an Apostate's Opinion" (2007), argumenta que para sistemas distribuidos de gran escala, la consistencia eventual con compensaciones resulta más práctica que transacciones ACID estrictas.</p>
+
+    <h3>4.2. Object-Relational Mapping: Beneficios y Desafíos</h3>
+    <p>Los ORM como Hibernate, Entity Framework, y Sequelize abstraen el acceso a bases de datos relacionales, permitiendo trabajar con objetos en lugar de SQL directamente. Los beneficios incluyen: productividad mediante generación automática de SQL, portabilidad entre diferentes bases de datos, type safety en consultas, gestión automática del ciclo de vida de objetos, caching integrado de primer y segundo nivel, y lazy loading de relaciones.</p>
+
+    <p>Sin embargo, los ORM presentan desafíos significativos. El "impedance mismatch" entre paradigmas orientado a objetos y relacional genera fricciones fundamentales: herencia y polimorfismo no mapean naturalmente a tablas, relaciones bidireccionales requieren sincronización cuidadosa, y el concepto de identidad difiere (identidad de objetos vs primary keys). El problema N+1 surge cuando lazy loading genera múltiples consultas innecesarias; cargar una lista de objetos y luego acceder a relaciones de cada uno puede generar N consultas adicionales. Los ORM pueden generar SQL subóptimo para consultas complejas.</p>
+
+    <p>Las mejores prácticas incluyen: (1) Comprender el SQL generado monitoreando consultas en desarrollo; (2) Usar eager loading estratégicamente para prevenir N+1; (3) Emplear proyecciones o DTOs para consultas read-only en lugar de entidades completas; (4) Recurrir a SQL nativo o stored procedures para consultas complejas o críticas para performance; (5) Configurar caching apropiadamente considerando requisitos de consistencia; (6) Diseñar agregados y boundaries transaccionales considerando cómo el ORM gestionará relaciones.</p>
+
+    <h3>4.3. Patrón Unit of Work y Gestión de Estado</h3>
+    <p>El patrón Unit of Work, documentado por Fowler, mantiene una lista de objetos afectados por una transacción de negocio y coordina la escritura de cambios. Los ORMs implementan este patrón mediante contextos de persistencia (EntityManager en JPA, DbContext en Entity Framework, Session en Hibernate). El contexto rastrea cambios en objetos cargados y, al confirmar la transacción, genera automáticamente los INSERT, UPDATE, y DELETE necesarios.</p>
+
+    <p>El ciclo de vida de objetos persistentes incluye estados distintos. En JPA: New/Transient (objeto creado pero no gestionado por el contexto), Managed (objeto gestionado; cambios son rastreados), Detached (objeto previamente gestionado pero el contexto ha cerrado), y Removed (objeto marcado para eliminación). Comprender transiciones entre estos estados resulta crítico para evitar bugs sutiles. Por ejemplo, modificar un objeto Detached no persiste cambios; debe ser reattached mediante merge().</p>
+
+    <div class="mermaid">
+    stateDiagram-v2
+        [*] --> Transient: new Entity()
+        Transient --> Managed: persist()
+        Managed --> Detached: close()/clear()
+        Detached --> Managed: merge()
+        Managed --> Removed: remove()
+        Removed --> [*]: commit()
+        Managed --> [*]: commit()
+
+        note right of Managed
+            Changes are tracked
+            Auto-sync to DB
+        end note
+
+        note right of Detached
+            Changes NOT tracked
+            Must merge to persist
+        end note
+    </div>
+
+    <h3>4.4. Transacciones Distribuidas y Sagas</h3>
+    <p>Las transacciones distribuidas coordinan múltiples recursos (bases de datos, message queues) usando protocolos como Two-Phase Commit (2PC). En 2PC, un coordinador pregunta a todos los participantes si pueden confirmar (fase prepare), y si todos responden afirmativamente, ordena la confirmación (fase commit). Este protocolo garantiza atomicidad a través de recursos distribuidos.</p>
+
+    <p>Sin embargo, 2PC presenta limitaciones severas en sistemas distribuidos modernos. Es un protocolo bloqueante: si el coordinador falla entre fases, los recursos quedan bloqueados. Reduce disponibilidad ya que todos los recursos deben estar disponibles simultáneamente. No escala bien para arquitecturas de microservicios con muchos servicios. El teorema CAP de Brewer establece que en presencia de particiones de red, los sistemas distribuidos deben elegir entre consistencia y disponibilidad; 2PC prioriza consistencia sacrificando disponibilidad.</p>
+
+    <p>Como alternativa, el patrón Saga, popularizado por Chris Richardson para microservicios, implementa transacciones distribuidas mediante secuencias de transacciones locales con compensaciones. Cada servicio ejecuta su transacción local y publica un evento. Si una transacción falla, se ejecutan transacciones compensatorias en orden reverso para deshacer cambios previos. Las sagas pueden ser coreografiadas (cada servicio escucha eventos y actúa) u orquestadas (un orquestador central coordina la secuencia). Las sagas proporcionan mayor disponibilidad y escalabilidad que 2PC, pero introducen complejidad en el diseño de compensaciones y requieren eventual consistency.</p>
     <h2>5. Seguridad Empresarial</h2>
     <p>La seguridad constituye requisito crítico. La autenticación verifica identidad mediante credenciales, tokens, certificados, o biometría. La autorización controla qué usuarios acceden a qué recursos mediante roles, permisos, o políticas. OAuth 2.0 y OpenID Connect estandarizan autenticación delegada. La protección requiere encriptación en tránsito (TLS) y en reposo. La prevención de vulnerabilidades requiere input validation, output encoding, parametrized queries, CSRF tokens, CSP. El principio de defensa en profundidad aplica múltiples capas. Spring Security y similares proporcionan infraestructura comprehensiva.</p>
+
+    <h3>5.1. Autenticación y Gestión de Identidad</h3>
+    <p>La autenticación verifica la identidad del usuario mediante diferentes mecanismos. La autenticación basada en credenciales (usuario/contraseña) requiere almacenamiento seguro de passwords mediante hashing con algoritmos como bcrypt, scrypt, o Argon2, que incluyen salt y son computacionalmente costosos para prevenir ataques de fuerza bruta. Nunca almacenar passwords en texto plano o con hashing reversible.</p>
+
+    <p>La autenticación multi-factor (MFA) combina múltiples factores: algo que sabes (password), algo que tienes (token, smartphone), y algo que eres (biometría). MFA reduce significativamente el riesgo de compromiso de cuentas. TOTP (Time-based One-Time Password) implementado por Google Authenticator y similares proporciona un segundo factor ampliamente adoptado.</p>
+
+    <p>OAuth 2.0 y OpenID Connect proporcionan autenticación delegada permitiendo que aplicaciones autentiquen usuarios mediante proveedores externos (Google, Microsoft, Facebook) sin manejar credenciales directamente. OAuth 2.0 define flujos para diferentes escenarios: Authorization Code para aplicaciones web con backend, Implicit (deprecado) para SPAs, Client Credentials para comunicación servicio-a-servicio, y Resource Owner Password (desalentado) para aplicaciones legacy. OpenID Connect extiende OAuth 2.0 agregando una capa de identidad con ID tokens que contienen información del usuario.</p>
+
+    <p>JSON Web Tokens (JWT) son tokens auto-contenidos que codifican claims en formato JSON firmado. Los JWTs permiten autenticación stateless: el servidor no necesita almacenar sesiones; valida el token verificando la firma. Sin embargo, los JWTs presentan desafíos: no pueden ser invalidados fácilmente (requieren expiración corta y refresh tokens), y el tamaño aumenta overhead en cada request. Para seguridad máxima, usar JWTs con expiración corta (minutos) y refresh tokens para obtener nuevos access tokens.</p>
+
+    <h3>5.2. Autorización: RBAC, ABAC y Control de Acceso</h3>
+    <p>La autorización determina qué recursos y operaciones puede acceder un usuario autenticado. Role-Based Access Control (RBAC) asigna permisos a roles y usuarios a roles. Por ejemplo, rol "Admin" tiene todos los permisos, "Editor" puede modificar contenido, "Viewer" solo lectura. RBAC resulta simple y apropiado para muchas aplicaciones, pero puede volverse rígido con roles muy granulares.</p>
+
+    <p>Attribute-Based Access Control (ABAC) evalúa políticas basadas en atributos del usuario, recurso, acción, y contexto. Por ejemplo, "permitir acceso si usuario.departamento == documento.departamento AND hora < 18:00". ABAC proporciona flexibilidad para expresar políticas complejas. XACML es un estándar para ABAC. AWS IAM implementa un modelo similar basado en políticas.</p>
+
+    <p>El principio de Least Privilege establece que usuarios y servicios deben tener solo los permisos mínimos necesarios para sus funciones. Esto limita el daño potencial de cuentas comprometidas. La segregación de duties previene que una única persona tenga control completo sobre procesos críticos. Por ejemplo, quien aprueba pagos no debería poder crearlos.</p>
+
+    <h3>5.3. OWASP Top 10 y Vulnerabilidades Comunes</h3>
+    <p>El OWASP Top 10 lista las vulnerabilidades más críticas en aplicaciones web, actualizado periódicamente. Injection (SQL Injection, Command Injection) ocurre cuando datos no confiables se ejecutan como comandos. La prevención requiere parametrized queries/prepared statements y input validation. Nunca concatenar input de usuario directamente en queries SQL o comandos.</p>
+
+    <p>Broken Authentication incluye credential stuffing, session hijacking, y weak password policies. Las mitigaciones incluyen MFA, rate limiting en login, session timeouts, y secure session management. Cross-Site Scripting (XSS) inyecta scripts maliciosos en páginas que otros usuarios ven. La prevención requiere output encoding (escapar HTML/JavaScript), Content Security Policy headers, y usar frameworks con templating que escape automáticamente.</p>
+
+    <p>Cross-Site Request Forgery (CSRF) engaña al navegador del usuario para ejecutar acciones no intencionadas en sitios donde está autenticado. Los anti-CSRF tokens (valores únicos por sesión incluidos en formularios y validados en servidor) previenen estos ataques. Los frameworks modernos como Spring Security implementan protección CSRF por defecto.</p>
+
+    <p>Insecure Deserialization puede llevar a Remote Code Execution cuando aplicaciones deserializan objetos de fuentes no confiables. Nunca deserializar datos no confiables sin validación. Usar formatos simples como JSON cuando sea posible. Security Misconfiguration incluye defaults inseguros, directory listing habilitado, mensajes de error verbosos que revelan información del sistema. Aplicar principio de fail securely: errores no deben revelar información sensible.</p>
+
+    <h3>5.4. Ejercicios Prácticos</h3>
+    <div class="highlight-box">
+        <h4>Ejercicio 1: Diseño de Arquitectura Empresarial</h4>
+        <p><strong>Escenario:</strong> Diseñe la arquitectura para un sistema de gestión de pedidos e-commerce que debe manejar 10,000 pedidos por día, integrar con sistemas de inventario, pagos, y envío, y proporcionar una interfaz web responsive.</p>
+        <p><strong>Tareas:</strong></p>
+        <ul>
+            <li>Seleccione un estilo arquitectónico apropiado (capas, hexagonal, microservicios) y justifique la decisión considerando requisitos funcionales y no funcionales.</li>
+            <li>Identifique bounded contexts del dominio y responsabilidades de cada componente.</li>
+            <li>Diseñe la estrategia de persistencia: bases de datos, ORM, patrones de acceso a datos.</li>
+            <li>Especifique boundaries transaccionales y estrategia de consistencia.</li>
+            <li>Defina el enfoque de seguridad: autenticación, autorización, protección de datos.</li>
+        </ul>
+        <p><strong>Entregables:</strong> Diagrama de arquitectura, justificación de decisiones, identificación de trade-offs.</p>
+    </div>
+
+    <div class="highlight-box">
+        <h4>Ejercicio 2: Implementación de Patrones Empresariales</h4>
+        <p><strong>Escenario:</strong> Implemente un módulo de gestión de reservas hoteleras usando patrones empresariales apropiados.</p>
+        <p><strong>Tareas:</strong></p>
+        <ul>
+            <li>Implemente el patrón Repository para acceso a datos de reservas, habitaciones, y huéspedes.</li>
+            <li>Diseñe un Domain Model con entidades ricas que encapsulen lógica de negocio (validaciones de reserva, cálculo de precios, políticas de cancelación).</li>
+            <li>Implemente el patrón Unit of Work para coordinar cambios en múltiples entidades.</li>
+            <li>Cree un Application Service que orqueste casos de uso complejos como "reservar habitación" que involucra verificar disponibilidad, crear reserva, procesar pago, enviar confirmación.</li>
+            <li>Implemente control transaccional apropiado para garantizar consistencia.</li>
+        </ul>
+        <p><strong>Entregables:</strong> Código fuente, tests unitarios, documentación de decisiones de diseño.</p>
+    </div>
+
+    <div class="highlight-box">
+        <h4>Ejercicio 3: Análisis de Seguridad</h4>
+        <p><strong>Escenario:</strong> Realice una revisión de seguridad de una aplicación bancaria y proponga mitigaciones.</p>
+        <p><strong>Tareas:</strong></p>
+        <ul>
+            <li>Analice el código de autenticación e identifique vulnerabilidades potenciales (almacenamiento de passwords, gestión de sesiones, protección contra brute force).</li>
+            <li>Revise la autorización: verifique que se validan permisos antes de operaciones sensibles, identifique posibles casos de privilege escalation.</li>
+            <li>Busque vulnerabilidades de OWASP Top 10: SQL Injection, XSS, CSRF, Security Misconfiguration.</li>
+            <li>Evalúe la protección de datos en tránsito y en reposo: uso de TLS, encriptación de datos sensibles.</li>
+            <li>Proponga un plan de remediación priorizado por severidad y esfuerzo.</li>
+        </ul>
+        <p><strong>Entregables:</strong> Reporte de vulnerabilidades, matriz de riesgo, plan de remediación detallado.</p>
+    </div>
+
     <div class="highlight-box">
         <h3>Resumen</h3>
-        <p>Esta clase ha cubierto arquitecturas, patrones, frameworks, transacciones y seguridad en aplicaciones empresariales, proporcionando fundamentos esenciales para construir sistemas empresariales robustos y escalables.</p>
+        <p>Esta clase ha cubierto arquitecturas, patrones, frameworks, transacciones y seguridad en aplicaciones empresariales, proporcionando fundamentos esenciales para construir sistemas empresariales robustos y escalables. Se han explorado desde arquitecturas fundamentales como capas y hexagonal hasta patrones específicos de acceso a datos y lógica de negocio. La comprensión profunda de transacciones, persistencia y seguridad resulta crítica para aplicaciones empresariales que manejan datos sensibles y procesos de negocio complejos. Los ejercicios prácticos permiten aplicar estos conceptos en escenarios reales de la industria.</p>
     </div>
     <div class="nav-buttons">
         <a href="#" class="btn btn-prev" data-clase="clase8">← Anterior</a>

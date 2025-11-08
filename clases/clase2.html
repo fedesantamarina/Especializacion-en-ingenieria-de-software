@@ -303,6 +303,116 @@
         Técnicas como design by contract, popularizadas por el lenguaje Eiffel y adoptadas en lenguajes modernos, incorporan elementos de especificación formal (precondiciones, postcondiciones, invariantes) en código ejecutable. Los analyzadores estáticos basados en métodos formales pueden integrarse en pipelines de CI/CD, proporcionando feedback rápido sobre posibles errores. La especificación formal de APIs críticas y algoritmos complejos puede coexistir con desarrollo ágil para el resto del sistema. El desafío radica en encontrar el balance apropiado entre rigor formal y pragmatismo ágil según el contexto específico del proyecto.
     </p>
 
+    <div class="mermaid">
+    graph TB
+        subgraph "Integración de Métodos Formales y Ágil"
+            A[Proyecto de Software]
+            A --> B[Componentes Críticos]
+            A --> C[Componentes No Críticos]
+
+            B --> B1[Especificación Formal]
+            B --> B2[Verificación Formal]
+            B --> B3[Testing Extensivo]
+
+            C --> C1[Desarrollo Ágil]
+            C --> C2[Testing Convencional]
+            C --> C3[Code Reviews]
+
+            B1 --> INTEGRACION[Pipeline CI/CD]
+            B2 --> INTEGRACION
+            C1 --> INTEGRACION
+            C2 --> INTEGRACION
+
+            INTEGRACION --> PRODUCTO[Producto de Calidad]
+        end
+
+        style A fill:#9b59b6
+        style B fill:#e74c3c
+        style C fill:#3498db
+        style PRODUCTO fill:#2ecc71
+    </div>
+
+    <h2>7. Casos de Estudio Detallados</h2>
+
+    <h3>7.1 Verificación del Compilador CompCert</h3>
+
+    <p>
+        CompCert representa uno de los logros más significativos en la aplicación de métodos formales a sistemas de software complejos. Es un compilador de C completamente verificado utilizando el asistente de pruebas Coq. La verificación abarca todas las fases del compilador: parsing, análisis semántico, optimizaciones, y generación de código. Se demostró formalmente que el código máquina generado por CompCert preserva la semántica del código fuente C, bajo ciertas asunciones bien definidas.
+    </p>
+
+    <p>
+        El desarrollo de CompCert tomó aproximadamente seis años-persona de esfuerzo, resultando en aproximadamente 100,000 líneas de código Coq para las pruebas, además del código del compilador mismo. Este esfuerzo significativo se justifica por la garantía de corrección: bugs en compiladores pueden ser particularmente perniciosos, ya que pueden introducir errores silenciosos en cualquier programa compilado. CompCert ha sido utilizado en aplicaciones críticas de seguridad donde se requiere alta confianza en la corrección del código generado. El proyecto demuestra que la verificación formal de sistemas complejos es factible, aunque requiere inversión sustancial.
+    </p>
+
+    <h3>7.2 Microkernel seL4</h3>
+
+    <p>
+        seL4 es el primer microkernel de sistema operativo con una prueba formal de corrección funcional. El kernel fue especificado formalmente en Isabelle/HOL, implementado en C, y se construyó una prueba formal de que la implementación en C satisface la especificación de alto nivel. Además, se verificaron propiedades de seguridad incluyendo aislamiento espacial (un proceso no puede acceder memoria de otro proceso) y temporal (un proceso no puede prevenir indefinidamente la ejecución de otro proceso de mayor prioridad).
+    </p>
+
+    <p>
+        La verificación de seL4 involucró aproximadamente 200,000 líneas de pruebas Isabelle para 9,000 líneas de código C del kernel. El esfuerzo total fue de aproximadamente 20 años-persona. A pesar de esta inversión, seL4 ha demostrado valor en aplicaciones donde la seguridad es crítica. El kernel se ha desplegado en sistemas de defensa, dispositivos médicos, y sistemas automotrices. Un resultado notable es que, desde su verificación formal, no se han descubierto errores en el código verificado del kernel, contrastando con kernels convencionales donde se descubren regularmente vulnerabilidades.
+    </p>
+
+    <h3>7.3 Amazon Web Services y TLA+</h3>
+
+    <p>
+        Amazon Web Services utiliza extensivamente TLA+ para especificar y verificar diseños de sistemas distribuidos complejos antes de implementarlos. Algoritmos como los utilizados en DynamoDB, S3, y otros servicios críticos de AWS han sido especificados y verificados en TLA+. En múltiples casos, el model checking de especificaciones TLA+ ha revelado bugs sutiles en diseños que habían pasado revisiones exhaustivas por ingenieros experimentados.
+    </p>
+
+    <p>
+        Un caso documentado involucró el algoritmo de replicación de DynamoDB, donde TLA+ reveló un escenario de falla raro pero posible que podía resultar en pérdida de datos. El escenario requería una secuencia específica de fallos y recuperaciones que era extremadamente improbable en testing pero posible en producción a escala de AWS. El uso de TLA+ permitió corregir el diseño antes de implementación, evitando potencialmente un incidente catastrófico. AWS ha documentado que TLA+ proporciona alto retorno de inversión: el esfuerzo de especificación es relativamente modesto (días a semanas) comparado con el costo de bugs en producción en sistemas distribuidos.
+    </p>
+
+    <div class="mermaid">
+    graph LR
+        subgraph "Proceso de Verificación en AWS con TLA+"
+            A[Diseño del Sistema] --> B[Especificación TLA+]
+            B --> C[Model Checking]
+            C --> D{¿Propiedades Válidas?}
+            D -->|No| E[Análisis de Contraejemplo]
+            E --> F[Refinamiento del Diseño]
+            F --> B
+            D -->|Sí| G[Implementación]
+            G --> H[Testing Convencional]
+            H --> I[Despliegue en Producción]
+        end
+
+        style D fill:#f39c12
+        style E fill:#e74c3c
+        style I fill:#2ecc71
+    </div>
+
+    <h2>8. Herramientas y Ecosistema</h2>
+
+    <h3>8.1 Herramientas de Model Checking</h3>
+
+    <p>
+        El ecosistema de model checking incluye herramientas especializadas para diferentes tipos de sistemas y propiedades. SPIN es uno de los model checkers más utilizados, especializado en verificación de protocolos de comunicación y sistemas concurrentes. NuSMV y su predecesor SMV son model checkers simbólicos que representan conjuntos de estados mediante BDDs (Binary Decision Diagrams) o técnicas basadas en SAT, permitiendo verificar sistemas con espacios de estados más grandes. UPPAAL combina model checking con autómatas temporizados, apropiado para sistemas de tiempo real.
+    </p>
+
+    <h3>8.2 Asistentes de Prueba</h3>
+
+    <p>
+        Los asistentes de prueba modernos proporcionan entornos sofisticados para desarrollo de pruebas formales. Coq, desarrollado en Francia, se basa en el Cálculo de Construcciones Inductivas y ha sido utilizado para verificaciones significativas incluyendo CompCert. Isabelle/HOL, desarrollado principalmente en Cambridge y Munich, proporciona un framework flexible que soporta múltiples lógicas. PVS combina un lenguaje de especificación expresivo con potentes procedimientos de decisión automatizados. Lean, desarrollado en Microsoft Research, representa la nueva generación de asistentes de prueba con énfasis en usabilidad y comunidades de matemáticos formales.
+    </p>
+
+    <h3>8.3 Herramientas de Análisis Estático</h3>
+
+    <p>
+        Las herramientas de análisis estático basadas en métodos formales proporcionan verificación automatizada para código existente. Astrée verifica ausencia de errores runtime en programas C, utilizado en aviónica. Polyspace, adquirido por MathWorks, proporciona análisis estático para código C/C++ en sistemas embedded. Infer, desarrollado originalmente en Facebook, utiliza abstract interpretation y separation logic para detectar null pointer dereferences, memory leaks, y condition races en código Java, C++, y Objective-C a escala de millones de líneas de código.
+    </p>
+
+    <h2>9. Desafíos y Futuro de los Métodos Formales</h2>
+
+    <p>
+        Los métodos formales enfrentan desafíos que limitan su adopción más amplia. El principal es la curva de aprendizaje: requieren conocimientos matemáticos y lógicos que muchos ingenieros de software no poseen. El esfuerzo requerido para especificación y verificación formal puede ser significativo, particularmente para sistemas grandes y complejos. La escalabilidad sigue siendo un desafío: aunque se han logrado avances, verificar sistemas de millones de líneas de código permanece difícil. La integración con herramientas y procesos de desarrollo convencionales no siempre es fluida.
+    </p>
+
+    <p>
+        El futuro de los métodos formales probablemente involucrará mayor automatización mediante técnicas de inteligencia artificial y machine learning. Ya se están desarrollando sistemas que pueden sintetizar automáticamente programas a partir de especificaciones, o generar especificaciones a partir de código existente. La combinación de métodos formales con testing puede proporcionar mayor cobertura que cualquiera de las técnicas aisladas. Los métodos formales ligeros, que proporcionan beneficios significativos con inversión moderada, probablemente ganarán adopción más amplia. La creciente criticidad del software en sociedad moderna incrementará la demanda de técnicas rigurosas de aseguramiento de calidad, posicionando los métodos formales como competencia esencial para ingenieros de software del futuro.
+    </p>
+
     <div class="highlight-box">
         <h3>Resumen de la Clase</h3>
         <p>
